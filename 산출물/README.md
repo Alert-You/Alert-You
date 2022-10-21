@@ -2,11 +2,13 @@
 
 ## 기획 & 설계 산출물
 
-[기능명세서](https://www.notion.so/5832024df6a84a6bb640d70c05cf6cdf)
+[01_기능명세서](./master/산출물/01_기능명세서.md)
 
-[ERD](https://www.notion.so/ERD-17da7c7590864b6ca46775f8eb53a1d4)
+[02_ERD](./master/산출물/02_ERD.PNG)
 
-와이어 프레임 / 목업
+[03_화면 정의서](./master/산출물/03_화면_정의서.pdf)
 
-API 명세서
+[04_페르소나](./master/산출물/04_페르소나.pdf)
+
+[05_중간 발표자료](./master/산출물/05_대전_자율1반_B109_알럿-유_중간발표.pdf)
 
