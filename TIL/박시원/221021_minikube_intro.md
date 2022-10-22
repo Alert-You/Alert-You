@@ -107,13 +107,15 @@ minikube version
 
 ### 3. 실행하기
 
+실습을 할 때만 minikube를 키고 끝나면 종료할 것 => CPU, 메모리 때문
+
 - CMD 실행하기(꼭 관리자 권한으로 실행하지 않아도 되지만, 혹시 에러가 난다면 관리자 권한 실행)
 
 ```
 minikube start --driver=hyperv
 ```
 
-![image-20221021003109956](C:\Users\SIWON\AppData\Roaming\Typora\typora-user-images\image-20221021003109956.png)
+![image](https://user-images.githubusercontent.com/93081720/197008319-e818395e-ec2a-4a58-9165-47adac6fa74c.png)
 
 ※ 만약 에러가 발생한다면? docker 또는 virtualbox 설치 후 다음과 같이 입력하여 진행
 
@@ -145,3 +147,173 @@ minikube dashboard
 ![image](https://user-images.githubusercontent.com/93081720/196995031-8a6682ab-6af9-4386-8fe8-ea2f129742ba.png)
 
 ![image](https://user-images.githubusercontent.com/93081720/196995236-224f2ff5-80f0-4045-8097-4069c2b2a88f.png)
+
+### 5. 주요 명령어
+
+```
+# 실행
+minikube start
+
+# 특정 k8s 버전 실행
+minikube start --kubernetes-version=v1.23.1
+
+# 특정 driver 실행
+minikube start --driver=virtualbox --kubernetes-version=v1.23.1
+
+# 상태확인
+minikube status
+
+# minikube ip 확인 (접속테스트시 필요)
+minikube ip
+
+# ssh 접속
+minikube ssh
+
+# 정지
+minikube stop
+
+# 삭제
+minikube delete
+```
+
+<br>
+
+## 3. 워드프레스 배포
+
+```
+cd %USERPROFILE%
+mkdir guide/index
+```
+
+- wordpress-k8s.yml 파일 생성
+
+```yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-mysql
+  labels:
+    app: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: mysql
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: mysql
+    spec:
+      containers:
+        - image: mariadb:10.7
+          name: mysql
+          env:
+            - name: MYSQL_DATABASE
+              value: wordpress
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+          ports:
+            - containerPort: 3306
+              name: mysql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-mysql
+  labels:
+    app: wordpress
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: wordpress
+    tier: mysql
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        tier: frontend
+    spec:
+      containers:
+        - image: wordpress:5.9.1-php8.1-apache
+          name: wordpress
+          env:
+            - name: WORDPRESS_DB_HOST
+              value: wordpress-mysql
+            - name: WORDPRESS_DB_NAME
+              value: wordpress
+            - name: WORDPRESS_DB_USER
+              value: root
+            - name: WORDPRESS_DB_PASSWORD
+              value: password
+          ports:
+            - containerPort: 80
+              name: wordpress
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+  selector:
+    app: wordpress
+    tier: frontend
+```
+
+- 배포
+
+```
+kubectl apply -f wordpress-k8s.yml
+```
+
+![image](https://user-images.githubusercontent.com/93081720/197318288-daabd173-1872-4a29-8397-c835159d549f.png)
+
+- 배포 상태 확인
+
+```
+kubectl get all
+```
+
+![image](https://user-images.githubusercontent.com/93081720/197318343-c316454b-ad46-4b14-8b23-26e2482d0a2c.png)
+
+- ip 주소 확인
+
+```
+minikube ip
+```
+
+![image](https://user-images.githubusercontent.com/93081720/197318430-92adf09b-5931-4ecf-a302-4cc8d98c6723.png)
+
+- 접속
+
+`ip주소:service/wordpress 포트 번호`로 접속
+
+![image](https://user-images.githubusercontent.com/93081720/197318530-2a85ed7c-6e79-495d-b7a2-c0af2d312b64.png)
+
+- 리소스 제거
+
+```
+kubectl delete -f wordpress-k8s.yml
+```
+
