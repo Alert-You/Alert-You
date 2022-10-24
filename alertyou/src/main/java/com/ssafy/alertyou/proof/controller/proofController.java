@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.ssafy.alertyou.proof.service.proofService;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,13 +21,17 @@ public class proofController {
     private final proofService proofService;
     private final S3Util s3Util;
 
+//    @PostMapping(value = "/upload")
+//    public ResponseEntity<Map<String, Object>> proofSave(@RequestPart MultipartFile mpart) throws Exception {
+//        System.out.println(mpart.getContentType());
+//        return getResponseEntity(s3Util.upload(mpart));
+//    }
     @PostMapping(value = "/upload")
-    public ResponseEntity<Map<String, Object>> proofSave(@RequestPart MultipartFile mpart) throws Exception {
-        System.out.println(mpart.getContentType());
-        return getResponseEntity(s3Util.upload(mpart));
+    public String fileUpload(@RequestParam("file") MultipartFile multipartFile) throws IOException {
+        return s3Util.upload(multipartFile, "image"); // test 폴더에 파일 생성
     }
 
-    @GetMapping(value = "")
+    @GetMapping(value = "/hello")
     public String proofs() throws Exception {
         return "hello";
     }
