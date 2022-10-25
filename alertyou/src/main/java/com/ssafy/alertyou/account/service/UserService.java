@@ -1,5 +1,6 @@
 package com.ssafy.alertyou.account.service;
 
+import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +15,7 @@ public class UserService {
 
     // 회원가입
     public boolean createUser() {
-
+        User newUser = User.builder().build();
 
         return true;
     }
