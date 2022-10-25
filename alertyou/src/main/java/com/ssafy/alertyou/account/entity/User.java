@@ -20,12 +20,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToMany(mappedBy = "user")
-    private List<Bodygaurd> bodygaurdList = new ArrayList<>();
+//    @OneToMany(mappedBy = "user")
+//    private List<Bodygaurd> bodygaurdList = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "school_id")
-    private School school;
+//    @OneToOne
+//    @JoinColumn(name = "school_id")
+//    private School school;
 
     private String password;
     private String role;
