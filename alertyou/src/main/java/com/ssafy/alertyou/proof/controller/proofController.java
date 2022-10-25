@@ -16,8 +16,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/proof")
 public class proofController {
-    private String SUCCESS = "SUCCESS";
-    private String FAIL = "FAIL";
     private final proofService proofService;
     private final S3Util s3Util;
 
@@ -27,28 +25,8 @@ public class proofController {
 //        return getResponseEntity(s3Util.upload(mpart));
 //    }
     @PostMapping(value = "/upload")
-    public String fileUpload(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-        return s3Util.upload(multipartFile, "image"); // test 폴더에 파일 생성
+    public ResponseEntity<Map<String, Object>> ProofAdd(@RequestPart("file") MultipartFile multipartFile, @RequestPart("user_id") long id) throws Exception {
+        return proofService.addProof(id, multipartFile); // test 폴더에 파일 생성
     }
 
-    @GetMapping(value = "/hello")
-    public String proofs() throws Exception {
-        return "hello";
-    }
-
-    public ResponseEntity<Map<String, Object>> getResponseEntity(Object obj) {
-        Map<String, Object> result = new HashMap<>();
-        HttpStatus status;
-        try {
-            result.put("item", obj);
-            result.put("msg", SUCCESS);
-            status = HttpStatus.ACCEPTED;
-        } catch (Exception e) {
-            result.put("item", e.getMessage());
-            result.put("msg", FAIL);
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-            e.printStackTrace();
-        }
-        return new ResponseEntity<>(result, status);
-    }
     }

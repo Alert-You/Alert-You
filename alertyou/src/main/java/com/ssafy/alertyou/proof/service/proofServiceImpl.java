@@ -3,54 +3,63 @@ package com.ssafy.alertyou.proof.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.alertyou.account.entity.User;
+import com.ssafy.alertyou.proof.config.S3Util;
+import com.ssafy.alertyou.proof.entity.Proof;
+import com.ssafy.alertyou.proof.repository.ProofRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class proofServiceImpl implements proofService {
-    private final AmazonS3Client amazonS3Client;
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    private final S3Util s3Util;
+    private final String IMAGE = "image";
+    private final String RECORD = "record";
+    private final String SUCCESS = "SUCCESS";
+    private final String FAIL = "FAIL";
+    private final ProofRepository proofRepository;
+    public ResponseEntity<Map<String, Object>> addProof(long id, MultipartFile file) throws Exception{
+        Map<String, Object> result = new HashMap<>();
+        HttpStatus status;
+        String type = new String();
+        Boolean ctype = null;
+        if (file.getContentType().contains("image")){
+             type = IMAGE;
+             ctype = true;
+        }else if (file.getContentType().contains("audio")){
+             type = RECORD;
+             ctype = false;
+        }
+        String url = s3Util.upload(file,type);
+        try {
+            Long res = proofRepository.save(toEntity(url,ctype)).getId();
+            result.put("msg",SUCCESS);
+            status = HttpStatus.CREATED;
+        } catch (Exception e){
+            result.put("mgs",FAIL);
+            status = HttpStatus.BAD_REQUEST;
+        }
 
-    private final String IMAGE = "image/";
-    private final String RECORD = "record/";
+        return new ResponseEntity<>(result, status);
+    }
 
-    public String addProof(MultipartFile mpart) throws Exception{
-//        return "hello";
-//        File orgFile =
-        // MultipartFile to File
-        System.out.println("여긴가 1");
-        File file = new File(LocalDateTime.now().toString());
-        System.out.println("여긴가 2");
-        file.createNewFile();
-        System.out.println("여긴가 3");
-        FileOutputStream outputStream = new FileOutputStream(file);
-        System.out.println("여긴가 4");
-        outputStream.write(mpart.getBytes());
-        System.out.println("여긴가 5");
-
-        outputStream.close();
-        System.out.println("여긴가 6");
-
-        // S3에 저장할 파일명
-        String fileName = "IMAGE" + "/" + file.getName();
-        System.out.println("여긴가 7");
-
-        // S3에 파일 업로드
-        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, file)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        System.out.println("여긴가 8");
-
-        String uploadImageUrl = amazonS3Client.getUrl(bucket, fileName).toString();
-        System.out.println("여긴가 9");
-        return uploadImageUrl;
+    public Proof toEntity(String url, Boolean ctype){
+        return Proof.builder()
+                .ctype(ctype)
+                .url(url)
+                .createdAt(LocalDateTime.now())
+                .build();
     }
 
 }
