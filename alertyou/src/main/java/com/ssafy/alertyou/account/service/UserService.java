@@ -1,11 +1,11 @@
 package com.ssafy.alertyou.account.service;
 
-import com.ssafy.alertyou.account.dto.UserRequestDto;
+import com.ssafy.alertyou.account.dto.UserSignupReqDto;
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.repository.UserRepository;
-import com.ssafy.alertyou.school.entity.School;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     // 회원가입
-    public boolean createUser(UserRequestDto userRequestDto) {
+    public boolean createUser(UserSignupReqDto userRequestDto) {
         // 핸드폰 번호가 이미 있으면 false
         if (userRepository.findByPhone(userRequestDto.getPhone()) != null) {
             return false;
@@ -24,12 +24,20 @@ public class UserService {
         User newUser = User.builder()
                         .phone(userRequestDto.getPhone())
                         .username(userRequestDto.getUsername())
-                        .password(passwordEncoder.encode(userRequestDto.getPassword()))
+                        .password(bCryptPasswordEncoder.encode(userRequestDto.getPassword()))
+                        .role("student")
+                        .active(true)
                         .build();
-
         userRepository.save(newUser);
         return true;
     }
+
+    public User getUserByPhone(String phone) {
+        return userRepository.findByPhone(phone);
+    }
+
+
+
 
 
 

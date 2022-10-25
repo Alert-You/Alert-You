@@ -40,7 +40,7 @@ public class User {
     @Column(nullable = false)
     private String phone;
 
-    private String social;
+//    private String social;
 
     private boolean active;
 }
