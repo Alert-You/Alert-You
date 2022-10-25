@@ -18,6 +18,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private long id;
 
     @OneToMany(mappedBy = "user")
@@ -27,10 +28,19 @@ public class User {
     @JoinColumn(name = "school_id")
     private School school;
 
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
     private String role;
+
+    @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
     private String phone;
+
     private String social;
+
     private boolean active;
 }
