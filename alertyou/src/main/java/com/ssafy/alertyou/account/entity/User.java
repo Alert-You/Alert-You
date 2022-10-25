@@ -33,5 +33,4 @@ public class User {
     private String phone;
     private String social;
     private boolean active;
-    
 }
