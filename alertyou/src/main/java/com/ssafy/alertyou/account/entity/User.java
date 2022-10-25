@@ -21,12 +21,12 @@ public class User {
     @Column(name = "user_id")
     private long id;
 
-    @OneToMany(mappedBy = "user")
-    private List<Bodygaurd> bodygaurdList = new ArrayList<>();
-
-    @OneToOne
-    @JoinColumn(name = "school_id")
-    private School school;
+//    @OneToMany(mappedBy = "user")
+//    private List<Bodygaurd> bodygaurdList = new ArrayList<>();
+//
+//    @OneToOne
+//    @JoinColumn(name = "school_id")
+//    private School school;
 
     @Column(nullable = false)
     private String password;
