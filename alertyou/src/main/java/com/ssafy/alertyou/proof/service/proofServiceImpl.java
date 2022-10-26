@@ -3,6 +3,7 @@ package com.ssafy.alertyou.proof.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.proof.config.S3Util;
 import com.ssafy.alertyou.proof.entity.Proof;
@@ -16,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,12 +56,22 @@ public class proofServiceImpl implements proofService {
         return new ResponseEntity<>(result, status);
     }
 
+    public S3ObjectInputStream downloadProof(Long id) throws IOException {
+        Proof proof = findProof(id);
+        return s3Util.download(proof.getUrl());
+    }
+
     public Proof toEntity(String url, Boolean ctype){
         return Proof.builder()
                 .ctype(ctype)
                 .url(url)
                 .createdAt(LocalDateTime.now())
                 .build();
+    }
+
+    public Proof findProof(Long id){
+        return proofRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Proof Not Found"));
     }
 
 }

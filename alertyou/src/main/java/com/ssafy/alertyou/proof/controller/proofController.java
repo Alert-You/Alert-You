@@ -1,5 +1,6 @@
 package com.ssafy.alertyou.proof.controller;
 
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.ssafy.alertyou.proof.config.S3Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,12 @@ public class proofController {
 //    }
     @PostMapping(value = "/upload")
     public ResponseEntity<Map<String, Object>> ProofAdd(@RequestPart("file") MultipartFile multipartFile, @RequestPart("user_id") long id) throws Exception {
-        return proofService.addProof(id, multipartFile); // test 폴더에 파일 생성
+        return proofService.addProof(id, multipartFile);
+    }
+
+    @GetMapping(value = "")
+    public S3ObjectInputStream ProofDownload(@RequestParam("proof_id") Long id ) throws Exception {
+        return proofService.downloadProof(id);
     }
 
     }

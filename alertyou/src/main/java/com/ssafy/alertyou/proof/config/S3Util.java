@@ -1,8 +1,7 @@
 package com.ssafy.alertyou.proof.config;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -58,5 +57,12 @@ public class S3Util {
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    public S3ObjectInputStream download(String fileUrl) throws IOException{
+
+        S3Object s3Object = amazonS3Client.getObject(new GetObjectRequest(bucket, fileUrl));
+        S3ObjectInputStream objectInputStream = s3Object.getObjectContent();
+        return  objectInputStream;
     }
 }
