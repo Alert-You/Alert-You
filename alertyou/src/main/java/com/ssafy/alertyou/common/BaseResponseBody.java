@@ -18,4 +18,12 @@ public class BaseResponseBody {
     String message = null;
     @ApiModelProperty(name="응답 코드", example = "200")
     Integer statusCode = null;
+
+    public static BaseResponseBody result(Integer statusCode, String message) {
+        BaseResponseBody res = new BaseResponseBody();
+        res.setStatusCode(statusCode);
+        res.setMessage(message);
+        return res;
+    }
+
 }
