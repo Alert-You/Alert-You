@@ -24,9 +24,12 @@ public class AlertYouDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
+//        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        return this.roles;
+    }
 
-        return authorities;
+    public void setAuthorities(List<GrantedAuthority> roles) {
+        this.roles = roles;
     }
 
     @Override
