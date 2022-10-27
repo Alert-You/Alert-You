@@ -4,15 +4,18 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.service.UserService;
+import com.ssafy.alertyou.common.auth.AlertYouDetails;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import java.io.IOException;
 
 /**
@@ -30,17 +33,23 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     // jwt 토큰 헤더 인증 필터
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-
+//        System.out.println("필터 동작하니?");
         String header = request.getHeader(JwtProperties.HEADER_STRING); // Authorization--
+        System.out.println(header);
         // 헤더가 null이거나, Bearer로 시작하지 않으면
         if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
             chain.doFilter(request, response);
+//            System.out.println("위에 if절 통과했니?");
             return;
         }
-//
-//        try {
-//            Authentication authentication = getA
-//        }
+//        System.out.println("어 통과했음!");
+        try {
+            Authentication authentication = getAuthentication(request);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
 
         chain.doFilter(request, response);
     }
@@ -57,15 +66,13 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                 User user = userService.getUserByPhone(phone); // 핸드폰 번호로 유저 정보를 가져옴
                 if (user != null) {
                     // 식별된 정상 유저일 경우에 진행
-
-
+                    AlertYouDetails alertYouDetails = new AlertYouDetails(user);
+                    UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(phone, null, alertYouDetails.getAuthorities());
+                    return jwtAuthentication;
                 }
             }
-
             return null;
         }
-
-
+        return null;
     }
-
 }

@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
 @Api(value = "회원 관리 API", tags = {"auth"})
@@ -39,7 +40,7 @@ public class UserController {
 //            @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
 //            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
 //    })
-    public ResponseEntity<UserLoginResDto> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginReqDto userLoginReqDto) {
+    public ResponseEntity<UserLoginResDto> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginReqDto userLoginReqDto, HttpServletResponse response) {
         HttpStatus status ;
         String phone = userLoginReqDto.getPhone();
         String password = userLoginReqDto.getPassword();
@@ -54,8 +55,10 @@ public class UserController {
         if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
             String refreshToken = authRefreshTokenService.saveRefreshToken(phone);
 
-            // 엑세스 토크과 함께 로그인 결과 반환
-            return ResponseEntity.ok().body(UserLoginResDto.result(200, "로그인 성공", JwtTokenProvider.createAccessToken(phone)));
+            // 엑세스 토큰과 함께 로그인 결과 반환
+            String accessToken = JwtTokenProvider.createAccessToken(phone);
+            response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
+            return ResponseEntity.ok().body(UserLoginResDto.result(200, "로그인 성공", accessToken));
         }
 
         return ResponseEntity.status(401).body(UserLoginResDto.result(401, "잘못된 비밀번호", null));
@@ -150,6 +153,12 @@ public class UserController {
         }
         // 기존 유저 정보를 삭제한다.
         return ResponseEntity.status(200).body(BaseResponseBody.result(200, "회원 정보 수정 성공"));
+    }
+
+    @GetMapping("/test")
+    @ResponseBody
+    public String test() {
+        return "테스트 페이지";
     }
 
 }
