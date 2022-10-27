@@ -6,7 +6,7 @@ type Props = {}
 const LoginScreen = (props: Props) => {
   return (
     <View>
-      <Text>Login</Text>
+      <Text>LoginHello</Text>
     </View>
   )
 }
