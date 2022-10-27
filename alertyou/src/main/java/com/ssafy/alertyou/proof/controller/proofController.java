@@ -1,7 +1,9 @@
 package com.ssafy.alertyou.proof.controller;
 
+import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.ssafy.alertyou.proof.config.S3Util;
+import com.ssafy.alertyou.proof.entity.Proof;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +22,15 @@ public class proofController {
     private final proofService proofService;
     private final S3Util s3Util;
 
-//    @PostMapping(value = "/upload")
-//    public ResponseEntity<Map<String, Object>> proofSave(@RequestPart MultipartFile mpart) throws Exception {
-//        System.out.println(mpart.getContentType());
-//        return getResponseEntity(s3Util.upload(mpart));
-//    }
     @PostMapping(value = "/upload")
-    public ResponseEntity<Map<String, Object>> ProofAdd(@RequestPart("file") MultipartFile multipartFile, @RequestPart("user_id") long id) throws Exception {
-        return proofService.addProof(id, multipartFile);
+    public ResponseEntity<Map<String, Object>> ProofUpload(@RequestPart("file") MultipartFile multipartFile, @RequestPart("user_id") long id) throws Exception {
+        return proofService.uploadProof(id, multipartFile);
     }
 
-    @GetMapping(value = "")
-    public S3ObjectInputStream ProofDownload(@RequestParam("proof_id") Long id ) throws Exception {
+    @GetMapping(value = "/download")
+    public ResponseEntity<byte[]> ProofDownload(@RequestParam("proof_id") Long id ) throws IOException {
         return proofService.downloadProof(id);
     }
+
 
     }

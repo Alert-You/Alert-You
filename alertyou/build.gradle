@@ -35,6 +35,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	//S3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE'
+	testImplementation group: 'software.amazon.awssdk', name: 's3', version: '2.18.2'
 
 }
 

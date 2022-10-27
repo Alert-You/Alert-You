@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Builder
+@Table(name = "proof")
 public class Proof {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +27,9 @@ public class Proof {
 
     @Column
     private String url;
+
+    @Column
+    private String endPoint;
 
     @Column
     private LocalDateTime createdAt;
