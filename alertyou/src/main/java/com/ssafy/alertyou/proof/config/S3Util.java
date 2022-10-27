@@ -1,17 +1,24 @@
 package com.ssafy.alertyou.proof.config;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.IOUtils;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,8 +37,7 @@ public class S3Util {
                 .orElseThrow(() -> new IllegalArgumentException("file convert error")); // 파일을 변환할 수 없으면 에러
 
 //      S3에 저장할 파일명
-        String fileName = dirName + "/" + LocalDateTime.now().toString() + "_" + convertFile.getName();
-
+        String fileName = dirName + "/"+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) +"_" + convertFile.getName();
 //      S3에 파일 업로드
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, convertFile).withCannedAcl(CannedAccessControlList.PublicRead));
         String uploadImageUrl = amazonS3Client.getUrl(bucket, fileName).toString();
@@ -58,5 +64,24 @@ public class S3Util {
             return Optional.of(convertFile);
         }
         return Optional.empty();
+    }
+
+    public ResponseEntity<byte[]> download(String key, String endPoint) throws IOException{
+
+        // S3 서버로 요청 단계
+        S3Object s3Object = amazonS3Client.getObject(new GetObjectRequest(bucket, key));
+        S3ObjectInputStream objectInputStream = s3Object.getObjectContent();
+        System.out.println(objectInputStream.toString());
+        byte[] bytes = IOUtils.toByteArray(objectInputStream);
+
+        // 다운로드 로직
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.valueOf(endPoint));
+        httpHeaders.setContentLength(bytes.length);
+        String[] arr = key.split("_");
+        String type = arr[arr.length-1];
+        String fileName = URLEncoder.encode(type, "UTF-8").replaceAll("\\+", "%20");
+        httpHeaders.setContentDispositionFormData("attachment",fileName); // 파일 이름 저장
+        return new ResponseEntity<>(bytes,httpHeaders, HttpStatus.OK);
     }
 }
