@@ -18,9 +18,9 @@ public class Proof {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
-//    @JoinColumn(name = "user_id")
-//    private long userId;
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column
     private Boolean ctype;
