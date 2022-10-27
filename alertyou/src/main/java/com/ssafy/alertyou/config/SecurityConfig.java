@@ -1,5 +1,6 @@
 package com.ssafy.alertyou.config;
 
+import com.ssafy.alertyou.account.jwt.JwtAuthenticationFilter;
 import com.ssafy.alertyou.account.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .httpBasic().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService))
                 .authorizeRequests()
+                .antMatchers("/api/auth/test").authenticated()
                 .anyRequest().permitAll();
     }
 

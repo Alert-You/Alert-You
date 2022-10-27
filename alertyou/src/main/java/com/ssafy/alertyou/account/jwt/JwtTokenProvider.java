@@ -12,6 +12,7 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
+    // 서명과 JWT형태가 올바른지 확인
     public static JWTVerifier getVerifier() {
         return JWT
                 .require(Algorithm.HMAC512(JwtProperties.SECRET.getBytes()))
