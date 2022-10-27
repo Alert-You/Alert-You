@@ -40,7 +40,7 @@ public class UserController {
 //            @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
 //            @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
 //    })
-    public ResponseEntity<UserLoginResDto> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginReqDto userLoginReqDto, HttpServletResponse response) {
+    public ResponseEntity<UserLoginResDto> login(@RequestBody @ApiParam(value="로그인 정보", required = true) UserLoginReqDto userLoginReqDto) { // , HttpServletResponse response
         HttpStatus status ;
         String phone = userLoginReqDto.getPhone();
         String password = userLoginReqDto.getPassword();
@@ -57,7 +57,7 @@ public class UserController {
 
             // 엑세스 토큰과 함께 로그인 결과 반환
             String accessToken = JwtTokenProvider.createAccessToken(phone);
-            response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
+//            response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + accessToken);
             return ResponseEntity.ok().body(UserLoginResDto.result(200, "로그인 성공", accessToken));
         }
 
