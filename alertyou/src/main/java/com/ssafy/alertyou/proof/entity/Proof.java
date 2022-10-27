@@ -12,20 +12,24 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Builder
+@Table(name = "proof")
 public class Proof {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
-//    @JoinColumn(name = "user_id")
-//    private long userId;
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column
     private Boolean ctype;
 
     @Column
     private String url;
+
+    @Column
+    private String endPoint;
 
     @Column
     private LocalDateTime createdAt;

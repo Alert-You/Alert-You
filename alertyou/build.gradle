@@ -35,6 +35,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE' 	//S3
 	compileOnly 'net.nurigo:javaSDK:2.2' // coolSMS(문자 인증)
+	testImplementation group: 'software.amazon.awssdk', name: 's3', version: '2.18.2'
 }
 
 tasks.named('test') {
