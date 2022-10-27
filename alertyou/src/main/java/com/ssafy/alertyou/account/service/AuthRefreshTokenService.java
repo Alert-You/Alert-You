@@ -13,12 +13,13 @@ public class AuthRefreshTokenService {
     private final AuthRefreshTokenRepository authRefreshTokenRepository;
 
     // refresh토큰 생성(저장)
-    public void saveRefreshToken(String phone) {
+    public String saveRefreshToken(String phone) {
         String refreshToken = JwtTokenProvider.createRefreshToken(phone);
         AuthRefreshToken authRefreshToken = AuthRefreshToken.builder()
                 .refreshToken(refreshToken)
                 .build();
         authRefreshTokenRepository.save(authRefreshToken);
+        return refreshToken;
     }
 
 }

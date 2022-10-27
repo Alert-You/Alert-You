@@ -1,5 +1,6 @@
 package com.ssafy.alertyou.account.entity;
 
+import com.ssafy.alertyou.account.dto.UserSignupReqDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,4 +44,12 @@ public class User {
 //    private String social;
 
     private boolean active;
+
+    public void updateAccount(UserSignupReqDto userSignupReqDto, String newPassword) {
+        this.phone = userSignupReqDto.getPhone();
+        this.active = true;
+        this.role = "student";
+        this.username = userSignupReqDto.getUsername();
+        this.password = newPassword;
+    }
 }
