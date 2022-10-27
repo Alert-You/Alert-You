@@ -14,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseResponseBody {
-    @ApiModelProperty(name="응답 메시지", example = "회원 가입 상태")
+    @ApiModelProperty(name="응답 메세지", example = "응답 메세지")
     String message = null;
     @ApiModelProperty(name="응답 코드", example = "200")
     Integer statusCode = null;
