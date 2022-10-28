@@ -8,7 +8,7 @@ import {
   NoticeNavigation,
   ProfileNavigation,
   SignUpNavigation,
-  LoginNavigation
+  LoginNavigation,
 } from '@/navigations';
 
 const Stack = createNativeStackNavigator();
@@ -21,21 +21,34 @@ const MainNavigation = () => {
     <>
       {hasToken && (
         <Tab.Navigator>
-          <Tab.Screen name="Notice" component={NoticeNavigation} />
-          <Tab.Screen name="Home" component={HomeNavigation} />
-          <Tab.Screen name="Profile" component={ProfileNavigation} />
+          <Tab.Screen
+            name="Notice"
+            component={NoticeNavigation}
+            options={{headerShown: false}}
+          />
+          <Tab.Screen
+            name="Home"
+            component={HomeNavigation}
+            options={{headerShown: false}}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileNavigation}
+            options={{headerShown: false}}
+          />
         </Tab.Navigator>
       )}
+
       {!hasToken && (
         <Stack.Navigator>
           <Stack.Screen
-            name="SignUp"
-            component={SignUpNavigation}
+            name="Login"
+            component={LoginNavigation}
             options={{headerShown: false}}
           />
           <Stack.Screen
-            name="Login"
-            component={LoginNavigation}
+            name="SignUp"
+            component={SignUpNavigation}
             options={{headerShown: false}}
           />
         </Stack.Navigator>

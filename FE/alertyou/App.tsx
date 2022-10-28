@@ -3,16 +3,16 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {RecoilRoot} from 'recoil';
 import { MainNavigation } from '@/navigations';
+import { NativeBaseProvider } from 'native-base';
 
-const App: React.FunctionComponent = () => {
-
-  return (
-    <RecoilRoot>
+const App: React.FunctionComponent = () => (
+  <RecoilRoot>
+    <NativeBaseProvider>
       <NavigationContainer>
-        <MainNavigation/>
+        <MainNavigation />
       </NavigationContainer>
-    </RecoilRoot>
-  );
-};
+    </NativeBaseProvider>
+  </RecoilRoot>
+);
 
 export default App;
