@@ -1,4 +1,4 @@
-import {View, Button, Text} from 'react-native';
+import {View, Button, Text, TextInput} from 'react-native';
 import React from 'react';
 import {tokenState} from '@/store';
 import {useSetRecoilState} from 'recoil';
@@ -14,11 +14,7 @@ const LoginScreen = ({navigation}: Props) => {
   }
   return (
     <View>
-      <Text>LoginHello</Text>
-      <Button
-        title="회원가입"
-        onPress={() => navigation.navigate('SignUpScreen')}
-      />
+      <TextInput/>
       <Button 
         title="토큰부여"
         onPress={createTmpToken}/>
