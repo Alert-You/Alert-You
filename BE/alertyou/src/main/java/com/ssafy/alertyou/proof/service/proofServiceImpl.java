@@ -5,7 +5,11 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssafy.alertyou.account.entity.User;
+import com.ssafy.alertyou.account.jwt.JwtProperties;
+import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.proof.config.S3Util;
 import com.ssafy.alertyou.proof.dto.ProofListResDto;
@@ -31,7 +35,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class proofServiceImpl implements proofService {
+public class proofServiceImpl implements ProofService {
     private final S3Util s3Util;
     private final String IMAGE = "image";
     private final String AUDIO = "audio";
@@ -39,12 +43,14 @@ public class proofServiceImpl implements proofService {
     private final String FAIL = "FAIL";
     private final ProofRepository proofRepository;
     private final UserRepository userRepository;
-    public ResponseEntity<Map<String, Object>> uploadProof(long id, MultipartFile file) throws Exception{
+    public ResponseEntity<Map<String, Object>> uploadProof(String token, MultipartFile file) throws Exception{
         Map<String, Object> result = new HashMap<>();
         HttpStatus status;
         String type = new String();
         Boolean ctype = null;
         String endPoint = file.getContentType();
+        User user = findUserByPhone(decodeToken(token));
+        String uId = String.valueOf(user.getId());
         if (file.getContentType().contains("image")){
              type = IMAGE;
              ctype = true;
@@ -52,9 +58,9 @@ public class proofServiceImpl implements proofService {
              type = AUDIO;
              ctype = false;
         }
-        String url = s3Util.upload(file,type);
+        String url = s3Util.upload(file,type+"/"+uId);
         try {
-            Long res = proofRepository.save(toEntity(findUser(id), url,ctype,endPoint)).getId();
+            Long res = proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
             result.put("msg",SUCCESS);
             status = HttpStatus.CREATED;
         } catch (Exception e){
@@ -68,18 +74,19 @@ public class proofServiceImpl implements proofService {
 
     public ResponseEntity<byte[]> downloadProof(Long id) throws IOException {
         Proof proof = findProof(id);
-
         String key = null;
         if (proof.getCtype().booleanValue() == true){
             key = proof.getUrl().substring(proof.getUrl().lastIndexOf("image"));
         } else if (proof.getCtype().booleanValue() == false) {
             key = proof.getUrl().substring(proof.getUrl().lastIndexOf("audio"));
         }
-        return s3Util.download(decodeUrl(key),proof.getEndPoint());
+        String url = URLDecoder.decode(key, "UTF-8");
+        return s3Util.download(url,proof.getEndPoint());
     }
 
-    public ResponseEntity<Map<String, Object>> getProof(long id, long tId) throws Exception{
-        User teacher = findUser(tId);
+    public ResponseEntity<Map<String, Object>> getProof(String token, long id) throws Exception{
+
+        User teacher = findUserByPhone(decodeToken(token));
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
         if (teacher.isActive() == true && teacher.getRole().equals("teacher")){
@@ -103,10 +110,6 @@ public class proofServiceImpl implements proofService {
         return new ResponseEntity<>(result, status);
     }
 
-    public User checkProof(long id, MultipartFile file) throws Exception{
-        return findUser(id);
-    }
-
     public Proof toEntity(User user, String url, Boolean ctype, String endPoint){
         return Proof.builder()
                 .user(user)
@@ -127,8 +130,18 @@ public class proofServiceImpl implements proofService {
                 .orElseThrow(() -> new IllegalArgumentException("Proof Not Found"));
     }
 
+    public User findUserByPhone(String phone){
+        return userRepository.findByPhone(phone);
+    }
+
     public String decodeUrl(String url) throws UnsupportedEncodingException {
         return  URLDecoder.decode(url, "UTF-8");
+    }
+
+    public String decodeToken(String token) throws Exception{
+        JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
+        DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
+        return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
     }
 
 }

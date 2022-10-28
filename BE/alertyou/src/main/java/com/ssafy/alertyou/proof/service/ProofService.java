@@ -11,11 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Map;
 
-public interface proofService {
-    public ResponseEntity<Map<String, Object>> uploadProof(long id, MultipartFile file) throws Exception;
+public interface ProofService {
+    public ResponseEntity<Map<String, Object>> uploadProof(String token, MultipartFile file) throws Exception;
     public ResponseEntity<byte[]> downloadProof(Long id) throws IOException;
 
-    public ResponseEntity<Map<String, Object>> getProof(long id, long tId) throws Exception;
-
-    public User checkProof(long id, MultipartFile file) throws Exception;
+    public ResponseEntity<Map<String, Object>> getProof(String token, long id) throws Exception;
 }
