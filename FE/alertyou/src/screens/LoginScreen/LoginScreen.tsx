@@ -1,18 +1,17 @@
 import {View, Button, Text} from 'react-native';
 import React from 'react';
 import {tokenState} from '@/store';
-import {useRecoilState} from 'recoil';
+import {useSetRecoilState} from 'recoil';
 
 type Props = {
   navigation: any;
 };
 
-// const createTmpToken = () => {
-//   setTmpToken('1');
-// }
-
 const LoginScreen = ({navigation}: Props) => {
-  const [tmpToken, setTmpToken] = useRecoilState(tokenState);
+  const setTmpToken = useSetRecoilState(tokenState);
+  const createTmpToken = () => {
+    setTmpToken('1');
+  }
   return (
     <View>
       <Text>LoginHello</Text>
@@ -22,7 +21,7 @@ const LoginScreen = ({navigation}: Props) => {
       />
       <Button 
         title="토큰부여"
-        onPress={() => setTmpToken("hhihihi")}/>
+        onPress={createTmpToken}/>
     </View>
   );
 };
