@@ -1,17 +1,17 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { LoginScreen } from '@/screens';
+import {RecoilRoot} from 'recoil';
+import { MainNavigation } from '@/navigations';
 
-const Stack = createNativeStackNavigator();
+const App: React.FunctionComponent = () => {
 
-const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="SplashScreen">
-        <Stack.Screen name="LoginScreen" component={LoginScreen}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <RecoilRoot>
+      <NavigationContainer>
+        <MainNavigation/>
+      </NavigationContainer>
+    </RecoilRoot>
   );
 };
 
