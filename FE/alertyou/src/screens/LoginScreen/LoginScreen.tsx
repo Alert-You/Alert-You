@@ -1,12 +1,15 @@
-import { View, Text } from 'react-native'
+import { View, Text, Button } from 'react-native'
 import React from 'react'
 
-type Props = {}
+type Props = {
+  navigation: any
+}
 
-const LoginScreen = (props: Props) => {
+const LoginScreen = ({ navigation }: Props) => {
   return (
     <View>
       <Text>LoginHello</Text>
+      <Button title="회원가입" onPress={() => navigation.navigate("SignUpScreen")}></Button>
     </View>
   )
 }
