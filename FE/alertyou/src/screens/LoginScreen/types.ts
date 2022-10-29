@@ -1,9 +1,16 @@
 export interface loginValueType {
-  phoneNumber: string;
+  phone: string;
   password: string;
 }
 
 export interface loginActionType {
-  type: string,
-  payload: string
+  type: string;
+  payload: string;
+}
+
+export interface TokenType {
+  data: {
+    msg: string;
+    tokenId: string;
+  };
 }

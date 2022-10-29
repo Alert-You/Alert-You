@@ -8041,6 +8041,11 @@
     "jscodeshift" "^0.13.1"
     "nullthrows" "^1.1.1"
 
+"react-native-error-boundary@^1.1.16":
+  "integrity" "sha512-yCbKhjGo2kMJBoUdy503L3oaInrLo1gychGr5e/IrezfPhfUGhfr8EtG2EKgZDcSfmvodBXvARq942hWis5sUA=="
+  "resolved" "https://registry.npmjs.org/react-native-error-boundary/-/react-native-error-boundary-1.1.16.tgz"
+  "version" "1.1.16"
+
 "react-native-gesture-handler@>= 1.0.0":
   "integrity" "sha512-poOSfz/w0IyD6Qwq7aaIRRfEaVTl1ecQFoyiIbpOpfNTjm2B1niY2FLrdVQIOtIOe+K9nH55Qal04nr4jGkHdQ=="
   "resolved" "https://registry.npmjs.org/react-native-gesture-handler/-/react-native-gesture-handler-2.8.0.tgz"
@@ -8104,7 +8109,7 @@
     "normalize-css-color" "^1.0.2"
     "prop-types" "^15.6.0"
 
-"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.70 || 1000.0.0", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@0.70.3":
+"react-native@*", "react-native@^0.0.0-0 || 0.60 - 0.70 || 1000.0.0", "react-native@>=0.42.0", "react-native@>=0.48.4", "react-native@>=0.50.0", "react-native@>=0.57.7", "react-native@0.70.3":
   "integrity" "sha512-EiJxOonyvpSWa3Eik7a6YAD6QU8lK2W9M/DDdYlpWmIlGLCd5110rIpEZjxttsyrohxlRJAYRgJ9Tx2mMXqtfw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.70.3.tgz"
   "version" "0.70.3"
@@ -8180,7 +8185,7 @@
     "global" "^4.3.0"
     "react-proxy" "^1.1.7"
 
-"react@*", "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0-rc.1", "react@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0", "react@^18.1.0", "react@^18.2.0", "react@>= 16.8.0", "react@>=16.13.1", "react@>=17.0.0", "react@>=17.0.1", "react@18.1.0":
+"react@*", "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0-rc.1", "react@^16.8.0 || ^17.0.0-rc.1 || ^18.0.0", "react@^18.1.0", "react@^18.2.0", "react@>= 16.8.0", "react@>=16.13.1", "react@>=16.6.0", "react@>=17.0.0", "react@>=17.0.1", "react@18.1.0":
   "integrity" "sha512-4oL8ivCz5ZEPyclFQXaNksK3adutVS8l2xzZU0cqEFrE9Sb7fC0EFK5uEk74wIreL1DERyjvsU915j1pcT2uEQ=="
   "resolved" "https://registry.npmjs.org/react/-/react-18.1.0.tgz"
   "version" "18.1.0"

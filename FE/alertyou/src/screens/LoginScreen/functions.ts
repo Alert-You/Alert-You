@@ -1,17 +1,20 @@
+import {Alert} from 'react-native';
 import type {loginActionType, loginValueType} from './types';
+
 export const loginInitialState: loginValueType = {
-  phoneNumber: '',
+  phone: '',
   password: '',
 };
+
 export const loginReducer = (
   state: loginValueType,
   action: loginActionType,
 ): loginValueType => {
   switch (action.type) {
-    case 'phoneNumber': {
+    case 'phone': {
       return {
         ...state,
-        phoneNumber: action.payload,
+        phone: action.payload,
       };
     }
     case 'password': {
@@ -23,4 +26,24 @@ export const loginReducer = (
     default:
       return state;
   }
+};
+
+export const phoneValidation = (phone: string): boolean => {
+  if (/^[0-9]{2,3}[0-9]{3,4}[0-9]{4}/.test(phone)) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+export const failPhoneValidation = () => {
+  Alert.alert('로그인 실패', '휴대폰 번호는 숫자만 입력해주세요.', [
+    {text: '확인'},
+  ]);
+};
+
+export const onFailHandler = () => {
+  Alert.alert('로그인 실패', '휴대폰 번호, 비밀번호를 확인해주세요.', [
+    {text: '확인'},
+  ]);
 };
