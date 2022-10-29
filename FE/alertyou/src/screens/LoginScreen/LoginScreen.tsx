@@ -1,9 +1,9 @@
-import {View, Button, Text} from 'react-native';
+import {View, Button, SafeAreaView, TouchableOpacity, Text} from 'react-native';
 import {CloseIcon, FormControl, Input, Pressable, Stack} from 'native-base';
 import React, {useReducer} from 'react';
 import {tokenState} from '@/store';
 import {useSetRecoilState} from 'recoil';
-import {COLOR} from '@/theme/colorVariants';
+import {MAIN} from '@/theme/colorVariants';
 
 import {styles} from './style';
 import {loginInitialState, loginReducer} from './functions';
@@ -15,7 +15,7 @@ type Props = {
 const LoginScreen = ({navigation}: Props) => {
   const setTmpToken = useSetRecoilState(tokenState);
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
-  
+
   const createTmpToken = () => {
     setTmpToken('1');
   };
@@ -37,19 +37,19 @@ const LoginScreen = ({navigation}: Props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Stack space={4}>
-        <FormControl isRequired>
+    <SafeAreaView style={styles.container}>
+      <FormControl isRequired>
+        <Stack space={4}>
           <Input
             variant="underlined"
             placeholder="휴대폰 번호"
             keyboardType="numeric"
             size="sm"
-            color={COLOR.mainFont}
-            focusOutlineColor={COLOR.red}
+            color={MAIN.mainFont}
+            focusOutlineColor={MAIN.red}
             InputRightElement={
               <Pressable onPress={deletePhoneNumber}>
-                {state.phoneNumber &&<CloseIcon color={COLOR.red}/>}
+                {state.phoneNumber && <CloseIcon color={MAIN.red} />}
               </Pressable>
             }
             onChangeText={changePhoneNumber}
@@ -60,21 +60,23 @@ const LoginScreen = ({navigation}: Props) => {
             variant="underlined"
             placeholder="비밀번호"
             size="sm"
-            color={COLOR.mainFont}
-            focusOutlineColor={COLOR.red}
+            color={MAIN.mainFont}
+            focusOutlineColor={MAIN.red}
             InputRightElement={
               <Pressable onPress={deletePassword}>
-                {state.password && <CloseIcon color={COLOR.red} />}
+                {state.password && <CloseIcon color={MAIN.red} />}
               </Pressable>
             }
             onChangeText={changePassword}
             value={state.password}
           />
-          <Button title="로그인" onPress={() => {}} />
-        </FormControl>
-      </Stack>
+          <TouchableOpacity style={styles.loginButton} activeOpacity={0.8}>
+            <Text style={styles.loginButtonText}>로그인</Text>
+          </TouchableOpacity>
+        </Stack>
+      </FormControl>
       <Button title="토큰부여" onPress={createTmpToken} />
-    </View>
+    </SafeAreaView>
   );
 };
 
