@@ -53,7 +53,7 @@ public class User {
         this.password = newPassword;
     }
 
-    public void deleteAccount() { // active를 바꾸는 메서드(setter사용을 피하기 위함)
+    public void deleteAccount() { // 회원 탈퇴(active를 바꾸는 메서드, setter사용을 피하기 위함)
         this.active = false;
     }
 }
