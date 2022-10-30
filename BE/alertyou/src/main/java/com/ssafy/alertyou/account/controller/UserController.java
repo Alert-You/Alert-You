@@ -46,8 +46,8 @@ public class UserController {
         String password = userLoginReqDto.getPassword();
         User user = userService.getUserByPhone(phone);
 
-        // 로그인 요청한 유저가 DB에 존재하지 않으면 404 리턴
-        if (user == null) {
+        // 로그인 요청한 유저가 DB에 존재하지 않거나 active가 아니면 404 리턴
+        if (user == null || !user.isActive()) {
             return ResponseEntity.status(404).body(UserLoginResDto.result(404, "해당 유저가 없습니다.", null));
         }
 

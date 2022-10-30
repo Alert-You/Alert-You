@@ -45,11 +45,15 @@ public class User {
 
     private boolean active;
 
-    public void updateAccount(UserSignupReqDto userSignupReqDto, String newPassword) {
+    public void updateAccount(UserSignupReqDto userSignupReqDto, String newPassword) { // 회원 수정 메서드
         this.phone = userSignupReqDto.getPhone();
         this.active = true;
         this.role = "student";
         this.username = userSignupReqDto.getUsername();
         this.password = newPassword;
+    }
+
+    public void deleteAccount() { // active를 바꾸는 메서드 setter사용을 피하기 위함
+        this.active = false;
     }
 }
