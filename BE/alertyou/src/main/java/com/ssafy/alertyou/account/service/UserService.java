@@ -51,7 +51,7 @@ public class UserService {
     }
     
     
-    // 유저 삭제
+    // 유저 삭제(setter 사용을 피하기 위해 회원 정보 수정 로직을 엔티티에 추가함)
     public void removeUser(User user) {
         user.deleteAccount();
         userRepository.save(user); // userRepository.delete(user);
