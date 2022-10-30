@@ -53,7 +53,8 @@ public class UserService {
     
     // 유저 삭제
     public void removeUser(User user) {
-        userRepository.delete(user);
+        user.deleteAccount();
+        userRepository.save(user); // userRepository.delete(user);
     }
 
 }
