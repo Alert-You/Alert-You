@@ -1,19 +1,26 @@
 import { View, Text, Pressable } from 'react-native'
 import React from 'react'
 import { styles } from './style';
+import { NoticeList } from '@/screens/NoticeScreen'
+import { useRecoilState } from 'recoil';
+import { noticeListState } from '@/store'
+
 type Props = {
   navigation: any
 }
 
 const NoticeScreen = ({ navigation }: Props) => {
+  const [noticeList, setNoticeList] = useRecoilState(noticeListState)
+
   return (
     <View style={styles.container}>
       <Pressable>
         <Text style={styles.readContainer}>모두 읽기</Text>
       </Pressable>
-      <View>
-        <Text style={styles.textContainer} >오늘</Text>
+      <View style={styles.textContainer} >
+        <Text > 오늘 </Text>
       </View>
+      <NoticeList noticeList={noticeList} />
     </View>
   )
 }
