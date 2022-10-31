@@ -7,28 +7,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: WHITE.white,
   },
-  loginButton: {
-    marginTop: 32,
-    backgroundColor: MAIN.red,
-    justifyContent: 'center',
-    alignContent: 'center',
-    height: 45,
-    borderRadius: 5,
-    fontWeight: FONT_WEIGHT.Bold,
-  },
-  loginButtonText: {
-    textAlign: 'center',
-    fontWeight: FONT_WEIGHT.SemiBold,
-    color: WHITE.white,
-    fontSize: 16,
-  },
   imageContainer: {
     flex: 1,
-    marginHorizontal: 16,
   },
   formContainer: {
     flex: 3,
-    marginTop: 40,
+    marginTop: 50,
     marginHorizontal: 16,
   },
   signUpText: {
