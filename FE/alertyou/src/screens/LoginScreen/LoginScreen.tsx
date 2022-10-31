@@ -1,19 +1,18 @@
-import {View, Button, TouchableOpacity, Text} from 'react-native';
+import {View, Button, Text} from 'react-native';
 import {
   CloseIcon,
   FormControl,
   Input,
   KeyboardAvoidingView,
   Pressable,
-  Spinner,
   Stack,
 } from 'native-base';
 import ErrorBoundary from 'react-native-error-boundary';
-import React, {Suspense, useReducer} from 'react';
+import React, {useReducer} from 'react';
 import {tokenState} from '@/store';
 import {useSetRecoilState} from 'recoil';
-import {MAIN, WHITE} from '@/theme/colorVariants';
-import {LogoImage} from '@/components';
+import {MAIN} from '@/theme/colorVariants';
+import {LogoImage, SpinnerButton} from '@/components';
 import {useMutation} from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -27,7 +26,6 @@ import {
 } from './functions';
 import {loginRequest} from './apis';
 import {loginValueType, TokenType} from './types';
-import SignUpNavigation from '../../navigations/SignUpNavigation/SignUpNavigation';
 
 const LoginScreen = ({navigation}: any) => {
   const setToken = useSetRecoilState(tokenState);
@@ -76,18 +74,18 @@ const LoginScreen = ({navigation}: any) => {
     //유효성 검사 추가
     if (phoneValidation(state.phone)) {
       mutate(state);
-    } else if(!state.phone || !state.password) {
-      onFailHandler()
+    } else if (!state.phone || !state.password) {
+      onFailHandler();
     } else {
       failPhoneValidation();
     }
     deletePhoneNumber();
     deletePassword();
   };
-  
+
   const moveToSignUp = () => {
-    navigation.navigate("SignUp")
-  }
+    navigation.navigate('SignUp');
+  };
 
   return (
     <ErrorBoundary>
@@ -109,7 +107,7 @@ const LoginScreen = ({navigation}: any) => {
                 focusOutlineColor={MAIN.red}
                 InputRightElement={
                   <Pressable onPress={deletePhoneNumber}>
-                    {state.phone && <CloseIcon color={MAIN.red} />}
+                    {state.phone ? <CloseIcon color={MAIN.red} /> : null}
                   </Pressable>
                 }
                 onChangeText={changePhoneNumber}
@@ -129,7 +127,7 @@ const LoginScreen = ({navigation}: any) => {
                 focusOutlineColor={MAIN.red}
                 InputRightElement={
                   <Pressable onPress={deletePassword}>
-                    {state.password && <CloseIcon color={MAIN.red} />}
+                    {state.password ? <CloseIcon color={MAIN.red} /> : null}
                   </Pressable>
                 }
                 onChangeText={changePassword}
@@ -138,19 +136,12 @@ const LoginScreen = ({navigation}: any) => {
               />
             </FormControl>
           </Stack>
-          <TouchableOpacity
-            style={styles.loginButton}
-            activeOpacity={0.8}
-            onPress={submitAndClearForm}>
-            <Suspense fallback={<Spinner color={WHITE.white} />}>
-              <Text style={styles.loginButtonText}>로그인</Text>
-            </Suspense>
-          </TouchableOpacity>
+          <SpinnerButton onPress={submitAndClearForm}>로그인</SpinnerButton>
           <View style={styles.signUpTextGroup}>
-            <Text style={styles.signUpText}>
-              알럿유가 처음이신가요?
+            <Text style={styles.signUpText}>알럿유가 처음이신가요?</Text>
+            <Text style={styles.signUpNavigator} onPress={moveToSignUp}>
+              회원가입
             </Text>
-              <Text style={styles.signUpNavigator} onPress={moveToSignUp}>회원가입</Text>
           </View>
           <Button title="토큰부여" onPress={createTmpToken} />
         </View>
