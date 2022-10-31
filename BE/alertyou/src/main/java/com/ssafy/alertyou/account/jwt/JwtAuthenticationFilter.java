@@ -45,7 +45,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
 //        System.out.println("어 통과했음!");
         try {
             Authentication authentication = getAuthentication(request);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContextHolder에 인증 정보를 저장
         } catch (Exception e) {
             e.printStackTrace();
             return;
