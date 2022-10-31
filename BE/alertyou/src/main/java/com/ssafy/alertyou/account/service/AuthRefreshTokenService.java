@@ -12,14 +12,28 @@ public class AuthRefreshTokenService {
 
     private final AuthRefreshTokenRepository authRefreshTokenRepository;
 
+    public String createAccessToken(String phone) {
+        return JwtTokenProvider.createAccessToken(phone);
+    }
+
+
     // refresh토큰 생성(저장)
-    public String saveRefreshToken(String phone) {
+    public String createRefreshToken(String phone) {
         String refreshToken = JwtTokenProvider.createRefreshToken(phone);
         AuthRefreshToken authRefreshToken = AuthRefreshToken.builder()
                 .refreshToken(refreshToken)
                 .build();
         authRefreshTokenRepository.save(authRefreshToken);
         return refreshToken;
+    }
+
+    // 리프레시 토큰 조회
+    public AuthRefreshToken getRefreshToken(String refreshToken) {
+        return authRefreshTokenRepository.findByRefreshToken(refreshToken);
+    }
+
+    public void deleteRefreshToken(AuthRefreshToken refreshToken) {
+        authRefreshTokenRepository.delete(refreshToken);
     }
 
 }
