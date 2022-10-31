@@ -19,7 +19,7 @@ public class ProofController {
     private final S3Util s3Util;
 
     @PostMapping(value = "/upload")
-    public ResponseEntity<Map<String, Object>> ProofUpload(@RequestHeader String token, @RequestPart("file") MultipartFile multipartFile) throws Exception {
+    public ResponseEntity<Map<String, Object>> ProofUpload(@RequestHeader(value = "Authorization") String token, @RequestPart("file") MultipartFile multipartFile) throws Exception {
         return proofService.uploadProof(token, multipartFile);
     }
 
@@ -29,7 +29,7 @@ public class ProofController {
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<Map<String, Object>> ProofList(@RequestHeader String token, @RequestParam("user_id") long id) throws Exception {
+    public ResponseEntity<Map<String, Object>> ProofList(@RequestHeader(value = "Authorization") String token, @RequestParam("user_id") long id) throws Exception {
         return proofService.getProof(token, id);
     }
 
