@@ -70,7 +70,8 @@ export enum RED {
   red300p = "#FAD3C5",
   red400p = "#FA9E7F",
   red500p = "#F5765D",
-  red600p = "#E35F42"
+  red600p = "#E35F42",
+  redBg = "#FFF9F7"
 }
 
 
