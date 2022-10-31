@@ -77,7 +77,7 @@ const SignUpScreen = ({navigation}:any) => {
                   </Pressable>
                 }
                 autoCorrect={false}
-                // value={val}
+                value={school.school}
               />
             </FormControl>
             <HStack justifyContent="space-between">
