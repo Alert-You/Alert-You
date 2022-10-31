@@ -1,6 +1,10 @@
 package com.ssafy.alertyou.account.entity;
 
 import com.ssafy.alertyou.account.dto.UserSignupReqDto;
+import com.ssafy.alertyou.guard.entity.Coguard;
+import com.ssafy.alertyou.guard.entity.Opguard;
+import com.ssafy.alertyou.report.entity.Report;
+import com.ssafy.alertyou.school.entity.School;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +32,29 @@ public class User {
 //    @OneToOne
 //    @JoinColumn(name = "school_id")
 //    private School school;
+    
+    // 학교-유저 관계 추가
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = School.class)
+    @JoinColumn(name = "school_id")
+    private School school;
+
+    // 추가 가드-유저 관계
+    @OneToMany(mappedBy="user")
+    private List<Opguard> users = new ArrayList<>();
+
+    @OneToMany(mappedBy="opGuard")
+    private List<Opguard> opGuards = new ArrayList<>();
+
+    // 공통 가드-유저 관계 추가
+    @OneToMany(mappedBy="teacher")
+    private List<Coguard> teachers = new ArrayList<>();
+
+    @OneToMany(mappedBy="coGuard")
+    private List<Coguard> coGuards = new ArrayList<>();
+
+    // 신고-유저 관계
+    @OneToMany(mappedBy="reUser")
+    private List<Report> reUsers = new ArrayList<>();
 
     @Column(nullable = false)
     private String password;
