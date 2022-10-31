@@ -7,7 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,7 +32,8 @@ public class Report {
     private User reUser;
 
     private boolean isVictim;
-    private LocalDateTime dateTime;
+    private String noticeDate;
+    private String noticeTime;
     private boolean checked;
     private String content;
     private int latitude;
