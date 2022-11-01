@@ -1,7 +1,5 @@
-import {View, Text, Pressable} from 'react-native';
+import {View, Text, Pressable, Dimensions} from 'react-native';
 import React from 'react';
-import {LogoImage, SpinnerButton} from '@/components';
-import {styles} from './style';
 import {
   Center,
   CloseIcon,
@@ -11,10 +9,12 @@ import {
   SearchIcon,
   Stack,  
 } from 'native-base';
-import {MAIN} from '@/theme/colorVariants';
-import {Dimensions} from 'react-native';
 import {useRecoilState} from 'recoil';
+import {LogoImage, SpinnerButton} from '@/components';
+import {MAIN} from '@/theme/colorVariants';
 import {schoolState} from '@/store/signUpState';
+
+import {styles} from './style';
 
 const SignUpScreen = ({navigation}:any) => {
   const [school, setSchool] = useRecoilState(schoolState);
@@ -48,6 +48,12 @@ const SignUpScreen = ({navigation}:any) => {
       screen: 'searchSchoolScreen'
     });
   };
+
+  const moveToNextPage = (): void => {
+    navigation.navigate('SignUp', { 
+      screen: 'SignUpSubScreen'
+    })
+  }
 
   return (
     <View style={styles.container}>
@@ -131,7 +137,7 @@ const SignUpScreen = ({navigation}:any) => {
               </Center>
             </HStack>
           </Stack>
-          <SpinnerButton onPress={() => {}}>다음</SpinnerButton>
+          <SpinnerButton onPress={moveToNextPage}>다음</SpinnerButton>
         </View>
       </View>
     </View>

@@ -1,4 +1,4 @@
-import {WHITE} from '@/theme/colorVariants';
+import { WHITE, MAIN } from '@/theme/colorVariants';
 import {FONT_WEIGHT} from '@/theme/fontWeightVariants';
 import {StyleSheet} from 'react-native';
 
@@ -12,22 +12,20 @@ export const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 3,
-    marginTop: 50,
+    marginTop: 40,
     marginHorizontal: 16,
   },
-  signUpText: {
-    textAlign: 'center',
-    fontSize: 12,
+  infoTextContainer: {
+    flex: 1,
+    marginTop: 10,
   },
-  signUpNavigator: {
-    fontSize: 12,
-    marginLeft: 4,
-    textDecorationLine: 'underline',
+  infoText: {
+    fontSize: 16,
     fontWeight: FONT_WEIGHT.Bold,
+    color: MAIN.mainFont,
   },
-  signUpTextGroup: {
-    marginTop: 7,
-    justifyContent: 'center',
-    flexDirection: 'row',
+  formsList: {
+    flex: 8,
   },
 });
+

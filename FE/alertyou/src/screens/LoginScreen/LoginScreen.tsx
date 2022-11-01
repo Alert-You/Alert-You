@@ -74,6 +74,7 @@ const LoginScreen = ({navigation}: any) => {
     //유효성 검사 추가
     if (phoneValidation(state.phone)) {
       mutate(state);
+      //Navigate로 홈으로 이동
     } else if (!state.phone || !state.password) {
       onFailHandler();
     } else {

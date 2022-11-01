@@ -14,9 +14,11 @@ interface schoolInfoType {
   grade: string;
   class: string;
 }
+interface phoneType {
+  phone: string
+}
 
 interface accountType {
-  phone: string;
   password: string;
   name: string;
 }
@@ -33,22 +35,29 @@ export const schoolState = atom<schoolInfoType>({
 export const accountState = atom<accountType>({
   key: 'accountState',
   default: {
-    phone: '',
     password: '',
     name: '',
   },
 });
+
+export const phoneState = atom<phoneType>({
+  key: 'phoneState',
+  default: {
+    phone: ''
+  }
+})
 
 export const signUpState = selector<signUpType>({
   key: 'signUpState',
   get: ({ get }) => {
     const school = get(schoolState)
     const account = get(accountState)
+    const phone = get(phoneState)
     return {
       school: school.school,
       grade: school.grade ? parseInt(school.grade): 0,
       class: school.class ? parseInt(school.class): 0,
-      phone: account.phone,
+      phone: phone.phone,
       password: account.password,
       name: account.name
     }
