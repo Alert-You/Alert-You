@@ -4,7 +4,7 @@ import {Input, SearchIcon} from 'native-base';
 import {MAIN} from '@/theme/colorVariants';
 
 import {styles} from './style';
-import { SchoolInfo } from './components/SchoolInfo';
+import { SchoolInfo } from './components';
 
 const SearchSchoolScreen = () => {
   
