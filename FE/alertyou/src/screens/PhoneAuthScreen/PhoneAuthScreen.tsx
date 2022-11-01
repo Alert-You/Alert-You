@@ -1,5 +1,5 @@
 import {View, Text, Pressable, Keyboard, Dimensions} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {Suspense, useEffect, useState} from 'react';
 import {Box, CloseIcon, FormControl, Input, Stack, useToast} from 'native-base';
 import {useRecoilState} from 'recoil';
 import {LogoImage, SpinnerButton} from '@/components';
@@ -9,25 +9,19 @@ import {phoneState} from '@/store/signUpState';
 import {styles} from './style';
 import {AuthSpinnerButton} from './components';
 import {onFailHandler, phoneValidation} from './functions';
-import { useQuery } from '@tanstack/react-query';
-import { fetchAuthKey } from './apis';
-import axios from 'axios';
+import {useQuery} from '@tanstack/react-query';
+import {fetchAuthKey} from './apis';
 
 const PhoneAuthScreen = () => {
-  // const {data, isLoading, isError, error} = useQuery(["verification"], fetchAuthKey)
+  const {data, refetch} = useQuery(['verification'], fetchAuthKey, {
+    enabled: false,
+    refetchOnWindowFocus: false,
+  });
   const [phone, setPhone] = useRecoilState(phoneState);
   const [openInput, setOpenInput] = useState<boolean>(false);
   const [authNumber, setAuthNumber] = useState<string>('');
-  const [newData, setNewData] =useState<any>();
   const toast = useToast();
 
-  // useEffect(() => {
-  //   axios.get('https://jsonplaceholder.typicode.com/todos/1')
-  //   .then(res => {
-  //     setNewData(res.data)
-  //   })
-  //   console.log(newData)
-  // }, [newData])
   const onSuccessHandler = (): void => {
     toast.show({
       render: () => {
@@ -73,6 +67,7 @@ const PhoneAuthScreen = () => {
   const sendAuthMessage = (): void => {
     if (phoneValidation(phone.phone)) {
       //인증 요청
+      refetch();
       onSuccessHandler();
       setOpenInput(true);
       Keyboard.dismiss();
@@ -84,7 +79,7 @@ const PhoneAuthScreen = () => {
 
   const checkAuthValid = (): void => {
     //인증번호가 입력값과 같은지 체크 후 보냄
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -93,9 +88,10 @@ const PhoneAuthScreen = () => {
       </View>
       <View style={styles.formContainer}>
         <View style={styles.infoTextContainer}>
-          <Text style={styles.infoText}>
-            휴대폰 인증을 진행하세요
-          </Text>
+          <Text style={styles.infoText}>휴대폰 인증을 진행하세요</Text>
+          <Suspense>
+            <Text>{data}</Text>
+          </Suspense>
         </View>
         <View style={styles.formsList}>
           <Stack space={4}>
