@@ -11,7 +11,7 @@ const queryClinet = new QueryClient();
 const App: React.FunctionComponent = () => (
   <QueryClientProvider client={queryClinet}>
     <RecoilRoot>
-      <NativeBaseProvider>
+      <NativeBaseProvider config={config}>
         <NavigationContainer>
           <MainNavigation />
         </NavigationContainer>
@@ -19,5 +19,11 @@ const App: React.FunctionComponent = () => (
     </RecoilRoot>
   </QueryClientProvider>
 );
+
+const config = {
+  dependencies: {
+    'linear-gradient': require('react-native-linear-gradient').default,
+  }
+}
 
 export default App;
