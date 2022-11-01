@@ -32,7 +32,7 @@ const HomeScreen = ({navigation}: Props) => {
           <HomeTitle
             content={isEmergency ? '긴급 도움 요청' : '현장 목격 신고'}
           />
-          <MainBtn />
+          <MainBtn isEmergency={isEmergency}/>
           <ToggleBtn toggleIsEmergency={toggleIsEmergency} isEmergency={isEmergency} />
           {isEmergency ? <HelpText /> : <ReportBtns />}
         </Box>
