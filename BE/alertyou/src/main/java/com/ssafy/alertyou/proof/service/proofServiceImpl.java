@@ -127,7 +127,7 @@ public class proofServiceImpl implements ProofService {
 
     public User findUser(long id){
         return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Proof Not Found"));
+                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
     }
 
     public User findUserByPhone(String phone){
