@@ -1,8 +1,8 @@
 package com.ssafy.alertyou.account.entity;
 
 import com.ssafy.alertyou.account.dto.UserSignupReqDto;
-import com.ssafy.alertyou.guard.entity.Coguard;
-import com.ssafy.alertyou.guard.entity.Opguard;
+import com.ssafy.alertyou.bodyguard.entity.Coguard;
+import com.ssafy.alertyou.bodyguard.entity.Opguard;
 import com.ssafy.alertyou.report.entity.Report;
 import com.ssafy.alertyou.school.entity.School;
 import lombok.AllArgsConstructor;
@@ -46,7 +46,7 @@ public class User {
     private List<Opguard> opGuards = new ArrayList<>();
 
     // 공통 가드-유저 관계 추가
-    @OneToMany(mappedBy="teacher")
+    @OneToMany(mappedBy="user")
     private List<Coguard> teachers = new ArrayList<>();
 
     @OneToMany(mappedBy="coGuard")

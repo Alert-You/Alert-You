@@ -1,7 +1,6 @@
-package com.ssafy.alertyou.guard.entity;
+package com.ssafy.alertyou.bodyguard.entity;
 
 import com.ssafy.alertyou.account.entity.User;
-import com.ssafy.alertyou.school.entity.School;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

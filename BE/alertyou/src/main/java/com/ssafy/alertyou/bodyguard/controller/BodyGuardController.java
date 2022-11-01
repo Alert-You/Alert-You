@@ -1,6 +1,6 @@
-package com.ssafy.alertyou.guard.controller;
+package com.ssafy.alertyou.bodyguard.controller;
 
-import com.ssafy.alertyou.guard.service.OpGuardService;
+import com.ssafy.alertyou.bodyguard.service.BodyGuardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +13,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/bodyguard")
-public class OpGuardController {
-    private final OpGuardService opGuardService;
+public class BodyGuardController {
+    private final BodyGuardService bodyGuardService;
 
     @GetMapping(value = "/list")
-    public ResponseEntity<Map<String, Object>> OpGuardList(@RequestParam("user_id") long id) throws Exception{
-        return opGuardService.getOpGuard(id);
+    public ResponseEntity<Map<String, Object>> BodyGuardList(@RequestParam("user_id") long id) throws Exception{
+        return bodyGuardService.getBodyGuard(id);
     }
 }
