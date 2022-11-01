@@ -7,5 +7,5 @@ import java.util.Map;
 
 public interface BodyGuardService {
     public ResponseEntity<Map<String, Object>> getBodyGuard(long id) throws Exception;
-    public ResponseEntity<Map<String, Object>> postBodyGuard(BodyGuardReqDto bodyGuardReqDto) throws Exception;
+    public ResponseEntity<Map<String, Object>> addBodyGuard(BodyGuardReqDto bodyGuardReqDto) throws Exception;
 }

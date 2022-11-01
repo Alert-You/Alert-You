@@ -17,9 +17,9 @@ import lombok.NoArgsConstructor;
 public class BodyGuardReqDto {
 
     @ApiModelProperty(name="등록한 사람 id")
-    private long enroll_id;
+    private long enrollId;
 
     @ApiModelProperty(name="등록한 보디가드 id")
-    private long guard_id;
+    private long guardId;
 
 }

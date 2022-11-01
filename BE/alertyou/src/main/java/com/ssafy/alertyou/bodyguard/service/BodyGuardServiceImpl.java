@@ -75,13 +75,13 @@ public class BodyGuardServiceImpl implements BodyGuardService {
                 .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
     }
 
-    public ResponseEntity<Map<String, Object>> postBodyGuard(BodyGuardReqDto bodyGuardReqDto) throws Exception{
+    public ResponseEntity<Map<String, Object>> addBodyGuard(BodyGuardReqDto bodyGuardReqDto) throws Exception{
 
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
 
-        long enroll_id = bodyGuardReqDto.getEnroll_id();
-        long guard_id = bodyGuardReqDto.getGuard_id();
+        long enroll_id = bodyGuardReqDto.getEnrollId();
+        long guard_id = bodyGuardReqDto.getGuardId();
 
         User user = findUser(enroll_id); // 분기를 위한 User 찾기
         User guard = findUser(guard_id); // 저장할 가드 id

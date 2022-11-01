@@ -16,11 +16,11 @@ public class BodyGuardController {
 
     @PostMapping("")
     public ResponseEntity<Map<String, Object>> BodyGuardSave(@RequestBody BodyGuardReqDto bodyGuardReqDto) throws Exception {
-        return bodyGuardService.postBodyGuard(bodyGuardReqDto);
+        return bodyGuardService.addBodyGuard(bodyGuardReqDto);
     }
 
     @GetMapping(value = "/list")
-    public ResponseEntity<Map<String, Object>> BodyGuardList(@RequestParam("user_id") long id) throws Exception{
+    public ResponseEntity<Map<String, Object>> BodyGuardList(@RequestParam("userId") long id) throws Exception{
         return bodyGuardService.getBodyGuard(id);
     }
 }
