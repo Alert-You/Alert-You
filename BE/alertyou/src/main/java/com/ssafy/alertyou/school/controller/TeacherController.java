@@ -18,7 +18,7 @@ public class TeacherController {
         return teacherService.getClasses(token, name, grade, room);
     }
 
-    @GetMapping("")
+    @GetMapping("/student")
     public ResponseEntity<Map<String, Object>> getStudent(@RequestParam(value = "userId") long id) throws Exception{
         return teacherService.getStudent(id);
     }
