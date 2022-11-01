@@ -7,15 +7,15 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ProofListResDto {
-    private Long proof_id;
+    private Long proofId;
     private String url;
     private Boolean type;
-    private LocalDateTime created_time;
+    private String createDate;
 
     public ProofListResDto(Proof entity){
-        this.proof_id = entity.getId();
+        this.proofId = entity.getId();
         this.url = entity.getUrl();
         this.type = entity.getCtype();
-        this.created_time = entity.getCreatedAt();
+        this.createDate = entity.getCreatedAt();
     }
 }

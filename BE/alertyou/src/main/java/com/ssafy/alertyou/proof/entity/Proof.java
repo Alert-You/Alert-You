@@ -32,6 +32,6 @@ public class Proof {
     private String endPoint;
 
     @Column
-    private LocalDateTime createdAt;
+    private String createdAt;
 
 }
