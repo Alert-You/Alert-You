@@ -1,11 +1,14 @@
 import {useState} from 'react';
-import {Box, Button, ScrollView} from 'native-base';
+import {Box, ScrollView, Center} from 'native-base';
+
 import {
   HomeTitle,
   HelpText,
   MainBtn,
   ReportBtns,
+  ToggleBtn,
 } from '@/screens/HomeScreen/components';
+import { emergencyBgStyle, nonEmergencyBgStyle } from '@/theme/Home/gradient';
 
 type Props = {
   navigation: any;
@@ -16,22 +19,6 @@ const HomeScreen = ({navigation}: Props) => {
 
   const toggleIsEmergency = () => {
     setIsEmergency((emergency: boolean) => !emergency);
-  };
-
-  const emergencyBgStyle = {
-    linearGradient: {
-      colors: ['#250704', '#FF7843'],
-      start: [0, 0],
-      end: [1, 1],
-    },
-  };
-
-  const nonEmergencyBgStyle = {
-    linearGradient: {
-      colors: ['#7979F7', '#202A43'],
-      start: [0, 0],
-      end: [1, 1],
-    },
   };
 
   return (
@@ -46,7 +33,7 @@ const HomeScreen = ({navigation}: Props) => {
             content={isEmergency ? '긴급 도움 요청' : '현장 목격 신고'}
           />
           <MainBtn />
-          <Button onPress={toggleIsEmergency}>Click Me</Button>
+          <ToggleBtn toggleIsEmergency={toggleIsEmergency} isEmergency={isEmergency} />
           {isEmergency ? <HelpText /> : <ReportBtns />}
         </Box>
       </ScrollView>
