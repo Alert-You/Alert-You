@@ -68,6 +68,21 @@ public class TeacherServiceImpl implements TeacherService{
         return new ResponseEntity<>(result, status);
     }
 
+    public ResponseEntity<Map<String, Object>> getStudent(long id) throws Exception{
+//        1. id로 findUser 찾기
+//        2. 만약 CoGuard에서 선생님이 지정한 보디가드 일 때, 있다면 role = GUARD & 없다면 role = STUDENT
+        // String GUARD = '보디가드' & String STUDENT = '학급원'
+            //2-1 다른 반 보디가드는 볼 수 없는건가요 ?
+                //2-1-1 만약 다른 반 보디가드를 볼 수 없다면 : findTeacherAndCoGuard 값으로 판단
+                //2-1-2 만약 다른 반 보디가드를 볼 수 있다면 : findCoGuard에서 값으로 판단
+//        3. School school = findSchool(user.getSchool)
+            //3-1 String schoolName = school.getName + school.getGrade.toString() +"학년" + school.getRoom.toString()+"반";
+//        4. 분기처리 하고 들어갈 것 : StudentDetailResDto(user,role,schoolName)
+
+        return null;
+    }
+
+
 
     public School findSchool(String name, int grade, int room){
         return schoolRepository.findByNameAndGradeAndRoom(name,grade,room)
