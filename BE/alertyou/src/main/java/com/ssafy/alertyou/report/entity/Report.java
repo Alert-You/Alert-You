@@ -31,11 +31,10 @@ public class Report {
     @JoinColumn(name = "report_user_id")
     private User reUser;
 
-    private boolean isVictim;
-    private String noticeDate;
-    private String noticeTime;
+    private Boolean isVictim;
+    private String noticeDateTime;
     private boolean checked;
     private String content;
-    private int latitude;
-    private int longtitude;
+    private double latitude;
+    private double longtitude;
 }
