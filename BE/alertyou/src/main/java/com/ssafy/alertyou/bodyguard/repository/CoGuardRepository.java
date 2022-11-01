@@ -11,6 +11,8 @@ import java.util.Optional;
 public interface CoGuardRepository extends JpaRepository<Coguard, Long> {
     public List<Coguard> findAllByUser(User user);
 
+    public Optional<Coguard> findByCoGuardAndUser(User coGuard, User user);
+
     public Optional<Coguard> findByCoGuard(User user);
 
 }
