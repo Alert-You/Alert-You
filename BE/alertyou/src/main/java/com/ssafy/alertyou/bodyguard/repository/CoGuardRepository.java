@@ -6,7 +6,11 @@ import com.ssafy.alertyou.bodyguard.entity.Opguard;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CoGuardRepository extends JpaRepository<Coguard, Long> {
     public List<Coguard> findAllByUser(User user);
+
+    public Optional<Coguard> findByCoGuard(User user);
+
 }
