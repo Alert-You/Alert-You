@@ -2,6 +2,8 @@ package com.ssafy.alertyou.report.service;
 
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.repository.UserRepository;
+import com.ssafy.alertyou.bodyguard.entity.Opguard;
+import com.ssafy.alertyou.bodyguard.repository.OpGuardRepository;
 import com.ssafy.alertyou.report.dto.ReportResDto;
 import com.ssafy.alertyou.report.dto.ReportVictimReqDto;
 import com.ssafy.alertyou.report.dto.ReportWitnessReqDto;
@@ -24,6 +26,7 @@ public class ReportServiceImpl implements ReportService {
 
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
+    private final OpGuardRepository opGuardRepository;
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
 
@@ -65,6 +68,39 @@ public class ReportServiceImpl implements ReportService {
             result.put("student", new ReportResDto(report));
             status = HttpStatus.OK;
         } catch (Exception e){
+            result.put("msg",FAIL);
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity<>(result, status);
+
+    }
+    public ResponseEntity<Map<String, Object>> getReportBodyGuardList(long id) throws Exception{
+
+        HttpStatus status = null;
+        Map<String, Object> result = new HashMap<>();
+
+        List<ReportResDto> list = new ArrayList<>();
+
+        User user = findUser(id);
+        List<Opguard> guardlist = findGuard(user);
+
+
+        for(Opguard opguard : guardlist){
+            User guarduser = opguard.getUser();
+            List<Report> reportlist = reportRepository.findAllByReUser(guarduser);
+
+            for(Report report : reportlist){
+                list.add(new ReportResDto(report));
+            }
+
+        }
+
+        if (!list.isEmpty()){
+            result.put("msg",SUCCESS);
+            result.put("reports", list);
+            status = HttpStatus.OK;
+        } else if(list.isEmpty()){
             result.put("msg",FAIL);
             status = HttpStatus.BAD_REQUEST;
         }
@@ -151,5 +187,9 @@ public class ReportServiceImpl implements ReportService {
     public Report findReport(long id){
         return reportRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Report Not Found"));
+    }
+
+    public List<Opguard> findGuard(User user){
+        return opGuardRepository.findAllByOpGuard(user);
     }
 }
