@@ -7,6 +7,8 @@ import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.jwt.JwtProperties;
 import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
 import com.ssafy.alertyou.account.repository.UserRepository;
+import com.ssafy.alertyou.bodyguard.entity.Coguard;
+import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.proof.dto.ProofListResDto;
 import com.ssafy.alertyou.proof.entity.Proof;
 import com.ssafy.alertyou.school.dto.StudentListResDto;
@@ -30,28 +32,30 @@ public class TeacherServiceImpl implements TeacherService{
     private final SchoolRepository schoolRepository;
     private final UserRepository userRepository;
 
+    private final CoGuardRepository coGuardRepository;
+
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
     private final String ROLE = "student";
 
-    public ResponseEntity<Map<String, Object>> getClasses(String token,String name, Integer grade, Integer room) throws Exception{
+    public ResponseEntity<Map<String, Object>> getClasses(String token,Integer grade, Integer room) throws Exception{
         School school = new School();
-        System.out.println(name);
+        User user = findUserByPhone(decodeToken(token));
         //1. 만약 아무것도 들어오지 않는다면(학교이름, 학년, 반 값이 없을 경우), default로 선생님의 반 학생들을 보여줍니다 (token을 활용)
             //1-1 만약 유저가 active true이고, role이 선생님일 때에만 로직이 돌아가게 추후 설정 예정
         //2. else 분기 처리를 좀 더 자세하게 할 지 고민입니당. ex) 학년만 검색했을 때, 학년 전체의 아이들이 나와야하는가? 아니면 반도 입력해달라고 할 것인가?
         //3. 학교 name을 받지 않고도 찾을 수 있는데 (선생님이 조회하니 값이 늘 고정이기 때문, grade와 room 은 변경되지만 학교는 변경되지 않으니까) name을 받을지 말 지 고민입니다
-        if (name == null && grade == null && room == null){
-            school = findUserByPhone(decodeToken(token)).getSchool();
+        if (grade == null && room == null){
+            school = user.getSchool();
         } else {
-            school = findSchool(name, grade, room);
+            school = findSchool(user.getSchool().getName(), grade, room);
         }
         List<User> userList = userRepository.findAllBySchoolAndRole(school,ROLE);
         List<StudentListResDto> list = new ArrayList<>();
-        for (User user : userList){
+        for (User student : userList){
             // user 객체로 기본 정보를 주고, 선생님이 선택한 보디가드인지 확인하는 로직 필요
-            // 보디가드 확인하는 로직 : findTeacherAndCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
-            list.add(new StudentListResDto(user, false));
+            // 보디가드 확인하는 로직 : findCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
+            list.add(new StudentListResDto(student, findGuard(student)));
         }
 
         HttpStatus status = null;
@@ -87,6 +91,14 @@ public class TeacherServiceImpl implements TeacherService{
     public School findSchool(String name, int grade, int room){
         return schoolRepository.findByNameAndGradeAndRoom(name,grade,room)
                 .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
+    }
+
+    public Boolean findGuard(User user){
+        if (!coGuardRepository.findByCoGuard(user).isPresent()){
+            return false;
+        }else {
+            return true;
+        }
     }
 
     public User findUser(long id){
