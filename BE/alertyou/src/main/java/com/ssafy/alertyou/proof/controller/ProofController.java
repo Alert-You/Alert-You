@@ -24,12 +24,12 @@ public class ProofController {
     }
 
     @GetMapping(value = "/download")
-    public ResponseEntity<byte[]> ProofDownload(@RequestParam("proof_id") Long id ) throws IOException {
+    public ResponseEntity<byte[]> ProofDownload(@RequestParam("proofId") Long id ) throws IOException {
         return proofService.downloadProof(id);
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<Map<String, Object>> ProofList(@RequestHeader(value = "Authorization") String token, @RequestParam("user_id") long id) throws Exception {
+    public ResponseEntity<Map<String, Object>> ProofList(@RequestHeader(value = "Authorization") String token, @RequestParam("userId") long id) throws Exception {
         return proofService.getProof(token, id);
     }
 

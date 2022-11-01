@@ -21,7 +21,7 @@ public class TeacherController {
     }
 
     @GetMapping("/student")
-    public ResponseEntity<Map<String, Object>> getStudent(@RequestParam(value = "userId") long id) throws Exception{
+    public ResponseEntity<Map<String, Object>> getStudent(@RequestParam(value = "studentId") long id) throws Exception{
         return teacherService.getStudent(id);
     }
 
