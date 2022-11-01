@@ -1,4 +1,4 @@
-package com.ssafy.alertyou.guard.entity;
+package com.ssafy.alertyou.bodyguard.entity;
 
 import com.ssafy.alertyou.account.entity.User;
 import lombok.AllArgsConstructor;
@@ -27,6 +27,6 @@ public class Coguard {
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "teacher_id")
-    private User teacher;
+    private User user;
 
 }
