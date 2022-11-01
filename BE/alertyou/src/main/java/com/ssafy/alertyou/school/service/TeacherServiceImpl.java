@@ -11,6 +11,7 @@ import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.proof.dto.ProofListResDto;
 import com.ssafy.alertyou.proof.entity.Proof;
+import com.ssafy.alertyou.school.dto.StudentDetailResDto;
 import com.ssafy.alertyou.school.dto.StudentListResDto;
 import com.ssafy.alertyou.school.entity.School;
 import com.ssafy.alertyou.school.repository.SchoolRepository;
@@ -37,6 +38,8 @@ public class TeacherServiceImpl implements TeacherService{
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
     private final String ROLE = "student";
+    private final String GUARD = "보디가드";
+    private final String STUDENT = "학급원";
 
     public ResponseEntity<Map<String, Object>> getClasses(String token,Integer grade, Integer room) throws Exception{
         School school = new School();
@@ -72,24 +75,47 @@ public class TeacherServiceImpl implements TeacherService{
         return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String, Object>> getStudent(long id) throws Exception{
+    public ResponseEntity<Map<String,Object>> getStudent(long id) throws Exception{
+        HttpStatus status = null;
+        Map<String, Object> result = new HashMap<>();
+        try {
 //        1. id로 findUser 찾기
+            User user = findUser(id);
+            School school = user.getSchool();
+            String role = new String();
 //        2. 만약 CoGuard에서 선생님이 지정한 보디가드 일 때, 있다면 role = GUARD & 없다면 role = STUDENT
-        // String GUARD = '보디가드' & String STUDENT = '학급원'
+            if (findGuard(user)==true){
+                role = GUARD;
+            }else {
+                role = STUDENT;
+            }
+            // String GUARD = '보디가드' & String STUDENT = '학급원'
             //2-1 다른 반 보디가드는 볼 수 없는건가요 ?
-                //2-1-1 만약 다른 반 보디가드를 볼 수 없다면 : findTeacherAndCoGuard 값으로 판단
-                //2-1-2 만약 다른 반 보디가드를 볼 수 있다면 : findCoGuard에서 값으로 판단
+                // 2-1-1 만약 다른 반 보디가드를 볼 수 없다면 : findTeacherAndCoGuard 값으로 판단
+                // !!2-1-2 만약 다른 반 보디가드를 볼 수 있다면 : findCoGuard에서 값으로 판단 (우선 진행)
 //        3. School school = findSchool(user.getSchool)
             //3-1 String schoolName = school.getName + school.getGrade.toString() +"학년" + school.getRoom.toString()+"반";
+            String schoolName = school.getName() + " " + String.valueOf(school.getGrade()) + "학년 " + String.valueOf(school.getRoom()) + "반";
 //        4. 분기처리 하고 들어갈 것 : StudentDetailResDto(user,role,schoolName)
-
-        return null;
+            result.put("msg",SUCCESS);
+            result.put("student", new StudentDetailResDto(user,schoolName,role));
+            status = HttpStatus.OK;
+        } catch (Exception e){
+            result.put("msg",FAIL);
+            status = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(result, status);
     }
 
 
 
     public School findSchool(String name, int grade, int room){
         return schoolRepository.findByNameAndGradeAndRoom(name,grade,room)
+                .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
+    }
+
+    public School findSchoolById(long id){
+        return schoolRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
     }
 
