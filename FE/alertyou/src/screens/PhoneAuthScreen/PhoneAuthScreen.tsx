@@ -1,5 +1,5 @@
 import {View, Text, Pressable, Keyboard, Dimensions} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, CloseIcon, FormControl, Input, Stack, useToast} from 'native-base';
 import {useRecoilState} from 'recoil';
 import {LogoImage, SpinnerButton} from '@/components';
@@ -9,14 +9,25 @@ import {phoneState} from '@/store/signUpState';
 import {styles} from './style';
 import {AuthSpinnerButton} from './components';
 import {onFailHandler, phoneValidation} from './functions';
+import { useQuery } from '@tanstack/react-query';
+import { fetchAuthKey } from './apis';
+import axios from 'axios';
 
 const PhoneAuthScreen = () => {
-  
+  // const {data, isLoading, isError, error} = useQuery(["verification"], fetchAuthKey)
   const [phone, setPhone] = useRecoilState(phoneState);
   const [openInput, setOpenInput] = useState<boolean>(false);
   const [authNumber, setAuthNumber] = useState<string>('');
+  const [newData, setNewData] =useState<any>();
   const toast = useToast();
 
+  // useEffect(() => {
+  //   axios.get('https://jsonplaceholder.typicode.com/todos/1')
+  //   .then(res => {
+  //     setNewData(res.data)
+  //   })
+  //   console.log(newData)
+  // }, [newData])
   const onSuccessHandler = (): void => {
     toast.show({
       render: () => {
@@ -82,7 +93,9 @@ const PhoneAuthScreen = () => {
       </View>
       <View style={styles.formContainer}>
         <View style={styles.infoTextContainer}>
-          <Text style={styles.infoText}>휴대폰 인증을 진행하세요</Text>
+          <Text style={styles.infoText}>
+            휴대폰 인증을 진행하세요
+          </Text>
         </View>
         <View style={styles.formsList}>
           <Stack space={4}>
@@ -112,31 +125,33 @@ const PhoneAuthScreen = () => {
                 </AuthSpinnerButton>
               </View>
             </FormControl>
-            {openInput ? <FormControl isRequired>
-              <View style={styles.phoneContainer}>
-                <Input
-                  variant="underlined"
-                  placeholder="010xxxx0000"
-                  keyboardType="numeric"
-                  size="md"
-                  w="75%"
-                  h="9"
-                  color={MAIN.mainFont}
-                  focusOutlineColor={MAIN.red}
-                  InputRightElement={
-                    <Pressable onPress={deleteAuthNumber}>
-                      {authNumber ? <CloseIcon color={MAIN.red} /> : null}
-                    </Pressable>
-                  }
-                  onChangeText={changeAuthNumber}
-                  autoCorrect={false}
-                  value={authNumber}
-                />
-                <AuthSpinnerButton onPress={sendAuthMessage}>
-                  인증
-                </AuthSpinnerButton>
-              </View>
-            </FormControl>: null}
+            {openInput ? (
+              <FormControl isRequired>
+                <View style={styles.phoneContainer}>
+                  <Input
+                    variant="underlined"
+                    placeholder="010xxxx0000"
+                    keyboardType="numeric"
+                    size="md"
+                    w="75%"
+                    h="9"
+                    color={MAIN.mainFont}
+                    focusOutlineColor={MAIN.red}
+                    InputRightElement={
+                      <Pressable onPress={deleteAuthNumber}>
+                        {authNumber ? <CloseIcon color={MAIN.red} /> : null}
+                      </Pressable>
+                    }
+                    onChangeText={changeAuthNumber}
+                    autoCorrect={false}
+                    value={authNumber}
+                  />
+                  <AuthSpinnerButton onPress={sendAuthMessage}>
+                    인증
+                  </AuthSpinnerButton>
+                </View>
+              </FormControl>
+            ) : null}
           </Stack>
           <SpinnerButton onPress={() => {}}>회원가입</SpinnerButton>
         </View>
