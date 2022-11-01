@@ -4,10 +4,9 @@ import {Input, SearchIcon} from 'native-base';
 import {MAIN} from '@/theme/colorVariants';
 
 import {styles} from './style';
-import { SchoolInfo } from './components';
+import {SchoolInfo} from './components';
 
 const SearchSchoolScreen = () => {
-  
   return (
     <View style={styles.container}>
       <View style={styles.searchContainer}>
@@ -24,12 +23,13 @@ const SearchSchoolScreen = () => {
           onSubmitEditing={() => {}}
         />
       </View>
+      {/* flatList + 아무것도 없다면 검색하시오 띄우기 */}
       <View style={styles.schoolListContainer}>
-        <SchoolInfo/>
-        <SchoolInfo/>
-        <SchoolInfo/>
-        <SchoolInfo/>
-        <SchoolInfo/>
+        <SchoolInfo />
+        <SchoolInfo />
+        <SchoolInfo />
+        <SchoolInfo />
+        <SchoolInfo />
       </View>
     </View>
   );

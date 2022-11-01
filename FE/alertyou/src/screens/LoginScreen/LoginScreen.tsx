@@ -23,6 +23,7 @@ import {
   loginReducer,
   onFailHandler,
   phoneValidation,
+  saveToken,
 } from './functions';
 import {loginRequest} from './apis';
 import {loginValueType, TokenType} from './types';
@@ -35,13 +36,7 @@ const LoginScreen = ({navigation}: any) => {
     {
       onSuccess: successData => {
         setToken(successData.data.tokenId);
-        async () => {
-          try {
-            await AsyncStorage.setItem('@token', successData.data.tokenId);
-          } catch {
-            console.log('기기에 토큰 저장 실패');
-          }
-        };
+        saveToken(successData.data.tokenId)
       },
       onError: () => {
         //실패해도 성공에서 fail메세지를 받나?

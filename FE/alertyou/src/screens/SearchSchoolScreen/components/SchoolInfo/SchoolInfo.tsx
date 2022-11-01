@@ -3,6 +3,7 @@ import React from 'react';
 import {Flex, Badge} from 'native-base';
 
 import {styles} from './style';
+import { WHITE } from '@/theme/colorVariants';
 
 type Props = {};
 

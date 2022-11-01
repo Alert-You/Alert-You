@@ -13,6 +13,7 @@ import { onFailHandler, phoneValidation, onVerifySuccess, onVerifyFail, failSign
 import {fetchAuthKey} from './apis';
 
 const PhoneAuthScreen = ({navigation}: any) => {
+  //타입 지정
   // const {data, mutate} = useMutation<any, unknown, any>(state => fetchAuthKey(state));
   const [phone, setPhone] = useRecoilState(phoneState);
   const [openInput, setOpenInput] = useState<boolean>(false);

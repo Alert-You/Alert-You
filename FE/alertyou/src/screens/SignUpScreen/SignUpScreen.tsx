@@ -7,7 +7,7 @@ import {
   HStack,
   Input,
   SearchIcon,
-  Stack,  
+  Stack,
 } from 'native-base';
 import {useRecoilState} from 'recoil';
 import {LogoImage, SpinnerButton} from '@/components';
@@ -16,7 +16,7 @@ import {schoolState} from '@/store/signUpState';
 
 import {styles} from './style';
 
-const SignUpScreen = ({navigation}:any) => {
+const SignUpScreen = ({navigation}: any) => {
   const [school, setSchool] = useRecoilState(schoolState);
 
   const changeGrade = (e: string): void => {
@@ -45,15 +45,15 @@ const SignUpScreen = ({navigation}:any) => {
 
   const moveToSearchSchool = (): void => {
     navigation.navigate('SignUp', {
-      screen: 'searchSchoolScreen'
+      screen: 'searchSchoolScreen',
     });
   };
 
   const moveToNextPage = (): void => {
-    navigation.navigate('SignUp', { 
-      screen: 'SignUpSubScreen'
-    })
-  }
+    navigation.navigate('SignUp', {
+      screen: 'SignUpSubScreen',
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -68,23 +68,25 @@ const SignUpScreen = ({navigation}:any) => {
           <Stack space={4}>
             <FormControl isRequired>
               <FormControl.Label>학교 검색</FormControl.Label>
-              <Input
-                type="text"
-                variant="underlined"
-                editable={false}
-                placeholder="ex) 싸피고등학교"
-                size="md"
-                h="9"
-                color={MAIN.mainFont}
-                focusOutlineColor={MAIN.red}
-                InputRightElement={
-                  <Pressable onPress={moveToSearchSchool}>
-                    <SearchIcon size="md" />
-                  </Pressable>
-                }
-                autoCorrect={false}
-                value={school.school}
-              />
+              <Pressable onPress={moveToSearchSchool}>
+                <Input
+                  type="text"
+                  variant="underlined"
+                  editable={false}
+                  placeholder="ex) 싸피고등학교"
+                  size="md"
+                  h="9"
+                  color={MAIN.mainFont}
+                  focusOutlineColor={MAIN.red}
+                  InputRightElement={
+                    <Pressable onPress={moveToSearchSchool}>
+                      <SearchIcon size="md" />
+                    </Pressable>
+                  }
+                  autoCorrect={false}
+                  value={school.school}
+                />
+              </Pressable>
             </FormControl>
             <HStack justifyContent="space-between">
               <Center w={(Dimensions.get('window').width - 32) / 2 - 20}>
