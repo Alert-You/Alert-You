@@ -16,8 +16,8 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getClass(@RequestHeader(value = "Authorization") String token, @RequestParam(required = false) Integer grade, Integer room) throws Exception {
-        return teacherService.getClasses(token, grade, room);
+    public ResponseEntity<Map<String, Object>> getClass(@RequestHeader(value = "Authorization") String token, @RequestParam(required = false) Integer grade, String classRoom) throws Exception {
+        return teacherService.getClasses(token, grade, classRoom);
     }
 
     @GetMapping("/student")

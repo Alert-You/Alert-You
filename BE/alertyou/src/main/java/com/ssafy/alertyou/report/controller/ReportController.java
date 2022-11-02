@@ -1,6 +1,5 @@
 package com.ssafy.alertyou.report.controller;
 
-import com.ssafy.alertyou.bodyguard.dto.BodyGuardReqDto;
 import com.ssafy.alertyou.report.dto.ReportVictimReqDto;
 import com.ssafy.alertyou.report.dto.ReportWitnessReqDto;
 import com.ssafy.alertyou.report.service.ReportService;
