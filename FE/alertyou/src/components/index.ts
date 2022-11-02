@@ -1,2 +1,2 @@
-export { LogoImage } from './LogoImage';
-export { default as FlatListItem } from './FlatListItem'
+export {LogoImage} from './LogoImage';
+export {SpinnerButton} from './SpinnerButton'
