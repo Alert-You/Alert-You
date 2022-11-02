@@ -1,8 +1,14 @@
 import {innerGradientStyle, outerGradientStyle} from '@/theme/gradient';
 import {AspectRatio, Center} from 'native-base';
 import React from 'react';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MAIN } from '@/theme/colorVariants'
 
-const ReportBtn = () => {
+interface propsType {
+  name: string;
+}
+
+const ReportBtn = ({name}: propsType) => {
 
   return (
     <>
@@ -15,7 +21,13 @@ const ReportBtn = () => {
         }}
         >
         <Center rounded="3xl" bg={outerGradientStyle}>
-          <Center size="85%" rounded="full" bg={innerGradientStyle}></Center>
+          <Center size="85%" rounded="full" bg={innerGradientStyle}>
+          <MaterialCommunityIcons
+                name={name}
+                color={MAIN.placeholder}
+                size={50}
+              />
+          </Center>
         </Center>
       </AspectRatio>
     </>
