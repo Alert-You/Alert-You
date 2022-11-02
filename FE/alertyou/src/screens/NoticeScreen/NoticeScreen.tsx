@@ -17,9 +17,6 @@ const NoticeScreen = ({ navigation }: Props) => {
       <Pressable>
         <Text style={styles.readContainer}>모두 읽기</Text>
       </Pressable>
-      <View style={styles.textContainer} >
-        <Text > 오늘 </Text>
-      </View>
       <NoticeList noticeList={noticeList} />
     </View>
   )
