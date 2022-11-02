@@ -1,5 +1,6 @@
 package com.ssafy.alertyou.school.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ssafy.alertyou.account.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,7 @@ public class School {
 
     // 학교-유저 관계
     @OneToMany(mappedBy="school")
+    @JsonIgnore
     private List<User> users = new ArrayList<>();
 
     private String name;

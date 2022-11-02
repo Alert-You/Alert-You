@@ -43,24 +43,35 @@ public class TeacherServiceImpl implements TeacherService{
 
     public ResponseEntity<Map<String, Object>> getClasses(String token,Integer grade, String classRoom) throws Exception{
         School school = new School();
+        List<StudentListResDto> list = new ArrayList<>();
         User user = findUserByPhone(decodeToken(token));
         //1. 만약 아무것도 들어오지 않는다면(학교이름, 학년, 반 값이 없을 경우), default로 선생님의 반 학생들을 보여줍니다 (token을 활용)
-            //1-1 만약 유저가 active true이고, role이 선생님일 때에만 로직이 돌아가게 추후 설정 예정
+        //1-1 만약 유저가 active true이고, role이 선생님일 때에만 로직이 돌아가게 추후 설정 예정
         //2. else 분기 처리를 좀 더 자세하게 할 지 고민입니당. ex) 학년만 검색했을 때, 학년 전체의 아이들이 나와야하는가? 아니면 반도 입력해달라고 할 것인가?
         //3. 학교 name을 받지 않고도 찾을 수 있는데 (선생님이 조회하니 값이 늘 고정이기 때문, grade와 room 은 변경되지만 학교는 변경되지 않으니까) name을 받을지 말 지 고민입니다
         if (grade == null && classRoom == null){
             school = user.getSchool();
+        } else if (!(grade == null) && classRoom == null){
+            List<School> schools = findSchoolAndGrade(user.getSchool().getName(),grade);
+            for (School school1 : schools){
+                List<User> userList = userRepository.findAllBySchoolAndRole(school1,ROLE);
+                for (User student : userList){
+                    // user 객체로 기본 정보를 주고, 선생님이 선택한 보디가드인지 확인하는 로직 필요
+                    // 보디가드 확인하는 로직 : findCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
+                    list.add(new StudentListResDto(student, findGuard(student)));
+                }
+            }
         } else {
             school = findSchool(user.getSchool().getName(), grade, classRoom);
         }
-        List<User> userList = userRepository.findAllBySchoolAndRole(school,ROLE);
-        List<StudentListResDto> list = new ArrayList<>();
-        for (User student : userList){
-            // user 객체로 기본 정보를 주고, 선생님이 선택한 보디가드인지 확인하는 로직 필요
-            // 보디가드 확인하는 로직 : findCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
-            list.add(new StudentListResDto(student, findGuard(student)));
+        if (list.isEmpty()){
+            List<User> userList = userRepository.findAllBySchoolAndRole(school,ROLE);
+            for (User student : userList){
+                // user 객체로 기본 정보를 주고, 선생님이 선택한 보디가드인지 확인하는 로직 필요
+                // 보디가드 확인하는 로직 : findCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
+                list.add(new StudentListResDto(student, findGuard(student)));
+            }
         }
-
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
         if (!list.isEmpty()){
@@ -112,6 +123,10 @@ public class TeacherServiceImpl implements TeacherService{
     public School findSchool(String name, int grade, String classRoom){
         return schoolRepository.findByNameAndGradeAndClassRoom(name,grade,classRoom)
                 .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
+    }
+
+    public List<School> findSchoolAndGrade(String name, int grade){
+        return schoolRepository.findAllByNameAndGrade(name,grade);
     }
 
     public School findSchoolById(long id){
