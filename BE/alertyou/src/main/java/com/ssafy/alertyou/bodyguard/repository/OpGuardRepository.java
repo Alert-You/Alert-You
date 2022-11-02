@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface OpGuardRepository extends JpaRepository<Opguard, Long> {
     public List<Opguard> findAllByUser(User user);
-
     public Optional<Opguard> findByOpGuardAndUser(User opGuard, User user);
     public List<Opguard> findAllByOpGuard(User opGuard);
 }

@@ -41,17 +41,17 @@ public class TeacherServiceImpl implements TeacherService{
     private final String GUARD = "보디가드";
     private final String STUDENT = "학급원";
 
-    public ResponseEntity<Map<String, Object>> getClasses(String token,Integer grade, Integer room) throws Exception{
+    public ResponseEntity<Map<String, Object>> getClasses(String token,Integer grade, String classRoom) throws Exception{
         School school = new School();
         User user = findUserByPhone(decodeToken(token));
         //1. 만약 아무것도 들어오지 않는다면(학교이름, 학년, 반 값이 없을 경우), default로 선생님의 반 학생들을 보여줍니다 (token을 활용)
             //1-1 만약 유저가 active true이고, role이 선생님일 때에만 로직이 돌아가게 추후 설정 예정
         //2. else 분기 처리를 좀 더 자세하게 할 지 고민입니당. ex) 학년만 검색했을 때, 학년 전체의 아이들이 나와야하는가? 아니면 반도 입력해달라고 할 것인가?
         //3. 학교 name을 받지 않고도 찾을 수 있는데 (선생님이 조회하니 값이 늘 고정이기 때문, grade와 room 은 변경되지만 학교는 변경되지 않으니까) name을 받을지 말 지 고민입니다
-        if (grade == null && room == null){
+        if (grade == null && classRoom == null){
             school = user.getSchool();
         } else {
-            school = findSchool(user.getSchool().getName(), grade, room);
+            school = findSchool(user.getSchool().getName(), grade, classRoom);
         }
         List<User> userList = userRepository.findAllBySchoolAndRole(school,ROLE);
         List<StudentListResDto> list = new ArrayList<>();
@@ -95,7 +95,7 @@ public class TeacherServiceImpl implements TeacherService{
                 // !!2-1-2 만약 다른 반 보디가드를 볼 수 있다면 : findCoGuard에서 값으로 판단 (우선 진행)
 //        3. School school = findSchool(user.getSchool)
             //3-1 String schoolName = school.getName + school.getGrade.toString() +"학년" + school.getRoom.toString()+"반";
-            String schoolName = school.getName() + " " + String.valueOf(school.getGrade()) + "학년 " + String.valueOf(school.getRoom()) + "반";
+            String schoolName = school.getName() + " " + String.valueOf(school.getGrade()) + "학년 " + String.valueOf(school.getClassRoom()) + "반";
 //        4. 분기처리 하고 들어갈 것 : StudentDetailResDto(user,role,schoolName)
             result.put("msg",SUCCESS);
             result.put("student", new StudentDetailResDto(user,schoolName,role));
@@ -109,8 +109,8 @@ public class TeacherServiceImpl implements TeacherService{
 
 
 
-    public School findSchool(String name, int grade, int room){
-        return schoolRepository.findByNameAndGradeAndRoom(name,grade,room)
+    public School findSchool(String name, int grade, String classRoom){
+        return schoolRepository.findByNameAndGradeAndClassRoom(name,grade,classRoom)
                 .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
     }
 

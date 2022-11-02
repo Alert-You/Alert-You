@@ -30,7 +30,7 @@ public class School {
     private String region;
     private String address;
     private int grade; // 학년
-    private int room; // 반
+    private String classRoom; // 반
 
 
 }
