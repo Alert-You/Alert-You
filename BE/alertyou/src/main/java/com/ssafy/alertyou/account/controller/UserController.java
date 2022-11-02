@@ -168,7 +168,12 @@ public class UserController {
 
 
     @PostMapping("/reissue/refresh")
-    @ApiOperation(value = "Refresh 토큰 재발급", notes = "Refresh 토큰을 재발급해준다.")
+    @ApiOperation(value = "refresh 토큰 재발급", notes = "refresh 토큰을 재발급해준다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "refresh 토큰 재발급 성공"),
+            @ApiResponse(code = 401, message = "토큰이 유효하지 않음"),
+            @ApiResponse(code = 404, message = "404 NOT FOUND")
+    })
     public ResponseEntity<BaseResponseBody> reissueRefresh(HttpServletRequest request, HttpServletResponse response) {
         // 리프레시 토큰을 재발급해준다. => 유효한 리프레시 토큰일 경우에만 발급
         String refreshToken = authRefreshTokenService.getRefreshTokenFromCookie(request);
@@ -192,6 +197,12 @@ public class UserController {
 
 
     @GetMapping("/{phone}")
+    @ApiOperation(value = "회원 상세 정보 조회", notes = "휴대 전화 번호를 입력하여 회원 상세 정보를 확인한다.")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "회원 상세 정보 조회 성공"),
+            @ApiResponse(code = 401, message = "권한 없음"),
+            @ApiResponse(code = 404, message = "회원을 찾을 수 없음")
+    })
     public ResponseEntity<? extends BaseResponseBody> getUser(@PathVariable String phone) {
         User user = userService.getUserByPhone(phone);
         if (user == null || !user.isActive()) { // 유저가 존재하지 않거나 탈퇴 유저이면
