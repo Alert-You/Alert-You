@@ -1,24 +1,24 @@
 import {innerGradientStyle, outerGradientStyle} from '@/theme/gradient';
-import {AspectRatio, Center} from 'native-base';
+import {AspectRatio, Center, VStack} from 'native-base';
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { MAIN } from '@/theme/colorVariants'
 
 interface propsType {
   name: string;
+  nameKr: string;
 }
 
-const ReportBtn = ({name}: propsType) => {
+const ReportBtn = ({name, nameKr}: propsType) => {
 
   return (
-    <>
+    <VStack width='28%' space={2}>
       <AspectRatio
+      width='100%'
         ratio={{
           base: 1 / 1,
         }}
-        width={{
-          base: '28%',
-        }}
+        
         >
         <Center rounded="3xl" bg={outerGradientStyle}>
           <Center size="85%" rounded="full" bg={innerGradientStyle}>
@@ -30,7 +30,8 @@ const ReportBtn = ({name}: propsType) => {
           </Center>
         </Center>
       </AspectRatio>
-    </>
+      <Center _text={{color:'white', fontSize:'lg'}}>{nameKr}</Center>
+    </VStack>
   );
 };
 
