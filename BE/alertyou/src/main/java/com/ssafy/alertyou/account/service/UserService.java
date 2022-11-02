@@ -25,6 +25,7 @@ public class UserService {
                         .phone(userRequestDto.getPhone())
                         .username(userRequestDto.getUsername())
                         .password(bCryptPasswordEncoder.encode(userRequestDto.getPassword()))
+                        .school(userRequestDto.getSchool())
                         .role("student")
                         .active(true)
                         .build();
