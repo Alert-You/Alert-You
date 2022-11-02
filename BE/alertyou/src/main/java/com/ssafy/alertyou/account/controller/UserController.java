@@ -1,9 +1,6 @@
 package com.ssafy.alertyou.account.controller;
 
-import com.ssafy.alertyou.account.dto.UserLoginReqDto;
-import com.ssafy.alertyou.account.dto.UserLoginResDto;
-import com.ssafy.alertyou.account.dto.UserSignupReqDto;
-import com.ssafy.alertyou.account.dto.UserSignupResDto;
+import com.ssafy.alertyou.account.dto.*;
 import com.ssafy.alertyou.account.entity.AuthRefreshToken;
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.service.AuthRefreshTokenService;
@@ -193,6 +190,16 @@ public class UserController {
         return ResponseEntity.status(200).body(BaseResponseBody.result(200, "리프레시 토큰 발급 완료"));
     }
 
+
+    @GetMapping("/{phone}")
+    public ResponseEntity<? extends BaseResponseBody> getUser(@PathVariable String phone) {
+        User user = userService.getUserByPhone(phone);
+        if (user == null || !user.isActive()) { // 유저가 존재하지 않거나 탈퇴 유저이면
+            return ResponseEntity.status(404).body(BaseResponseBody.result(404, "존재하지 않는 유저입니다."));
+        }
+        UserInfoResDto userInfoResDto = userService.getUserInfo(phone);
+        return ResponseEntity.status(200).body(userInfoResDto);
+    }
 
     @GetMapping("/test") // 권한 테스트용
     @ResponseBody

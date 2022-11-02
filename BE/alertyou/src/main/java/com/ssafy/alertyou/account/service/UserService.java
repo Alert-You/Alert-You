@@ -1,8 +1,12 @@
 package com.ssafy.alertyou.account.service;
 
+import com.ssafy.alertyou.account.dto.UserInfoResDto;
 import com.ssafy.alertyou.account.dto.UserSignupReqDto;
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.repository.UserRepository;
+import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
+import com.ssafy.alertyou.school.entity.School;
+import com.ssafy.alertyou.school.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +17,8 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CoGuardRepository coGuardRepository;
+    private final SchoolRepository schoolRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     // 회원가입
     public boolean createUser(UserSignupReqDto userRequestDto) {
@@ -25,7 +31,7 @@ public class UserService {
                         .phone(userRequestDto.getPhone())
                         .username(userRequestDto.getUsername())
                         .password(bCryptPasswordEncoder.encode(userRequestDto.getPassword()))
-                        .school(userRequestDto.getSchool())
+                        .school(schoolRepository.getById(userRequestDto.getSchoolId()))
                         .role("student")
                         .active(true)
                         .build();
@@ -41,10 +47,11 @@ public class UserService {
     // 유저 정보 수정(setter 사용을 피하기 위해 회원 정보 수정 로직을 엔티티에 추가함)
     public boolean modifyUserInfo(User user, UserSignupReqDto userSignupReqDto) {
         String newPhone = userSignupReqDto.getPhone();
-        // 바꾸려는 핸드폰 번호를 가진 유저가 없으면 회원정보 수정 진행
-        if (userRepository.findByPhone(newPhone) == null) {
+        // 바꾸려는 핸드폰 번호를 가진 유저가 없거나 자기 자신의 번호라면 회원정보 수정 진행
+        if (user.getPhone().equals(newPhone) || userRepository.findByPhone(newPhone) == null) {
             String newPassword = bCryptPasswordEncoder.encode(userSignupReqDto.getPassword());
-            user.updateAccount(userSignupReqDto, newPassword);
+            School school = schoolRepository.getById(userSignupReqDto.getSchoolId());
+            user.updateAccount(userSignupReqDto, school, newPassword);
             userRepository.save(user);
             return true;
         }
@@ -56,6 +63,20 @@ public class UserService {
     public void removeUser(User user) {
         user.deleteAccount();
         userRepository.save(user); // userRepository.delete(user);
+    }
+    
+    // 유저 정보 조회
+    public UserInfoResDto getUserInfo(String phone) {
+        User user = userRepository.findByPhone(phone);
+        boolean ret = coGuardRepository.findByCoGuard(user).isPresent(); // 보디가드 역할인지 확인
+        String role = user.getRole();
+        School school = user.getSchool();
+        if (ret) { // 보디가드 역할을 부여 받았으면 보디가드를 부여
+            role = "보디가드";
+        }
+        String schoolName = school.getName() + " " + String.valueOf(school.getGrade()) + "학년 " + String.valueOf(school.getRoom()) + "반";
+
+        return UserInfoResDto.result(200, "유저 정보 조회 완료", schoolName, user.getUsername(), role, phone);
     }
 
 }
