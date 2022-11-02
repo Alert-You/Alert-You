@@ -11,10 +11,12 @@ const NoticeList: React.FC<{ noticeList: noticeListType[] }> = ({ noticeList }) 
 
   return (
     <View>
-      <FlatList
-        data={noticeList}
-        renderItem={renderItem}
-      />
+      {noticeList ?
+        <FlatList
+          data={noticeList}
+          renderItem={renderItem}
+        />
+        : <Text>알림내역이 없습니다.</Text>}
     </View>
   )
 }
