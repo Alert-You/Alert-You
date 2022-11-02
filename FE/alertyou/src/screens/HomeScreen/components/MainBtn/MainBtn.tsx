@@ -1,9 +1,10 @@
 import {innerGradientStyle, outerGradientStyle} from '@/theme/gradient';
-import {toastType} from '@/types/toastType';
 import {AspectRatio, Center, Circle} from 'native-base';
 import React from 'react';
-import {Button, Pressable} from 'react-native';
+import {Pressable} from 'react-native';
 import Toast from 'react-native-toast-message';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { MAIN } from '@/theme/colorVariants'
 
 interface props {
   isEmergency: boolean;
@@ -37,7 +38,13 @@ const MainBtn = ({isEmergency}: props) => {
         }}>
         <Center>
           <Circle size="80%" bg={outerGradientStyle}>
-            <Circle size="88%" bg={innerGradientStyle}></Circle>
+            <Circle size="88%" bg={innerGradientStyle}>
+              <MaterialCommunityIcons
+                name={isEmergency ? 'bell-alert' : 'account-group'}
+                color={isEmergency ? '#942d25' : '#5253a1'}
+                size={150}
+              />
+            </Circle>
           </Circle>
         </Center>
       </AspectRatio>
