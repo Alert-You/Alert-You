@@ -31,7 +31,7 @@ import {loginValueType, TokenType} from './types';
 const LoginScreen = ({navigation}: any) => {
   const setToken = useSetRecoilState(tokenState);
   //onSuccess 데이터 처리, alert스타일 처리
-  const {data, mutate} = useMutation<TokenType, unknown, loginValueType>(
+  const {data, mutate, isLoading} = useMutation<TokenType, unknown, loginValueType>(
     credentials => loginRequest(credentials),
     {
       onSuccess: successData => {
@@ -132,7 +132,7 @@ const LoginScreen = ({navigation}: any) => {
               />
             </FormControl>
           </Stack>
-          <SpinnerButton onPress={submitAndClearForm}>로그인</SpinnerButton>
+          <SpinnerButton onPress={isLoading ? () => {} :submitAndClearForm}>로그인</SpinnerButton>
           <View style={styles.signUpTextGroup}>
             <Text style={styles.signUpText}>알럿유가 처음이신가요?</Text>
             <Text style={styles.signUpNavigator} onPress={moveToSignUp}>

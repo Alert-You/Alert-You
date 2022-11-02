@@ -14,12 +14,11 @@ import {fetchAuthKey} from './apis';
 
 const PhoneAuthScreen = ({navigation}: any) => {
   //타입 지정
-  // const {data, mutate} = useMutation<any, unknown, any>(state => fetchAuthKey(state));
+  const {data, mutate, isLoading} = useMutation<any, unknown, any>(state => fetchAuthKey(state));
   const [phone, setPhone] = useRecoilState(phoneState);
   const [openInput, setOpenInput] = useState<boolean>(false);
   const [authNumber, setAuthNumber] = useState<string>('');
   const [allowSignUp, setAllowSignUp] = useState<boolean>(false);
-  const data = {certNumber: '1111'}
   const toast = useToast();
 
   const onSuccessHandler = (): void => {
@@ -34,12 +33,12 @@ const PhoneAuthScreen = ({navigation}: any) => {
 
   const changePhoneNumber = (e: string): void => {
     setPhone(state => {
-      return {phone: e};
+      return {phone: e.trim()};
     });
   };
 
   const changeAuthNumber = (e: string): void => {
-    setAuthNumber(e);
+    setAuthNumber(e.trim());
   };
 
   const deletePhoneNumber = (): void => {
@@ -54,7 +53,7 @@ const PhoneAuthScreen = ({navigation}: any) => {
   const sendAuthMessage = (): void => {
     if (phoneValidation(phone.phone)) {
       //인증 요청
-      // mutate(phone.phone)
+      mutate(phone.phone)
       onSuccessHandler();
       setOpenInput(true);
       Keyboard.dismiss();
@@ -122,7 +121,7 @@ const PhoneAuthScreen = ({navigation}: any) => {
                   autoCorrect={false}
                   value={phone.phone}
                 />
-                <AuthSpinnerButton onPress={sendAuthMessage}>
+                <AuthSpinnerButton onPress={isLoading ? () => {} : sendAuthMessage}>
                   인증 요청
                 </AuthSpinnerButton>
               </View>

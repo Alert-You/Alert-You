@@ -54,12 +54,12 @@ export const signUpState = selector<signUpType>({
     const account = get(accountState)
     const phone = get(phoneState)
     return {
-      school: school.school,
-      grade: school.grade ? parseInt(school.grade): 0,
-      class: school.class ? parseInt(school.class): 0,
-      phone: phone.phone,
-      password: account.password,
-      name: account.name
+      school: school.school.trim(),
+      grade: school.grade ? parseInt(school.grade.trim()): 0,
+      class: school.class ? parseInt(school.class.trim()): 0,
+      phone: phone.phone.trim(),
+      password: account.password.trim(),
+      name: account.name.trim()
     }
   }
 });

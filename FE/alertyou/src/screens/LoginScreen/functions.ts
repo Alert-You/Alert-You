@@ -15,13 +15,13 @@ export const loginReducer = (
     case 'phone': {
       return {
         ...state,
-        phone: action.payload,
+        phone: action.payload.trim(),
       };
     }
     case 'password': {
       return {
         ...state,
-        password: action.payload,
+        password: action.payload.trim(),
       };
     }
     default:

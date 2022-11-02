@@ -21,13 +21,13 @@ const SignUpSubScreen = ({navigation}: any) => {
 
   const changeName = (e: string): void => {
     setAccount(state => {
-      return {...state, name: e};
+      return {...state, name: e.trim()};
     });
   };
 
   const changePassword = (e: string): void => {
     setAccount(state => {
-      return {...state, password: e};
+      return {...state, password: e.trim()};
     });
   };
 
@@ -49,7 +49,6 @@ const SignUpSubScreen = ({navigation}: any) => {
       navigation.navigate('SignUp', {
         screen: 'PhoneAuthScreen'
       });
-      //Navigate 휴대폰 인증 페이지
     } else {
       setIsValid(true);
       setAccount(state => {
@@ -94,7 +93,7 @@ const SignUpSubScreen = ({navigation}: any) => {
               <Input
                 type="password"
                 variant="underlined"
-                placeholder="비밀번호"
+                placeholder="숫자, 영어 소문자, 대문자, 특수문자를 입력하세요."
                 size="md"
                 h="9"
                 color={MAIN.mainFont}

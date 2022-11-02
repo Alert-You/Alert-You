@@ -15,19 +15,20 @@ import {MAIN} from '@/theme/colorVariants';
 import {schoolState} from '@/store/signUpState';
 
 import {styles} from './style';
+import { formIsNotFilled } from './functions';
 
 const SignUpScreen = ({navigation}: any) => {
   const [school, setSchool] = useRecoilState(schoolState);
 
   const changeGrade = (e: string): void => {
     setSchool(state => {
-      return {...state, grade: e};
+      return {...state, grade: e.trim()};
     });
   };
 
   const changeClass = (e: string): void => {
     setSchool(state => {
-      return {...state, class: e};
+      return {...state, class: e.trim()};
     });
   };
 
@@ -50,9 +51,13 @@ const SignUpScreen = ({navigation}: any) => {
   };
 
   const moveToNextPage = (): void => {
-    navigation.navigate('SignUp', {
-      screen: 'SignUpSubScreen',
-    });
+    if (school.class && school.school && school.grade) {
+      navigation.navigate('SignUp', {
+        screen: 'SignUpSubScreen',
+      });
+    } else {
+      formIsNotFilled();
+    }
   };
 
   return (
