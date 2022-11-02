@@ -1,11 +1,14 @@
 import { View, Text } from 'native-base'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { noticeListType } from '@/types'
 import { FlatListItem } from '@/components'
 import { WHITE, RED, MAIN } from '@/theme/colorVariants'
 import { Pressable } from 'react-native'
-
+import { useNavigation, NavigationProp } from '@react-navigation/native'
+import { NoticeParamList } from '@/navigations/NoticeNavigation/NoticeNavigation'
 const NoticeItem: React.FC<{ item: noticeListType }> = ({ item }) => {
+  const navigation = useNavigation<NavigationProp<NoticeParamList>>()
+
   let notice: string = ''
   let uri: string = ''
   if (item.isVictim) {
@@ -56,10 +59,13 @@ const NoticeItem: React.FC<{ item: noticeListType }> = ({ item }) => {
     subTitle = Math.trunc(dif / day) + '일 전';
     //달보다 작으면 몇일 전인지
   }
+  const onClick = useCallback(() => {
+    navigation.navigate('NoticeMap', { reportId: item.reportId });
+  }, [navigation]);
 
   return (
     <View>
-      <Pressable>
+      <Pressable onPress={onClick}>
         <FlatListItem
           title={notice}
           subTitle={subTitle}

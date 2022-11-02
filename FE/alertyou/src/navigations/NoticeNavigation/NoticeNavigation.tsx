@@ -1,12 +1,17 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NoticeScreen } from "@/screens"
+import { NoticeMap } from '@/screens/NoticeScreen';
 
-const Stack = createNativeStackNavigator();
+export type NoticeParamList = {
+  NoticeScreen: undefined,
+  NoticeMap: { reportId: number }
+}
+
+const Stack = createNativeStackNavigator<NoticeParamList>();
 
 const NoticeNavigation = () => {
   return (
-    //알아서 initialRouteName 바꾸세요.
     <Stack.Navigator initialRouteName="NoticeScreen">
       <Stack.Screen
         name="NoticeScreen"
@@ -22,6 +27,11 @@ const NoticeNavigation = () => {
             backgroundColor: '#FFF9F7'
           }
         }}
+      />
+      <Stack.Screen
+        name="NoticeMap"
+        component={NoticeMap}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
