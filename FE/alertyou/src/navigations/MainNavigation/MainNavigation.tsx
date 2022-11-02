@@ -20,7 +20,9 @@ const MainNavigation = () => {
   return (
     <>
       {hasToken && (
-        <Tab.Navigator>
+        <Tab.Navigator
+          initialRouteName='Home'
+        >
           <Tab.Screen
             name="Notice"
             component={NoticeNavigation}
