@@ -1,4 +1,4 @@
-import { View, Text } from 'native-base'
+import { View } from 'native-base'
 import React, { useCallback } from 'react'
 import { noticeListType } from '@/types'
 import { FlatListItem } from '@/components'
@@ -33,7 +33,7 @@ const NoticeItem: React.FC<{ item: noticeListType }> = ({ item }) => {
   // const day = ("0" + date.getDate()).slice(-2);
   // const todayDate = year + "-" + month + "-" + day;
 
-  const writeDay = new Date(item.noticeDate)
+  const writeDay = new Date(item.noticeDateTime)
   let dif = date.getTime() - writeDay.getTime()
   dif = Math.trunc(dif / 1000);
   console.log(writeDay.getTime())
