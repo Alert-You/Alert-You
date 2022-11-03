@@ -10,12 +10,13 @@ import {
   Stack,
 } from 'native-base';
 import {useRecoilState} from 'recoil';
+
 import {LogoImage, SpinnerButton} from '@/components';
 import {MAIN} from '@/theme/colorVariants';
 import {schoolState} from '@/store/signUpState';
 
 import {styles} from './style';
-import { formIsNotFilled } from './functions';
+import {formIsNotFilled} from './functions';
 
 const SignUpScreen = ({navigation}: any) => {
   const [school, setSchool] = useRecoilState(schoolState);
@@ -144,7 +145,9 @@ const SignUpScreen = ({navigation}: any) => {
               </Center>
             </HStack>
           </Stack>
-          <SpinnerButton onPress={moveToNextPage}>다음</SpinnerButton>
+          <View style={styles.spinnerButtonStyle}>
+            <SpinnerButton onPress={moveToNextPage}>다음</SpinnerButton>
+          </View>
         </View>
       </View>
     </View>

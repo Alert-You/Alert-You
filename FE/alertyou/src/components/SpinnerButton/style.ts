@@ -4,11 +4,9 @@ import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   loginButton: {
-    marginTop: 32,
     backgroundColor: MAIN.red,
     justifyContent: 'center',
     alignContent: 'center',
-    height: 45,
     borderRadius: 5,
     fontWeight: FONT_WEIGHT.Bold,
   },
@@ -16,6 +14,5 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: FONT_WEIGHT.SemiBold,
     color: WHITE.white,
-    fontSize: 16,
   },
 });

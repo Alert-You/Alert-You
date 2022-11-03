@@ -28,12 +28,15 @@ export const styles = StyleSheet.create({
     flex: 8,
   },
   phoneContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   toastText: {
     color: WHITE.white,
     fontWeight: FONT_WEIGHT.Bold,
     fontSize: 13,
-  }
+  },
+  spinnerButtonStyle: {
+    marginTop: 32,
+  },
 });
 

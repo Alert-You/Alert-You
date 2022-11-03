@@ -10,17 +10,17 @@ export const styles = StyleSheet.create({
   },
   headerText: {
     color: WHITE.white,
-    fontSize: 20,
+    fontSize: 24,
     textAlign: 'center',
-    fontWeight: FONT_WEIGHT.SemiBold,
-    marginTop: 10,
+    fontWeight: FONT_WEIGHT.Bold,
+    marginTop: 35,
   },
   nameText: {
     color: WHITE.white,
-    fontSize: 32,
+    fontSize: 36,
     textAlign: 'center',
     fontWeight: FONT_WEIGHT.Bold,
-    marginTop: 50,
+    marginTop: 30,
   },
   profileContainer: {
     flex: 1,
@@ -29,6 +29,16 @@ export const styles = StyleSheet.create({
   profileAbsoluteBox: {
     left: 16,
     bottom: 135,
+  },
+  studentListButton: {
+    marginTop: 100,
+    marginHorizontal: 16,
+  },
+  buttonText: {
+    fontSize: 16,
+    marginLeft: 3,
+    marginBottom: 5,
+    fontWeight: FONT_WEIGHT.Medium
   }
 
   
