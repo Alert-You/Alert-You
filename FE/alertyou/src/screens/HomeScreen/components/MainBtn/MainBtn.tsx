@@ -1,5 +1,5 @@
 import {innerGradientStyle, outerGradientStyle} from '@/theme/gradient';
-import {AspectRatio, Center, Circle, Modal} from 'native-base';
+import {AspectRatio, Center, Circle} from 'native-base';
 import React, {useState} from 'react';
 import {Pressable} from 'react-native';
 import Toast from 'react-native-toast-message';
