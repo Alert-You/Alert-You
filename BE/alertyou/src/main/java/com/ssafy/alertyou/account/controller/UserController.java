@@ -212,10 +212,9 @@ public class UserController {
         return ResponseEntity.status(200).body(userInfoResDto);
     }
 
-    @GetMapping("/test") // 권한 테스트용
-    @ResponseBody
-    public String test() {
-        return "테스트 페이지";
+    @GetMapping("/location") // 권한 테스트용
+    public String test(double latitude, double longitude) {
+        return userService.reverseGeo(latitude, longitude);
     }
 
 }
