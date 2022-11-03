@@ -1,4 +1,4 @@
-import {View, Button, Text} from 'react-native';
+import {View, Text} from 'react-native';
 import {
   CloseIcon,
   FormControl,
@@ -9,9 +9,6 @@ import {
 } from 'native-base';
 import React, {useEffect, useReducer} from 'react';
 import ErrorBoundary from 'react-native-error-boundary';
-import {useSetRecoilState} from 'recoil';
-import {useMutation} from '@tanstack/react-query';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {MAIN} from '@/theme/colorVariants';
 import {LogoImage, SpinnerButton} from '@/components';
@@ -29,6 +26,7 @@ import {
 
 const LoginScreen = ({navigation}: any) => {
   const {mutate, isLoading} = useLogIn();
+  const [state, dispatch] = useReducer(loginReducer, loginInitialState);
 
   /////삭제
   useEffect(() => {
@@ -36,7 +34,6 @@ const LoginScreen = ({navigation}: any) => {
   }, []);
   /////////
 
-  const [state, dispatch] = useReducer(loginReducer, loginInitialState);
 
   const changePhoneNumber = (e: string): void => {
     dispatch({type: 'phone', payload: e});

@@ -3,23 +3,25 @@ import React from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import {Box} from 'native-base';
 
-import {tokenState} from '@/store';
+import {isLoggedInState, tokenState} from '@/store';
 import {redProfileGradientStyle} from '@/theme/gradient';
 import {ProfileBox, SpinnerButton} from '@/components';
-import { isLoggedInState } from '@/store/isLoggedinState';
 import { removeToken } from '@/utils/auth';
 
 import {styles} from './style';
+import { useLogout } from '@/hooks';
 
 const ProfileScreen = ({navigation}: any) => {
   const setIsLoggedIn = useSetRecoilState(isLoggedInState);
   const tokenRemover = useSetRecoilState(tokenState);
+  const {mutate} = useLogout()
 
-  //전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
+  //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
   const logoutHandler = (): void => {
-    setIsLoggedIn(false);
-    removeToken();
+    mutate({});
     tokenRemover('');
+    removeToken();
+    setIsLoggedIn(false);
   }
 
   return (
