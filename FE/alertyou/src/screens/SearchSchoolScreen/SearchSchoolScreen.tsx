@@ -1,8 +1,9 @@
 import {View} from 'react-native';
 import React from 'react';
 import {Input, SearchIcon} from 'native-base';
-import {MAIN} from '@/theme/colorVariants';
 import { useRecoilState } from 'recoil';
+
+import {MAIN} from '@/theme/colorVariants';
 import { schoolState } from '@/store/signUpState';
 
 import {styles} from './style';

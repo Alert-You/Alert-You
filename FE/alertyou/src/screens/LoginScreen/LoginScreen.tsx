@@ -7,14 +7,15 @@ import {
   Pressable,
   Stack,
 } from 'native-base';
-import ErrorBoundary from 'react-native-error-boundary';
 import React, {useReducer} from 'react';
-import {tokenState} from '@/store';
+import ErrorBoundary from 'react-native-error-boundary';
 import {useSetRecoilState} from 'recoil';
-import {MAIN} from '@/theme/colorVariants';
-import {LogoImage, SpinnerButton} from '@/components';
 import {useMutation} from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import {MAIN} from '@/theme/colorVariants';
+import {tokenState} from '@/store';
+import {LogoImage, SpinnerButton} from '@/components';
 
 import {styles} from './style';
 import {
@@ -31,19 +32,20 @@ import {loginValueType, TokenType} from './types';
 const LoginScreen = ({navigation}: any) => {
   const setToken = useSetRecoilState(tokenState);
   //onSuccess 데이터 처리, alert스타일 처리
-  const {data, mutate, isLoading} = useMutation<TokenType, unknown, loginValueType>(
-    credentials => loginRequest(credentials),
-    {
-      onSuccess: successData => {
-        setToken(successData.data.tokenId);
-        saveToken(successData.data.tokenId)
-      },
-      onError: () => {
-        //실패해도 성공에서 fail메세지를 받나?
-        onFailHandler();
-      },
+  const {data, mutate, isLoading} = useMutation<
+    TokenType,
+    unknown,
+    loginValueType
+  >(credentials => loginRequest(credentials), {
+    onSuccess: successData => {
+      setToken(successData.data.tokenId);
+      saveToken(successData.data.tokenId);
     },
-  );
+    onError: () => {
+      //실패해도 성공에서 fail메세지를 받나?
+      onFailHandler();
+    },
+  });
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
   const createTmpToken = () => {
     setToken('1');
@@ -132,7 +134,11 @@ const LoginScreen = ({navigation}: any) => {
               />
             </FormControl>
           </Stack>
-          <SpinnerButton onPress={isLoading ? () => {} :submitAndClearForm}>로그인</SpinnerButton>
+          <View style={styles.spinnerButtonStyle}>
+            <SpinnerButton onPress={isLoading ? () => {} : submitAndClearForm}>
+              로그인
+            </SpinnerButton>
+          </View>
           <View style={styles.signUpTextGroup}>
             <Text style={styles.signUpText}>알럿유가 처음이신가요?</Text>
             <Text style={styles.signUpNavigator} onPress={moveToSignUp}>

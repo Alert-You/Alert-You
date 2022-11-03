@@ -1,20 +1,36 @@
 import {View, Text, Pressable, Keyboard} from 'react-native';
 import React, {Suspense, useState} from 'react';
-import {CheckIcon, CloseIcon, FormControl, Input, Stack, useToast} from 'native-base';
+import {
+  CheckIcon,
+  CloseIcon,
+  FormControl,
+  Input,
+  Stack,
+  useToast,
+} from 'native-base';
 import {useRecoilState} from 'recoil';
-import {LogoImage, SpinnerButton} from '@/components';
-import {MAIN} from '@/theme/colorVariants';
-import {phoneState} from '@/store/signUpState';
 import {useMutation} from '@tanstack/react-query';
+
+import {LogoImage, SpinnerButton} from '@/components';
+import {phoneState} from '@/store/signUpState';
+import {MAIN} from '@/theme/colorVariants';
 
 import {styles} from './style';
 import {AuthSpinnerButton, ToastView} from './components';
-import { onFailHandler, phoneValidation, onVerifySuccess, onVerifyFail, failSignUp } from './functions';
+import {
+  onFailHandler,
+  phoneValidation,
+  onVerifySuccess,
+  onVerifyFail,
+  failSignUp,
+} from './functions';
 import {fetchAuthKey} from './apis';
 
 const PhoneAuthScreen = ({navigation}: any) => {
   //타입 지정
-  const {data, mutate, isLoading} = useMutation<any, unknown, any>(state => fetchAuthKey(state));
+  const {data, mutate, isLoading} = useMutation<any, unknown, any>(state =>
+    fetchAuthKey(state),
+  );
   const [phone, setPhone] = useRecoilState(phoneState);
   const [openInput, setOpenInput] = useState<boolean>(false);
   const [authNumber, setAuthNumber] = useState<string>('');
@@ -24,9 +40,7 @@ const PhoneAuthScreen = ({navigation}: any) => {
   const onSuccessHandler = (): void => {
     toast.show({
       render: () => {
-        return (
-          <ToastView/>
-        );
+        return <ToastView />;
       },
     });
   };
@@ -53,7 +67,7 @@ const PhoneAuthScreen = ({navigation}: any) => {
   const sendAuthMessage = (): void => {
     if (phoneValidation(phone.phone)) {
       //인증 요청
-      mutate(phone.phone)
+      mutate(phone.phone);
       onSuccessHandler();
       setOpenInput(true);
       Keyboard.dismiss();
@@ -65,26 +79,26 @@ const PhoneAuthScreen = ({navigation}: any) => {
 
   const checkAuthValid = (): void => {
     //인증번호가 입력값과 같은지 체크 후 보냄
-    if(authNumber === data?.certNumber) {
+    if (authNumber === data?.certNumber) {
       setAllowSignUp(true);
       onVerifySuccess();
     } else {
       setAllowSignUp(false);
-      onVerifyFail()
+      onVerifyFail();
     }
   };
 
   const submitSignUp = (): void => {
-    if(allowSignUp) {
+    if (allowSignUp) {
       //아예 조건부 렌더링으로 하지 않는게 나은가?
       //토큰이 존재하는데 만료 상태라도 바로 홈으로 진입함.(문제 있음)
-      navigation.navigate('Home', {screen: 'HomeScreen'})
+      navigation.navigate('Home', {screen: 'HomeScreen'});
       //회원가입 성공, 토큰 생성 및 저장
     } else if (!allowSignUp) {
       //회원가입 실패(요청 이후의 알럿으로 분기처리)
-      failSignUp()
+      failSignUp();
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -121,7 +135,8 @@ const PhoneAuthScreen = ({navigation}: any) => {
                   autoCorrect={false}
                   value={phone.phone}
                 />
-                <AuthSpinnerButton onPress={isLoading ? () => {} : sendAuthMessage}>
+                <AuthSpinnerButton
+                  onPress={isLoading ? () => {} : sendAuthMessage}>
                   인증 요청
                 </AuthSpinnerButton>
               </View>
@@ -140,8 +155,10 @@ const PhoneAuthScreen = ({navigation}: any) => {
                     focusOutlineColor={MAIN.red}
                     InputRightElement={
                       <Pressable onPress={deleteAuthNumber}>
-                        {!allowSignUp && authNumber ? <CloseIcon color={MAIN.red} /> : null}
-                        {allowSignUp ? <CheckIcon color="emerald.500"/>: null }
+                        {!allowSignUp && authNumber ? (
+                          <CloseIcon color={MAIN.red} />
+                        ) : null}
+                        {allowSignUp ? <CheckIcon color="emerald.500" /> : null}
                       </Pressable>
                     }
                     onChangeText={changeAuthNumber}
@@ -155,7 +172,9 @@ const PhoneAuthScreen = ({navigation}: any) => {
               </FormControl>
             ) : null}
           </Stack>
-          <SpinnerButton onPress={submitSignUp}>회원가입</SpinnerButton>
+          <View style={styles.spinnerButtonStyle}>
+            <SpinnerButton onPress={submitSignUp}>회원가입</SpinnerButton>
+          </View>
         </View>
       </View>
     </View>

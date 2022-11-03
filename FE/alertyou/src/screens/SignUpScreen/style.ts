@@ -26,5 +26,8 @@ export const styles = StyleSheet.create({
   },
   formsList: {
     flex: 8
+  },
+  spinnerButtonStyle: {
+    marginTop: 32
   }
 });

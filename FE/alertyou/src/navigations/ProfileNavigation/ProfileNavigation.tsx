@@ -8,7 +8,9 @@ const ProfileNavigation = () => {
   return (
     //알아서 initialRouteName 바꾸세요.
     <Stack.Navigator initialRouteName="ProfileScreen">
-      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{
+        headerShown: false
+      }}/>
     </Stack.Navigator>
   );
 };

@@ -13,3 +13,11 @@ export const outerGradientStyle = {
     end: [1, 1],
   },
 };
+
+export const redProfileGradientStyle = {
+  linearGradient: {
+    colors: ['#FFA182', '#FF4900'],
+    start: [0, 1],
+    end: [0, 0],
+  },
+};
