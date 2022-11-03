@@ -8,8 +8,6 @@ import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.school.entity.School;
 import com.ssafy.alertyou.school.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
-
-import org.apache.http.client.methods.HttpGet;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -79,22 +77,5 @@ public class UserService {
 
         return UserInfoResDto.result(200, "유저 정보 조회 완료", schoolName, user.getUsername(), role, phone);
     }
-
-
-    // 역지오 코딩
-    public String reverseGeo(double latitude, double longitude) {
-        String clientId = "co4w5k4lo3"; // 클라이언트 ID
-        String clientSecret = "vLrvWalrYx895ya4jmC3XGmWqf3E11ViQJnhppLV"; // 클라이언트 키
-        String basicUrl = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc";
-        String coords = latitude + "," + longitude;
-        String testurl = String.format("https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?request=coordsToaddr&coords=%s&sourcecrs=epsg:4326&output=json&orders=legalcode,admcode,roadaddr", coords);
-//        String testurl = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?request=coordsToaddr&coords={coords}&sourcecrs=epsg:4326&output=json&orders=legalcode,admcode";
-        HttpGet getRequest = new HttpGet("https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?output=json&orders=roadaddr");
-        getRequest.setHeader("X-NCP-APIGW-API-KEY-ID", clientId);
-        getRequest.setHeader("X-NCP-APIGW-API-KEY", clientSecret);
-
-        return testurl;
-    }
-
 
 }

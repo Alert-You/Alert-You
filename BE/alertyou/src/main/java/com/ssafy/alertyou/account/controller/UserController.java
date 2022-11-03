@@ -203,7 +203,7 @@ public class UserController {
             @ApiResponse(code = 401, message = "권한 없음"),
             @ApiResponse(code = 404, message = "회원을 찾을 수 없음")
     })
-    public ResponseEntity<? extends BaseResponseBody> getUser(@PathVariable String phone) {
+    public ResponseEntity<? extends BaseResponseBody> getUser(@PathVariable("phone") String phone) {
         User user = userService.getUserByPhone(phone);
         if (user == null || !user.isActive()) { // 유저가 존재하지 않거나 탈퇴 유저이면
             return ResponseEntity.status(404).body(BaseResponseBody.result(404, "존재하지 않는 유저입니다."));
@@ -212,9 +212,11 @@ public class UserController {
         return ResponseEntity.status(200).body(userInfoResDto);
     }
 
-    @GetMapping("/location") // 권한 테스트용
-    public String test(double latitude, double longitude) {
-        return userService.reverseGeo(latitude, longitude);
+
+    @GetMapping("/test") // 권한 테스트용
+    @ResponseBody
+    public String test() {
+        return "스프링 시큐리티 권한 테스트";
     }
 
 }
