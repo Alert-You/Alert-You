@@ -1,6 +1,7 @@
 package com.ssafy.alertyou.account.entity;
 
 import com.ssafy.alertyou.account.dto.UserSignupReqDto;
+import com.ssafy.alertyou.alert.entity.Alert;
 import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.entity.Opguard;
 import com.ssafy.alertyou.report.entity.Report;
@@ -55,6 +56,10 @@ public class User {
     // 신고-유저 관계
     @OneToMany(mappedBy="reUser")
     private List<Report> reUsers = new ArrayList<>();
+
+    // 알람-신고 관계
+    @OneToMany(mappedBy="user")
+    private List<Alert> userList = new ArrayList<>();
 
     @Column(nullable = false)
     private String password;

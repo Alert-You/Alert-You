@@ -1,6 +1,7 @@
 package com.ssafy.alertyou.report.entity;
 
 import com.ssafy.alertyou.account.entity.User;
+import com.ssafy.alertyou.alert.entity.Alert;
 import com.ssafy.alertyou.school.entity.School;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,10 +32,16 @@ public class Report {
     @JoinColumn(name = "report_user_id")
     private User reUser;
 
+    // 알람-신고 관계
+    @OneToMany(mappedBy="report")
+    private List<Alert> alerts = new ArrayList<>();
+
     private Boolean isVictim;
     private String noticeDateTime;
-    private boolean checked;
     private String content;
     private double latitude;
     private double longtitude;
+
+    private String location;
+    private String place;
 }
