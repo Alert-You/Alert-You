@@ -9,7 +9,7 @@ import {
   SignUpNavigation,
   LoginNavigation,
 } from '@/navigations';
-import {isLoggedInState} from '@/store/isLoggedinState';
+import {isLoggedInState} from '@/store';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
