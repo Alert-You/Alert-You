@@ -23,31 +23,50 @@ public class SchoolServiceImpl implements SchoolService{
 
         return null;
     };
-    public List<String> getGradesAndClasses(String name) throws Exception{
+    public ArrayList<ArrayList<String>> getGradesAndClasses(String name) throws Exception{
         List<School> schools = schoolRepository.findAllByName(name);
 
-        List<List<String>> classes = new ArrayList<>();
+        ArrayList<ArrayList<String>> classes = new ArrayList<ArrayList<String>>();
+
+        if (name.contains("초등")){
+            for (int i = 1;i<= 6; i++){
+                ArrayList<String> classRoom = new ArrayList<>();
+                classes.add(classRoom);
+            }
+        } else {
+            for (int j =1 ; j <= 3 ; j++){
+                ArrayList<String> classRoom = new ArrayList<>();
+                classes.add(classRoom);
+            }
+        }
+        System.out.println(classes.size());
 
         for (School school : schools){
-            List<String> classRoom = new ArrayList<>();
-            if (school.getName().contains("초등")){
-                for (int i = 1;i<= 6; i++){
-                    if (school.getGrade() == i){
-                        classRoom.add(school.getClassRoom());
-                    }
-                }
-            } else {
-                for (int j =1 ; j <= 3 ; j++){
-                    if (school.getGrade() == j){
-                        classRoom.add(school.getClassRoom());
-                    }
-                }
-
-            }
-            String i = String.valueOf(school.getGrade());
+            ArrayList<String> Class  = classes.get(school.getGrade()-1);
+            Class.add(school.getClassRoom());
         }
 
-        return null;
+        return classes;
     };
 
-}
+    public ArrayList<ArrayList<String>> getTest(String name) throws Exception {
+        ArrayList<ArrayList<String>> classes = new ArrayList<ArrayList<String>>();
+
+        for (int i = 1; i <= 3; i++){
+            ArrayList<String> ik = new ArrayList<String>();
+            classes.add(ik);
+        }
+
+        ArrayList<String> ca  = classes.get(0);
+        ca.add("1");
+        classes.add(ca);
+
+        System.out.println(classes.get(0));
+        System.out.println(classes.get(1));
+        System.out.println(classes.get(2));
+
+        System.out.println("넘어왔나");
+        return null;
+    }
+
+    }
