@@ -63,7 +63,7 @@ public class ReportServiceImpl implements ReportService {
 
         try{
             result.put("msg",SUCCESS);
-            result.put("student", new ReportResDto(report));
+            result.put("report", new ReportResDto(report));
             status = HttpStatus.OK;
         } catch (Exception e){
             result.put("msg",FAIL);
