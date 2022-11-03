@@ -29,9 +29,9 @@ const LoginScreen = ({navigation}: any) => {
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
 
   /////삭제
-  useEffect(() => {
-    getToken();
-  }, []);
+  // useEffect(() => {
+  //   getToken();
+  // }, []);
   /////////
 
 

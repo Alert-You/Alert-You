@@ -12,16 +12,11 @@ import {styles} from './style';
 import { useLogout } from '@/hooks';
 
 const ProfileScreen = ({navigation}: any) => {
-  const setIsLoggedIn = useSetRecoilState(isLoggedInState);
-  const tokenRemover = useSetRecoilState(tokenState);
   const {mutate} = useLogout()
 
   //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
   const logoutHandler = (): void => {
     mutate({});
-    tokenRemover('');
-    removeToken();
-    setIsLoggedIn(false);
   }
 
   return (
