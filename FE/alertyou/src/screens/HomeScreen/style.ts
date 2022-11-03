@@ -6,6 +6,8 @@ export const styles = StyleSheet.create({
   },
 
   innerContainer: {
-    height: Dimensions.get('window').height,
+    minHeight: Dimensions.get('window').height,
+    padding: 16,
+    paddingTop: 64,
   },
 });

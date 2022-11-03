@@ -23,12 +23,9 @@ const HomeScreen = ({navigation}: Props) => {
   };
 
   return (
-    <ScrollView style={styles.container} bg="red.100">
+    <ScrollView style={styles.container}>
       <Box
         bg={isEmergency ? emergencyBgStyle : nonEmergencyBgStyle}
-        p="3"
-        pt="10"
-        height="100%"
         style={styles.innerContainer}
         >
         <HomeTitle
