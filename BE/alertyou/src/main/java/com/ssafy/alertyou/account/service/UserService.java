@@ -74,7 +74,7 @@ public class UserService {
         if (ret) { // 보디가드 역할을 부여 받았으면 보디가드를 부여
             role = "보디가드";
         }
-        String schoolName = school.getName() + " " + String.valueOf(school.getGrade()) + "학년 " + String.valueOf(school.getRoom()) + "반";
+        String schoolName = school.getName() + " " + String.valueOf(school.getGrade()) + "학년 " + String.valueOf(school.getClassRoom()) + "반";
 
         return UserInfoResDto.result(200, "유저 정보 조회 완료", schoolName, user.getUsername(), role, phone);
     }
