@@ -7,25 +7,25 @@ import { noticeListType } from '@/types';
 const initialState: noticeListType[] = [
   {
     isVictim: true,
-    noticeDate: '2022-11-01 23:50',
+    noticeDateTime: '2022-11-01 23:50',
     reportId: 4,
     checked: false
   },
   {
     isVictim: false,
-    noticeDate: '2022-10-31 20:50',
+    noticeDateTime: '2022-10-31 20:50',
     reportId: 3,
     checked: false
   },
   {
     isVictim: false,
-    noticeDate: '2022-10-30 20:50',
+    noticeDateTime: '2022-10-30 20:50',
     reportId: 2,
     checked: true
   },
   {
     isVictim: true,
-    noticeDate: '2022-10-29 20:50',
+    noticeDateTime: '2022-10-29 20:50',
     reportId: 1,
     checked: true
   }]
