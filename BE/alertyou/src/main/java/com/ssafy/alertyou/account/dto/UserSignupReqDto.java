@@ -1,6 +1,7 @@
 package com.ssafy.alertyou.account.dto;
 
 
+import com.ssafy.alertyou.school.entity.School;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -26,9 +27,7 @@ public class UserSignupReqDto {
 
     @ApiModelProperty(name="사용자 이름", example = "박시원")
     private String username;
-    // 학교 부분
-//    private String school_name;
-//    private int grade;
-//    private int room;
-
+    
+    @ApiModelProperty(name="학교 아이디", example = "1")
+    private Long schoolId;
 }
