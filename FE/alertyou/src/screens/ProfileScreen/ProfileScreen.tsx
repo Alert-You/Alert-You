@@ -1,19 +1,29 @@
-import {View, Text, StatusBar} from 'react-native';
+import {View, Text, StatusBar, Button} from 'react-native';
 import React from 'react';
-import {useRecoilState} from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {Box} from 'native-base';
 
 import {tokenState} from '@/store';
 import {redProfileGradientStyle} from '@/theme/gradient';
 import {ProfileBox, SpinnerButton} from '@/components';
+import { isLoggedInState } from '@/store/isLoggedinState';
+import { removeToken } from '@/utils/auth';
 
 import {styles} from './style';
 
 const ProfileScreen = ({navigation}: any) => {
-  const [tmpToken, setTmpToken] = useRecoilState(tokenState);
+  const setIsLoggedIn = useSetRecoilState(isLoggedInState);
+  const tokenRemover = useSetRecoilState(tokenState);
+
+  //전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
+  const logoutHandler = (): void => {
+    setIsLoggedIn(false);
+    removeToken();
+    tokenRemover('');
+  }
+
   return (
     <>
-      <StatusBar translucent backgroundColor="transparent" />
       <View style={styles.container}>
         <View style={styles.profileContainer}>
           <Box bg={redProfileGradientStyle} w="100%" h="100%">
@@ -36,7 +46,7 @@ const ProfileScreen = ({navigation}: any) => {
             </SpinnerButton>
           </View>
         </Box>
-        {/* <Button title="로그인페이지 이동" onPress={() => setTmpToken('')} /> */}
+        <Button title="로그아웃" onPress={logoutHandler} />
       </View>
     </>
   );

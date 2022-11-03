@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     textAlign: 'center',
     fontWeight: FONT_WEIGHT.Bold,
-    marginTop: 35,
+    marginTop: 15,
   },
   nameText: {
     color: WHITE.white,

@@ -1,17 +1,23 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { ProfileScreen } from "@/screens"
+import {ProfileScreen} from '@/screens';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 const Stack = createNativeStackNavigator();
 
 const ProfileNavigation = () => {
   return (
-    //알아서 initialRouteName 바꾸세요.
-    <Stack.Navigator initialRouteName="ProfileScreen">
-      <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{
-        headerShown: false
-      }}/>
-    </Stack.Navigator>
+    <SafeAreaProvider>
+      <Stack.Navigator initialRouteName="ProfileScreen">
+        <Stack.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+      </Stack.Navigator>
+    </SafeAreaProvider>
   );
 };
 

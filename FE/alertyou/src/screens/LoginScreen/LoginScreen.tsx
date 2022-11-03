@@ -7,15 +7,16 @@ import {
   Pressable,
   Stack,
 } from 'native-base';
-import React, {useReducer} from 'react';
+import React, {useEffect, useReducer} from 'react';
 import ErrorBoundary from 'react-native-error-boundary';
 import {useSetRecoilState} from 'recoil';
 import {useMutation} from '@tanstack/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {MAIN} from '@/theme/colorVariants';
-import {tokenState} from '@/store';
 import {LogoImage, SpinnerButton} from '@/components';
+import {getToken} from '@/utils/auth';
+import {useLogIn} from '@/hooks';
 
 import {styles} from './style';
 import {
@@ -24,32 +25,18 @@ import {
   loginReducer,
   onFailHandler,
   phoneValidation,
-  saveToken,
 } from './functions';
-import {loginRequest} from './apis';
-import {loginValueType, TokenType} from './types';
 
 const LoginScreen = ({navigation}: any) => {
-  const setToken = useSetRecoilState(tokenState);
-  //onSuccess 데이터 처리, alert스타일 처리
-  const {data, mutate, isLoading} = useMutation<
-    TokenType,
-    unknown,
-    loginValueType
-  >(credentials => loginRequest(credentials), {
-    onSuccess: successData => {
-      setToken(successData.data.tokenId);
-      saveToken(successData.data.tokenId);
-    },
-    onError: () => {
-      //실패해도 성공에서 fail메세지를 받나?
-      onFailHandler();
-    },
-  });
+  const {mutate, isLoading} = useLogIn();
+
+  /////삭제
+  useEffect(() => {
+    getToken();
+  }, []);
+  /////////
+
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
-  const createTmpToken = () => {
-    setToken('1');
-  };
 
   const changePhoneNumber = (e: string): void => {
     dispatch({type: 'phone', payload: e});
@@ -71,7 +58,6 @@ const LoginScreen = ({navigation}: any) => {
     //유효성 검사 추가
     if (phoneValidation(state.phone)) {
       mutate(state);
-      //Navigate로 홈으로 이동
     } else if (!state.phone || !state.password) {
       onFailHandler();
     } else {
@@ -145,7 +131,6 @@ const LoginScreen = ({navigation}: any) => {
               회원가입
             </Text>
           </View>
-          <Button title="토큰부여" onPress={createTmpToken} />
         </View>
       </KeyboardAvoidingView>
     </ErrorBoundary>

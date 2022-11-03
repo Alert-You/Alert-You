@@ -2,7 +2,6 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilValue} from 'recoil';
-import {tokenState} from '@/store';
 import {
   HomeNavigation,
   NoticeNavigation,
@@ -10,19 +9,18 @@ import {
   SignUpNavigation,
   LoginNavigation,
 } from '@/navigations';
+import {isLoggedInState} from '@/store/isLoggedinState';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const MainNavigation = () => {
   //토큰 존재 여부 판단
-  const hasToken = useRecoilValue(tokenState);
+  const isLoggedIn = useRecoilValue(isLoggedInState);
   return (
     <>
-      {hasToken && (
-        <Tab.Navigator
-          initialRouteName='Home'
-        >
+      {isLoggedIn ? (
+        <Tab.Navigator initialRouteName="Home">
           <Tab.Screen
             name="Notice"
             component={NoticeNavigation}
@@ -39,9 +37,7 @@ const MainNavigation = () => {
             options={{headerShown: false}}
           />
         </Tab.Navigator>
-      )}
-
-      {!hasToken && (
+      ) : (
         <Stack.Navigator>
           <Stack.Screen
             name="Login"
