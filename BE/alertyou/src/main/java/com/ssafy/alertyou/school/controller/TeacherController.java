@@ -16,13 +16,18 @@ public class TeacherController {
     private final TeacherService teacherService;
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getClass(@RequestHeader(value = "Authorization") String token, @RequestParam(required = false) Integer grade, String classRoom) throws Exception {
+    public ResponseEntity<Map<String, Object>> StudentList(@RequestHeader(value = "Authorization") String token, @RequestParam(required = false) Integer grade, String classRoom) throws Exception {
         return teacherService.getClasses(token, grade, classRoom);
     }
 
     @GetMapping("/student")
-    public ResponseEntity<Map<String, Object>> getStudent(@RequestParam(value = "studentId") long id) throws Exception{
+    public ResponseEntity<Map<String, Object>> StudentDetails(@RequestParam(value = "studentId") long id) throws Exception{
         return teacherService.getStudent(id);
+    }
+
+    @DeleteMapping("/student")
+    public ResponseEntity<Map<String, Object>> StudentRemove(@RequestParam(value = "studentId") long id) throws Exception{
+        return teacherService.removeStudent(id);
     }
 
 }

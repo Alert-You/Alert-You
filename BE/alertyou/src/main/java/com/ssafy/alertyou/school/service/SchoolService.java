@@ -10,4 +10,6 @@ public interface SchoolService {
     public ResponseEntity<Map<String, Object>> getSchools(String word) throws Exception;
     public ResponseEntity<Map<String, Object>> getGradesAndClasses(String name) throws Exception;
 
+    public ResponseEntity<Map<String, Object>> getSchoolsNumber(String name, int grade, String classRoom) throws Exception;
+
     }

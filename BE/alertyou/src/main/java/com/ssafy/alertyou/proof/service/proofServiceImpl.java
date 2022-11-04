@@ -65,7 +65,7 @@ public class proofServiceImpl implements ProofService {
             result.put("msg",SUCCESS);
             status = HttpStatus.CREATED;
         } catch (Exception e){
-            result.put("mgs",FAIL);
+            result.put("msg",FAIL);
             result.put("error",e.getStackTrace());
             status = HttpStatus.BAD_REQUEST;
         }
@@ -101,7 +101,7 @@ public class proofServiceImpl implements ProofService {
                 result.put("proofs", list);
                 status = HttpStatus.OK;
             } else if(list.isEmpty()){
-                result.put("mgs",FAIL);
+                result.put("msg",FAIL);
                 status = HttpStatus.BAD_REQUEST;
             }
         } else {
@@ -133,10 +133,6 @@ public class proofServiceImpl implements ProofService {
 
     public User findUserByPhone(String phone){
         return userRepository.findByPhone(phone);
-    }
-
-    public String decodeUrl(String url) throws UnsupportedEncodingException {
-        return  URLDecoder.decode(url, "UTF-8");
     }
 
     public String decodeToken(String token) throws Exception{

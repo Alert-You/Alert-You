@@ -12,13 +12,13 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class SchoolServiceImpl implements SchoolService{
+public class SchoolServiceImpl implements SchoolService {
 
     private final SchoolRepository schoolRepository;
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
 
-    public ResponseEntity<Map<String, Object>> getSchools(String word) throws Exception{
+    public ResponseEntity<Map<String, Object>> getSchools(String word) throws Exception {
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
         try {
@@ -26,7 +26,7 @@ public class SchoolServiceImpl implements SchoolService{
             Set<SchoolSearchResDto> res = new HashSet<>();
             for (School school : schools) {
                 SchoolSearchResDto dto = new SchoolSearchResDto(school);
-                if (!res.equals(dto.hashCode())){
+                if (!res.equals(dto.hashCode())) {
                     res.add(dto);
                 }
 
@@ -34,18 +34,21 @@ public class SchoolServiceImpl implements SchoolService{
             List<SchoolSearchResDto> ress = new ArrayList<>(res);
             ress.sort(Comparator.naturalOrder());
             Collections.sort(ress);
-            result.put("msg",SUCCESS);
+            result.put("msg", SUCCESS);
             result.put("schools", ress);
             status = HttpStatus.OK;
-        }catch (Exception e){
+        } catch (Exception e) {
             result.put("msg", FAIL);
             status = HttpStatus.BAD_REQUEST;
         }
 
 
         return new ResponseEntity<>(result, status);
-    };
-    public ResponseEntity<Map<String, Object>> getGradesAndClasses(String name) throws Exception{
+    }
+
+    ;
+
+    public ResponseEntity<Map<String, Object>> getGradesAndClasses(String name) throws Exception {
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
         try {
@@ -56,28 +59,46 @@ public class SchoolServiceImpl implements SchoolService{
             ArrayList<ArrayList<String>> classes = new ArrayList<ArrayList<String>>();
 
             //3. 초등학교라면, 배열 6개 미리 생성 (1~6학년)
-            if (name.contains("초등")){
-                for (int i = 1;i<= 6; i++){
+            if (name.contains("초등")) {
+                for (int i = 1; i <= 6; i++) {
                     ArrayList<String> classRoom = new ArrayList<>();
                     classes.add(classRoom);
                 }
                 //4. 중고등학교라면, 배열 3개 미리 생성(1-3학년)
             } else {
-                for (int j =1 ; j <= 3 ; j++){
+                for (int j = 1; j <= 3; j++) {
                     ArrayList<String> classRoom = new ArrayList<>();
                     classes.add(classRoom);
                 }
             }
             //5. schools 객체를 돌며, 학년별 배열에 반을 담아줌
-            for (School school : schools){
-                ArrayList<String> Class  = classes.get(school.getGrade()-1);
+            for (School school : schools) {
+                ArrayList<String> Class = classes.get(school.getGrade() - 1);
                 Class.add(school.getClassRoom());
             }
 
-            result.put("msg",SUCCESS);
+            result.put("msg", SUCCESS);
             result.put("classes", classes);
             status = HttpStatus.OK;
 
+        } catch (Exception e) {
+            result.put("msg", FAIL);
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity<>(result, status);
+    }
+
+    public ResponseEntity<Map<String, Object>> getSchoolsNumber(String name, int grade, String classRoom) throws Exception {
+        HttpStatus status = null;
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            Long schoolId = findSchool(name,grade,classRoom).getId();
+
+            result.put("msg", SUCCESS);
+            result.put("schoolId", schoolId);
+            status = HttpStatus.OK;
         }catch (Exception e){
             result.put("msg", FAIL);
             status = HttpStatus.BAD_REQUEST;
@@ -85,6 +106,15 @@ public class SchoolServiceImpl implements SchoolService{
 
         return new ResponseEntity<>(result, status);
     }
+
+
+    public School findSchool(String name, int grade, String classRoom){
+        return schoolRepository.findByNameAndGradeAndClassRoom(name,grade,classRoom)
+                .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
+    }
+}
+
+
 
 //    public ArrayList<ArrayList<String>> getTest(String name) throws Exception {
 //        ArrayList<ArrayList<String>> classes = new ArrayList<ArrayList<String>>();
@@ -106,4 +136,4 @@ public class SchoolServiceImpl implements SchoolService{
 //        return null;
 //    }
 
-    }
+
