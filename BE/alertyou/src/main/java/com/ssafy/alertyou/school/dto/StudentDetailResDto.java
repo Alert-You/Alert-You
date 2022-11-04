@@ -14,6 +14,13 @@ public class StudentDetailResDto {
         this.school =school;
         this.name = user.getUsername();
         this.role = role;
-        this.phone = user.getPhone();
+        this.phone = PhoneChange(user.getPhone());
+    }
+
+    public String PhoneChange(String phone){
+        StringBuffer change = new StringBuffer(phone);
+        change.insert(3, "-");
+        change.insert(8,"-");
+        return change.toString();
     }
 }

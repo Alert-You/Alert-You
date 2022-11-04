@@ -18,17 +18,12 @@ public class SchoolController {
     private final SchoolService schoolService;
     @GetMapping("/list")
     public ResponseEntity<Map<String, Object>> getSchools(@RequestParam String word) throws Exception {
-        return null;
+        return schoolService.getSchools(word);
     }
 
     @GetMapping("")
     public ResponseEntity<Map<String, Object>> getGradeAndClassRoom(@RequestParam String name) throws Exception {
-        return null;
-    }
-
-    @GetMapping("/check")
-    public ArrayList<ArrayList<String>> checkFuntion(@RequestParam String word) throws Exception{
-        return schoolService.getGradesAndClasses(word);
+        return schoolService.getGradesAndClasses(name);
     }
 
 }
