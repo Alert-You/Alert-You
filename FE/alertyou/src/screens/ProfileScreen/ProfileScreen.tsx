@@ -1,19 +1,18 @@
-import {View, Text, StatusBar} from 'react-native';
+import { View, Text, StatusBar } from 'react-native';
 import React from 'react';
-import {useRecoilState} from 'recoil';
-import {Box} from 'native-base';
+import { useRecoilState } from 'recoil';
+import { Box } from 'native-base';
 
-import {tokenState} from '@/store';
-import {redProfileGradientStyle} from '@/theme/gradient';
-import {ProfileBox, SpinnerButton} from '@/components';
+import { tokenState } from '@/store';
+import { redProfileGradientStyle } from '@/theme/gradient';
+import { ProfileBox, SpinnerButton } from '@/components';
 
-import {styles} from './style';
+import { styles } from './style';
 
-const ProfileScreen = ({navigation}: any) => {
+const ProfileScreen = ({ navigation }: any) => {
   const [tmpToken, setTmpToken] = useRecoilState(tokenState);
   return (
     <>
-      <StatusBar translucent backgroundColor="transparent" />
       <View style={styles.container}>
         <View style={styles.profileContainer}>
           <Box bg={redProfileGradientStyle} w="100%" h="100%">
@@ -31,7 +30,7 @@ const ProfileScreen = ({navigation}: any) => {
         <Box flex={1.3}>
           <View style={styles.studentListButton}>
             <Text style={styles.buttonText}>학생 관리</Text>
-            <SpinnerButton onPress={() => {}} height={55} fontSize={20}>
+            <SpinnerButton onPress={() => { navigation.navigate('TeacherScreen') }} height={55} fontSize={20}>
               학생 목록 조회
             </SpinnerButton>
           </View>

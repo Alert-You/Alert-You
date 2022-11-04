@@ -1,14 +1,20 @@
 
 import React from 'react'
-import { Box, Avatar, HStack, VStack, Text, Spacer } from "native-base";
+import { Box, HStack, VStack, Text, Spacer, Circle } from "native-base";
 import { WHITE, MAIN } from '@/theme/colorVariants';
+import LinearGradient from 'react-native-linear-gradient';
 
-const FlatListItem: React.FC<{ title: string; subTitle: string; bgColor: string; rightContent: React.ReactNode, uri: string }> = ({
+const FlatListItem: React.FC<{ title: string; subTitle: string; bgColor: string; rightContent: React.ReactNode, icon: React.ReactNode, bdbColor: string, bdWidth: number, bdColor: string, cbgColor: string }> = ({
   title,
   subTitle,
   bgColor,
   rightContent,
-  uri }) => {
+  bdbColor,
+  bdWidth,
+  bdColor,
+  cbgColor,
+  icon
+}) => {
 
   let color: string = WHITE.white
   if (bgColor === WHITE.white) {
@@ -16,11 +22,11 @@ const FlatListItem: React.FC<{ title: string; subTitle: string; bgColor: string;
   }
 
   return (
-    <Box pl={["0", "4"]} pr={["0", "5"]} py="13" backgroundColor={bgColor}>
+    <Box pl={["0", "4"]} pr={["0", "5"]} py="13" backgroundColor={bgColor} borderBottomColor={bdbColor} borderBottomWidth={bdWidth}>
       <HStack space={[3, 3]} justifyContent="space-between">
-        <Avatar marginLeft={2} size="48px" source={{
-          uri: uri
-        }} />
+        <Circle size="45px" borderColor={bdColor} borderWidth="1" marginLeft={4} background={cbgColor}>
+          {icon}
+        </Circle>
         <VStack style={{ justifyContent: 'center' }}>
           <Text color={color} fontSize='15' bold>
             {title}
@@ -30,7 +36,7 @@ const FlatListItem: React.FC<{ title: string; subTitle: string; bgColor: string;
           </Text>
         </VStack>
         <Spacer />
-        <VStack style={{ justifyContent: 'center' }}>
+        <VStack style={{ justifyContent: 'center', marginRight: 16 }}>
           {rightContent && rightContent}
         </VStack>
       </HStack>
