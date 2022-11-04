@@ -124,7 +124,7 @@ public class ReportServiceImpl implements ReportService {
         double latitude = reportVictimReqDto.getLatitude();
         double longtitude = reportVictimReqDto.getLongtitude();
         String nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString();
-
+        String location = LocationService.reverseGeo(longtitude, latitude);
 
         try{
             Report newReport = Report.builder()
@@ -133,6 +133,7 @@ public class ReportServiceImpl implements ReportService {
                     .noticeDateTime(nowTime)
                     .latitude(latitude)
                     .longtitude(longtitude)
+                    .location(location)
                     .build();
 
             // 알람 등록: 내가 등록한 가드
@@ -198,6 +199,7 @@ public class ReportServiceImpl implements ReportService {
         String nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString();
         String content = reportWitnessReqDto.getContent();
         String place  = reportWitnessReqDto.getPlace();
+        String location = LocationService.reverseGeo(longtitude, latitude);
 
         try{
             Report newReport = Report.builder()
@@ -208,8 +210,47 @@ public class ReportServiceImpl implements ReportService {
                     .longtitude(longtitude)
                     .content(content)
                     .place(place)
+                    .location(location)
                     .build();
-            reportRepository.save(newReport);
+
+            long alertReportId = reportRepository.save(newReport).getId();
+
+            Report guardReport = findReport(alertReportId);
+
+            // 특정 사용자의 가드 리스트 확인
+            List<Opguard> OpUserList = opGuardRepository.findAllByUser(user);
+
+            // 기존 알람 목록에 해당 신고-가드가 없을 때만 추가
+            for(Opguard opguard : OpUserList){
+                if(!alertRepository.findByUserAndReport(opguard.getOpGuard(), guardReport).isPresent()){
+                    Alert newAlert = Alert.builder()
+                            .user(opguard.getOpGuard())
+                            .report(guardReport)
+                            .checked(false)
+                            .build();
+                    alertRepository.save(newAlert);
+                }
+            }
+
+            // 알람 등록: 선생님이 등록한 가드
+            School userSchool = user.getSchool(); // 신고 내역에 있는 유저의 학교 ID
+
+            User userTeacher = userRepository.findBySchoolAndRole(userSchool, "teacher"); // 선생님 ID 찾기
+
+            List<Coguard> CoUserList = coGuardRepository.findAllByUser(userTeacher);
+
+            // 기존 알람 목록에 해당 신고-가드가 없을 때만 추가
+            for(Coguard coguard : CoUserList){
+                if(!alertRepository.findByUserAndReport(coguard.getCoGuard(), guardReport).isPresent()){
+                    Alert newAlert = Alert.builder()
+                            .user(coguard.getCoGuard())
+                            .report(guardReport)
+                            .checked(false)
+                            .build();
+                    alertRepository.save(newAlert);
+                }
+            }
+
 
             result.put("msg",SUCCESS);
             status = HttpStatus.OK;
