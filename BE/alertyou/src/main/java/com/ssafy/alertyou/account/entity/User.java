@@ -70,6 +70,7 @@ public class User {
 
     private boolean active;
 
+
     public void updateAccount(UserSignupReqDto userSignupReqDto, School school, String newPassword) { // 회원 수정 메서드(setter 사용을 피하기 위함)
         this.phone = userSignupReqDto.getPhone();
         this.school = school;
@@ -77,6 +78,15 @@ public class User {
         this.role = "student";
         this.username = userSignupReqDto.getUsername();
         this.password = newPassword;
+    }
+
+    public void deleteSchool(User user, School school) { // 회원 수정 메서드(setter 사용을 피하기 위함)
+        this.phone = user.getPhone();
+        this.school = school;
+        this.active = user.isActive();
+        this.role = user.getRole();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
     }
 
     public void deleteAccount() { // 회원 탈퇴(active를 바꾸는 메서드, setter사용을 피하기 위함)

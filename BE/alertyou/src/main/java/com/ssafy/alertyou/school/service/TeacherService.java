@@ -11,5 +11,6 @@ public interface TeacherService {
     public ResponseEntity<Map<String, Object>> getClasses(String token, Integer grade, String classRoom) throws Exception;
     public ResponseEntity<Map<String, Object>> getStudent(long id) throws Exception;
 
+    public ResponseEntity<Map<String, Object>> removeStudent(long id) throws Exception;
 
 }

@@ -5,13 +5,13 @@ import lombok.Getter;
 
 @Getter
 public class StudentListResDto {
-    private long userId;
+    private long studentId;
     private String name;
     private String phone;
     private Boolean isGuard;
 
     public StudentListResDto(User entity, Boolean isGuard){
-        this.userId = entity.getId();
+        this.studentId = entity.getId();
         this.name = entity.getUsername();
         this.phone = entity.getPhone();
         this.isGuard = isGuard;

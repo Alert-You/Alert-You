@@ -69,7 +69,7 @@ public class TeacherServiceImpl implements TeacherService{
             result.put("students", list);
             status = HttpStatus.OK;
         } else if(list.isEmpty()){
-            result.put("mgs",FAIL);
+            result.put("msg",FAIL);
             status = HttpStatus.BAD_REQUEST;
         }
 //        else if (!(grade == null) && classRoom == null){
@@ -117,6 +117,26 @@ public class TeacherServiceImpl implements TeacherService{
         }
         return new ResponseEntity<>(result, status);
     }
+
+    public ResponseEntity<Map<String, Object>> removeStudent(long id) throws Exception{
+        HttpStatus status = null;
+        Map<String, Object> result = new HashMap<>();
+        try {
+            User user = findUser(id);
+            School school = findSchoolById(0);
+            user.deleteSchool(user,school);
+            userRepository.save(user);
+
+            result.put("msg",SUCCESS);
+            status = HttpStatus.OK;
+        }catch (Exception e){
+            result.put("msg",FAIL);
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity<>(result, status);
+    }
+
 
 
 

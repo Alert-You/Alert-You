@@ -17,13 +17,18 @@ public class SchoolController {
 
     private final SchoolService schoolService;
     @GetMapping("/list")
-    public ResponseEntity<Map<String, Object>> getSchools(@RequestParam String word) throws Exception {
+    public ResponseEntity<Map<String, Object>> SchoolList(@RequestParam String word) throws Exception {
         return schoolService.getSchools(word);
     }
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getGradeAndClassRoom(@RequestParam String name) throws Exception {
+    public ResponseEntity<Map<String, Object>> GradeAndClassRoomList(@RequestParam String name) throws Exception {
         return schoolService.getGradesAndClasses(name);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Map<String, Object>> SchoolNumberDetail(@RequestParam String name, int grade, String classRoom) throws Exception {
+        return schoolService.getSchoolsNumber(name, grade, classRoom);
     }
 
 }
