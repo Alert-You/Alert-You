@@ -174,16 +174,12 @@ public class ReportServiceImpl implements ReportService {
                 }
             }
 
-
-
-
-            
             result.put("msg",SUCCESS);
             status = HttpStatus.OK;
 
         }catch (Exception e){
             result.put("msg", FAIL);
-            result.put("error",e.getStackTrace());
+            result.put("error",e.getMessage());
             status = HttpStatus.BAD_REQUEST;
 
         }
