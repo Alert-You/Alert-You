@@ -8,7 +8,6 @@ import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.school.entity.School;
 import com.ssafy.alertyou.school.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
