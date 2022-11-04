@@ -8,6 +8,7 @@ import {
   WarningOutlineIcon,
 } from 'native-base';
 import {useRecoilState} from 'recoil';
+
 import {LogoImage, SpinnerButton} from '@/components';
 import {MAIN} from '@/theme/colorVariants';
 import {accountState} from '@/store/signUpState';
@@ -47,7 +48,7 @@ const SignUpSubScreen = ({navigation}: any) => {
     if (passwordValidation(account.password)) {
       setIsValid(false);
       navigation.navigate('SignUp', {
-        screen: 'PhoneAuthScreen'
+        screen: 'PhoneAuthScreen',
       });
     } else {
       setIsValid(true);
@@ -113,7 +114,9 @@ const SignUpSubScreen = ({navigation}: any) => {
               </FormControl.ErrorMessage>
             </FormControl>
           </Stack>
-          <SpinnerButton onPress={submitForm}>다음</SpinnerButton>
+          <View style={styles.spinnerButtonStyle}>
+            <SpinnerButton onPress={submitForm}>다음</SpinnerButton>
+          </View>
         </View>
       </View>
     </View>

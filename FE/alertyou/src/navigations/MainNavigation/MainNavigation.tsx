@@ -1,8 +1,8 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {tokenState} from '@/store';
 import {useRecoilValue} from 'recoil';
+import {tokenState} from '@/store';
 import {
   HomeNavigation,
   NoticeNavigation,

@@ -30,4 +30,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
   },
+  spinnerButtonStyle: {
+    marginTop: 32
+  }
 });
