@@ -51,16 +51,6 @@ public class TeacherServiceImpl implements TeacherService{
         //3. 학교 name을 받지 않고도 찾을 수 있는데 (선생님이 조회하니 값이 늘 고정이기 때문, grade와 room 은 변경되지만 학교는 변경되지 않으니까) name을 받을지 말 지 고민입니다
         if (grade == null && classRoom == null){
             school = user.getSchool();
-        } else if (!(grade == null) && classRoom == null){
-            List<School> schools = findSchoolAndGrade(user.getSchool().getName(),grade);
-            for (School school1 : schools){
-                List<User> userList = userRepository.findAllBySchoolAndRole(school1,ROLE);
-                for (User student : userList){
-                    // user 객체로 기본 정보를 주고, 선생님이 선택한 보디가드인지 확인하는 로직 필요
-                    // 보디가드 확인하는 로직 : findCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
-                    list.add(new StudentListResDto(student, findGuard(student)));
-                }
-            }
         } else {
             school = findSchool(user.getSchool().getName(), grade, classRoom);
         }
@@ -82,7 +72,17 @@ public class TeacherServiceImpl implements TeacherService{
             result.put("mgs",FAIL);
             status = HttpStatus.BAD_REQUEST;
         }
-
+//        else if (!(grade == null) && classRoom == null){
+//            List<School> schools = findSchoolAndGrade(user.getSchool().getName(),grade);
+//            for (School school1 : schools){
+//                List<User> userList = userRepository.findAllBySchoolAndRole(school1,ROLE);
+//                for (User student : userList){
+//                    // user 객체로 기본 정보를 주고, 선생님이 선택한 보디가드인지 확인하는 로직 필요
+//                    // 보디가드 확인하는 로직 : findCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
+//                    list.add(new StudentListResDto(student, findGuard(student)));
+//                }
+//            }
+//        }
         return new ResponseEntity<>(result, status);
     }
 

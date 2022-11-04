@@ -11,4 +11,8 @@ import java.util.Optional;
 public interface SchoolRepository extends JpaRepository<School,Long> {
     Optional<School> findByNameAndGradeAndClassRoom(String name, int grade, String classRoom);
     List<School> findAllByNameAndGrade(String name, int grade);
+
+    List<School> findAllByNameContainsOrderByAddress(String word);
+
+    List<School> findAllByName(String name);
 }
