@@ -1,4 +1,4 @@
-import {View, Text, StatusBar, Button} from 'react-native';
+import { View, Text, StatusBar } from 'react-native';
 import React from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import {Box} from 'native-base';
@@ -38,7 +38,7 @@ const ProfileScreen = ({navigation}: any) => {
         <Box flex={1.3}>
           <View style={styles.studentListButton}>
             <Text style={styles.buttonText}>학생 관리</Text>
-            <SpinnerButton onPress={() => {}} height={55} fontSize={20}>
+            <SpinnerButton onPress={() => { navigation.navigate('TeacherScreen') }} height={55} fontSize={20}>
               학생 목록 조회
             </SpinnerButton>
           </View>

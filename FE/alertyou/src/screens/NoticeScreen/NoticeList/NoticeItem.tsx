@@ -1,4 +1,4 @@
-import { View, Text } from 'native-base'
+import { Icon, View } from 'native-base'
 import React, { useCallback } from 'react'
 import { noticeListType } from '@/types'
 import { FlatListItem } from '@/components'
@@ -6,6 +6,7 @@ import { WHITE, RED, MAIN } from '@/theme/colorVariants'
 import { Pressable } from 'react-native'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { NoticeParamList } from '@/navigations/NoticeNavigation/NoticeNavigation'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 const NoticeItem: React.FC<{ item: noticeListType }> = ({ item }) => {
   const navigation = useNavigation<NavigationProp<NoticeParamList>>()
 
@@ -33,7 +34,7 @@ const NoticeItem: React.FC<{ item: noticeListType }> = ({ item }) => {
   // const day = ("0" + date.getDate()).slice(-2);
   // const todayDate = year + "-" + month + "-" + day;
 
-  const writeDay = new Date(item.noticeDate)
+  const writeDay = new Date(item.noticeDateTime)
   let dif = date.getTime() - writeDay.getTime()
   dif = Math.trunc(dif / 1000);
   console.log(writeDay.getTime())
@@ -63,6 +64,21 @@ const NoticeItem: React.FC<{ item: noticeListType }> = ({ item }) => {
     navigation.navigate('NoticeMap', { reportId: item.reportId });
   }, [navigation]);
 
+  let icon = <View>
+    <MaterialCommunityIcons
+      name="account-group"
+      size={32}
+      color={RED.red400} />
+  </View>
+  if (item.isVictim) {
+    icon = <View>
+      <MaterialCommunityIcons
+        name='bell-alert'
+        size={32}
+        color={RED.red400} />
+    </View>
+  }
+
   return (
     <View>
       <Pressable onPress={onClick}>
@@ -71,7 +87,11 @@ const NoticeItem: React.FC<{ item: noticeListType }> = ({ item }) => {
           subTitle={subTitle}
           bgColor={bgColor}
           rightContent=''
-          uri={uri} />
+          bdColor={RED.red300}
+          bdbColor=''
+          cbgColor={RED.redBg}
+          bdWidth={0}
+          icon={icon} />
       </Pressable>
     </View>
   )
