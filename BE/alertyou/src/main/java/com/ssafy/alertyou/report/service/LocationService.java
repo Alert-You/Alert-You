@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocationService {
     // 역지오 서비스
-    public String reverseGeo(double longitude, double latitude) { // 경도(longitude): 세로선(x축), 위도(latitude): 가로선(y축)
+    public static String reverseGeo(double longitude, double latitude) { // 경도(longitude): 세로선(x축), 위도(latitude): 가로선(y축)
         try {
             String clientId = "co4w5k4lo3"; // 클라이언트 ID
             String clientSecret = "vLrvWalrYx895ya4jmC3XGmWqf3E11ViQJnhppLV"; // 클라이언트 키
