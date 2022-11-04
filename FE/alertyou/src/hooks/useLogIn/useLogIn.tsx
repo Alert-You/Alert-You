@@ -23,8 +23,8 @@ const useLogIn = () => {
       },
       onError: () => {
         onFailHandler();
-      },
-    },
+      }
+    }
   );
 };
 

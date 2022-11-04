@@ -5,6 +5,7 @@ import {
   Input,
   KeyboardAvoidingView,
   Pressable,
+  Spinner,
   Stack,
 } from 'native-base';
 import React, {useEffect, useReducer} from 'react';
@@ -33,7 +34,6 @@ const LoginScreen = ({navigation}: any) => {
   //   getToken();
   // }, []);
   /////////
-
 
   const changePhoneNumber = (e: string): void => {
     dispatch({type: 'phone', payload: e});
@@ -74,61 +74,64 @@ const LoginScreen = ({navigation}: any) => {
         <View style={styles.imageContainer}>
           <LogoImage />
         </View>
-        <View style={styles.formContainer}>
-          <Stack space={4}>
-            <FormControl isRequired>
-              <FormControl.Label>휴대폰 번호</FormControl.Label>
-              <Input
-                variant="underlined"
-                placeholder="010xxxx0000"
-                keyboardType="numeric"
-                size="md"
-                h="9"
-                color={MAIN.mainFont}
-                focusOutlineColor={MAIN.red}
-                InputRightElement={
-                  <Pressable onPress={deletePhoneNumber}>
-                    {state.phone ? <CloseIcon color={MAIN.red} /> : null}
-                  </Pressable>
-                }
-                onChangeText={changePhoneNumber}
-                autoCorrect={false}
-                value={state.phone}
-              />
-            </FormControl>
-            <FormControl isRequired>
-              <FormControl.Label>비밀번호</FormControl.Label>
-              <Input
-                type="password"
-                variant="underlined"
-                placeholder="비밀번호"
-                size="md"
-                h="9"
-                color={MAIN.mainFont}
-                focusOutlineColor={MAIN.red}
-                InputRightElement={
-                  <Pressable onPress={deletePassword}>
-                    {state.password ? <CloseIcon color={MAIN.red} /> : null}
-                  </Pressable>
-                }
-                onChangeText={changePassword}
-                autoCorrect={false}
-                value={state.password}
-              />
-            </FormControl>
-          </Stack>
-          <View style={styles.spinnerButtonStyle}>
-            <SpinnerButton onPress={isLoading ? () => {} : submitAndClearForm}>
-              로그인
-            </SpinnerButton>
+          <View style={styles.formContainer}>
+            {!isLoading ? 
+            <Stack space={4}>
+              <FormControl isRequired>
+                <FormControl.Label>휴대폰 번호</FormControl.Label>
+                <Input
+                  variant="underlined"
+                  placeholder="010xxxx0000"
+                  keyboardType="numeric"
+                  size="md"
+                  h="9"
+                  color={MAIN.mainFont}
+                  focusOutlineColor={MAIN.red}
+                  InputRightElement={
+                    <Pressable onPress={deletePhoneNumber}>
+                      {state.phone ? <CloseIcon color={MAIN.red} /> : null}
+                    </Pressable>
+                  }
+                  onChangeText={changePhoneNumber}
+                  autoCorrect={false}
+                  value={state.phone}
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormControl.Label>비밀번호</FormControl.Label>
+                <Input
+                  type="password"
+                  variant="underlined"
+                  placeholder="비밀번호"
+                  size="md"
+                  h="9"
+                  color={MAIN.mainFont}
+                  focusOutlineColor={MAIN.red}
+                  InputRightElement={
+                    <Pressable onPress={deletePassword}>
+                      {state.password ? <CloseIcon color={MAIN.red} /> : null}
+                    </Pressable>
+                  }
+                  onChangeText={changePassword}
+                  autoCorrect={false}
+                  value={state.password}
+                />
+              </FormControl>
+            </Stack>: <Spinner color={MAIN.red} size="lg"/>}
+            <View style={styles.spinnerButtonStyle}>
+              <SpinnerButton
+                onPress={isLoading ? () => {} : submitAndClearForm}>
+                로그인
+              </SpinnerButton>
+            </View>
+            <View style={styles.signUpTextGroup}>
+              <Text style={styles.signUpText}>알럿유가 처음이신가요?</Text>
+              <Text style={styles.signUpNavigator} onPress={moveToSignUp}>
+                회원가입
+              </Text>
+            </View>
           </View>
-          <View style={styles.signUpTextGroup}>
-            <Text style={styles.signUpText}>알럿유가 처음이신가요?</Text>
-            <Text style={styles.signUpNavigator} onPress={moveToSignUp}>
-              회원가입
-            </Text>
-          </View>
-        </View>
+      
       </KeyboardAvoidingView>
     </ErrorBoundary>
   );

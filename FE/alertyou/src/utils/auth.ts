@@ -1,8 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 export const saveToken = async (token: string) => {
   try {
-    await AsyncStorage.setItem('@token', token);
+    await EncryptedStorage.setItem('@token', token);
     console.log('성공!');
   } catch(e) {
     console.log(e);
@@ -11,7 +11,7 @@ export const saveToken = async (token: string) => {
 
 export const getToken = async () => {
     try {
-      const token = await AsyncStorage.getItem('@token');
+      const token = await EncryptedStorage.getItem('@token');
       console.log(token);
     } catch (e) {
       console.log(e);
@@ -20,7 +20,7 @@ export const getToken = async () => {
 
 export const removeToken = async () => {
   try {
-    await AsyncStorage.removeItem('@token')
+    await EncryptedStorage.removeItem('@token');
   } catch (e) {
     console.log(e)
   }

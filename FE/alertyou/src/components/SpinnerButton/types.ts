@@ -5,4 +5,5 @@ export interface Props {
   children: React.ReactNode;
   height?: number;
   fontSize?: number;
+  isLoading?: boolean;
 }
