@@ -123,7 +123,7 @@ public class TeacherServiceImpl implements TeacherService{
         Map<String, Object> result = new HashMap<>();
         try {
             User user = findUser(id);
-            School school = findSchoolById(0);
+            School school = findSchoolById(133683);
             user.deleteSchool(user,school);
             userRepository.save(user);
 
