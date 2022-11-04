@@ -1,7 +1,6 @@
 package com.ssafy.alertyou.account.dto;
 
 import com.ssafy.alertyou.common.BaseResponseBody;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
@@ -13,14 +12,18 @@ import lombok.*;
 @Setter
 @ApiModel("UserLoginResponseDto")
 public class UserLoginResDto extends BaseResponseBody {
-    @ApiModelProperty(name = "JWT access 인증 토큰", example = "asdqwdwqd12314...")
+    @ApiModelProperty(name = "Access 토큰", example = "eYasdqwdwqd12314...")
     String accessToken;
 
-    public static UserLoginResDto result(Integer statusCode, String message, String accessToken) {
+    @ApiModelProperty(name = "Refresh 토큰", example = "eYasdqwdwqd56789...")
+    String refreshToken;
+
+    public static UserLoginResDto result(Integer statusCode, String message, String accessToken, String refreshToken) {
         UserLoginResDto res = new UserLoginResDto();
         res.setStatusCode(statusCode);
         res.setMessage(message);
         res.setAccessToken(accessToken);
+        res.setRefreshToken(refreshToken);
         return res;
     }
 }
