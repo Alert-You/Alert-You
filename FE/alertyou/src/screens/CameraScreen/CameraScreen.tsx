@@ -7,6 +7,8 @@ import {
   getNewMicrophonePermission,
 } from '@/utils/permission';
 import {Button, View} from 'native-base';
+// import CameraRoll from '@react-native-community/cameraroll';
+import { CameraRoll } from "@react-native-camera-roll/camera-roll";
 
 const CameraScreen = ({navigation}: any) => {
   const camera = useRef<Camera>(null);
@@ -14,16 +16,15 @@ const CameraScreen = ({navigation}: any) => {
   const device = devices.back;
 
   async function takePhoto() {
-    console.log('-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-');
-    const ret = await camera.current;
-    console.log('ret', ret);
-    // console.log('-=-=-=-=-=-=-=-=-');
-
-    // const photo = await camera.current.takeSnapshot({
-    //   quality: 85,
-    //   skipMetadata: true,
-    // });
-    // console.log(photo);
+    const photo = await camera.current?.takePhoto({
+      flash: 'off'
+    })
+    console.log(typeof(photo), photo);
+    if (photo?.path) {
+      const uri = `file://${photo.path}`
+      const result = await CameraRoll.save(uri);
+      console.log('🐤result', result);
+    }
   }
 
   if (device == null) return <LoadingView />;
