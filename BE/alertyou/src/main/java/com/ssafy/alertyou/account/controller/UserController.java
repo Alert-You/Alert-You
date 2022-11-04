@@ -38,19 +38,19 @@ public class UserController {
         User user = userService.getUserByPhone(phone);
 
         if (user == null || !user.isActive()) { // 로그인 요청한 유저가 DB에 존재하지 않거나 active가 아니면 404 리턴
-            return ResponseEntity.status(404).body(UserLoginResDto.result(404, "해당 유저가 없습니다.", null));
+            return ResponseEntity.status(404).body(UserLoginResDto.result(404, "해당 유저가 없습니다.", null, null));
         }
 
         if (bCryptPasswordEncoder.matches(password, user.getPassword())) { // 로그인 요청 시 입력한 패스워드가 DB의 패스워드와 일치한다면 로그인 성공
-            Cookie cookie = authRefreshTokenService.createRefreshToken(phone); // 쿠키에 리프레시 토큰 생성
-            response.addCookie(cookie); // 쿠기를 담아서 반환
+            String refreshToken = authRefreshTokenService.createRefreshToken(phone); // 리프레시 토큰 생성
+            // response.addCookie(cookie); // 쿠기를 담아서 반환
 
-            // 엑세스 토큰과 함께 로그인 결과 반환
+            // 엑세스 토큰, 리프레시 토큰과 함께 로그인 결과 반환
             String accessToken = authRefreshTokenService.createAccessToken(phone);
-            return ResponseEntity.ok().body(UserLoginResDto.result(200, "로그인 성공", accessToken));
+            return ResponseEntity.ok().body(UserLoginResDto.result(200, "로그인 성공", accessToken, refreshToken));
         }
 
-        return ResponseEntity.status(401).body(UserLoginResDto.result(401, "잘못된 비밀번호", null));
+        return ResponseEntity.status(401).body(UserLoginResDto.result(401, "잘못된 비밀번호", null, null));
     }
 
 
@@ -62,19 +62,21 @@ public class UserController {
             @ApiResponse(code = 404, message = "404 NOT FOUND")
     })
     public ResponseEntity<BaseResponseBody> logout(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = authRefreshTokenService.getRefreshTokenFromCookie(request);
+        String refreshToken = request.getHeader("refreshToken");
+
+//        String refreshToken = authRefreshTokenService.getRefreshTokenFromCookie(request);
         if (refreshToken == null) {
-            return ResponseEntity.status(404).body(BaseResponseBody.result(404, "쿠키가 없습니다."));
+            return ResponseEntity.status(404).body(BaseResponseBody.result(404, "리프레시 토큰이 없습니다."));
         }
 
         AuthRefreshToken authRefreshToken = authRefreshTokenService.getRefreshToken(refreshToken);
 
         if (authRefreshToken != null) { // DB에 리프레시 토큰이 있으면 삭제, 쿠키를 초기화하고 로그아웃
             authRefreshTokenService.deleteRefreshToken(authRefreshToken);
-            Cookie cookie = new Cookie("refreshToken", null); // 리프레시 토큰 초기화
-            cookie.setMaxAge(0); // 쿠키 유효 기간 초기화
-            cookie.setPath("/");
-            response.addCookie(cookie);
+//            Cookie cookie = new Cookie("refreshToken", null); // 리프레시 토큰 초기화
+//            cookie.setMaxAge(0); // 쿠키 유효 기간 초기화
+//            cookie.setPath("/");
+//            response.addCookie(cookie);
             return ResponseEntity.status(200).body(BaseResponseBody.result(200, "로그 아웃 성공"));
         }
 
@@ -150,9 +152,9 @@ public class UserController {
     })
     public ResponseEntity<? extends BaseResponseBody> reissueAccess(HttpServletRequest request, HttpServletResponse response) {
         // 유효한 리프레시 토큰일 경우에만 엑세스 토큰을 재발급시켜준다.
-        String refreshToken = authRefreshTokenService.getRefreshTokenFromCookie(request);
-        if (refreshToken == null) {
-            return ResponseEntity.status(404).body(BaseResponseBody.result(404, "쿠키에 리프레시 토큰이 없습니다."));
+        String refreshToken = request.getHeader("refreshToken");
+        if (refreshToken == null || !authRefreshTokenService.getTokenExpiration(refreshToken)) {
+            return ResponseEntity.status(404).body(BaseResponseBody.result(404, "리프레시 토큰이 없습니다."));
         }
 
         AuthRefreshToken authRefreshToken = authRefreshTokenService.getRefreshToken(refreshToken);
@@ -160,39 +162,40 @@ public class UserController {
             String phone = authRefreshTokenService.getPhoneFromToken(refreshToken);
             String reissuedAccessToken = authRefreshTokenService.createAccessToken(phone); // access 토큰 재발급
 
-            return ResponseEntity.status(200).body(UserLoginResDto.result(200, "엑세스 토큰 재발급 완료", reissuedAccessToken));
+            return ResponseEntity.status(200).body(UserLoginResDto.result(200, "엑세스 토큰 재발급 완료", reissuedAccessToken, null));
         }
 
-        return ResponseEntity.status(401).body(BaseResponseBody.result(401, "토큰이 유효하지 않습니다."));
+        return ResponseEntity.status(401).body(BaseResponseBody.result(401, "토큰이 유효하지 않거나 이미 로그아웃했습니다."));
     }
 
 
     @PostMapping("/reissue/refresh")
-    @ApiOperation(value = "refresh 토큰 재발급", notes = "refresh 토큰을 재발급해준다.")
+    @ApiOperation(value = "refresh 토큰과 access 토큰 재발급", notes = "refresh 토큰과 access 토큰 재발급을 재발급해준다.")
     @ApiResponses({
-            @ApiResponse(code = 200, message = "refresh 토큰 재발급 성공"),
-            @ApiResponse(code = 401, message = "토큰이 유효하지 않음"),
-            @ApiResponse(code = 404, message = "404 NOT FOUND")
+            @ApiResponse(code = 200, message = "refresh, access 토큰 재발급 성공"),
+            @ApiResponse(code = 401, message = "권한이 없습니다"),
+            @ApiResponse(code = 404, message = "토큰이 없거나 유효하지 않습니다")
     })
     public ResponseEntity<BaseResponseBody> reissueRefresh(HttpServletRequest request, HttpServletResponse response) {
         // 리프레시 토큰을 재발급해준다. => 유효한 리프레시 토큰일 경우에만 발급
-        String refreshToken = authRefreshTokenService.getRefreshTokenFromCookie(request);
-        if (refreshToken == null) {
-            return ResponseEntity.status(404).body(BaseResponseBody.result(404, "쿠키에 리프레시 토큰이 없습니다."));
+        String refreshToken = request.getHeader("refreshToken");
+        if (refreshToken == null || !authRefreshTokenService.getTokenExpiration(refreshToken)) {
+            return ResponseEntity.status(404).body(BaseResponseBody.result(404, "리프레시 토큰이 없거나 만료되었습니다."));
         }
 
         AuthRefreshToken authRefreshToken = authRefreshTokenService.getRefreshToken(refreshToken);
 
         if (authRefreshToken != null) {
             String phone = authRefreshTokenService.getPhoneFromToken(refreshToken);
-            Cookie cookie = authRefreshTokenService.createRefreshToken(phone); // 쿠키에 리프레시 토큰 재발급하여 저장
+            String reissuedRefreshToken = authRefreshTokenService.createRefreshToken(phone); // 리프레시 토큰을 발급
+            String reissuedAccessToken = authRefreshTokenService.createAccessToken(phone); // 엑세스 토큰을 발급
             authRefreshTokenService.deleteRefreshToken(authRefreshToken); // 기존의 리프레시 토큰을 삭제
-            response.addCookie(cookie); // 쿠기를 담아서 반환
+//            response.addCookie(cookie); // 쿠기를 담아서 반환
 
-            return ResponseEntity.status(200).body(BaseResponseBody.result(200, "리프레시 토큰 재발급 완료"));
+            return ResponseEntity.status(200).body(UserLoginResDto.result(200, "리프레시 토큰, 엑세스 토큰 재발급 완료", reissuedAccessToken, reissuedRefreshToken));
         }
         
-        return ResponseEntity.status(200).body(BaseResponseBody.result(200, "리프레시 토큰 발급 완료"));
+        return ResponseEntity.status(401).body(BaseResponseBody.result(401, "권한이 없습니다."));
     }
 
 

@@ -35,7 +35,6 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 //        System.out.println("필터 동작하니?");
         String header = request.getHeader(JwtProperties.HEADER_STRING); // Authorization--
-        System.out.println(header);
         // 헤더가 null이거나, Bearer로 시작하지 않으면
         if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
             chain.doFilter(request, response);
@@ -62,7 +61,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
             DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
             String phone = decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
-            if (phone != null) { // 핸드폰 번호가 null이 아닐 경우
+            if (phone != null && JwtTokenProvider.verifyTokenExpiration(token)) { // 핸드폰 번호가 null이 아니면서, 토큰의 만료 시간이 유효할 경우
                 User user = userService.getUserByPhone(phone); // 핸드폰 번호로 유저 정보를 가져옴
                 if (user != null) {
                     // 식별된 정상 유저일 경우에 진행
