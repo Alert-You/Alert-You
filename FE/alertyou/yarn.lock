@@ -8013,6 +8013,11 @@
     "prop-types" "^15.7.2"
     "yargs" "^16.1.1"
 
+"react-native-vision-camera@^2.15.2":
+  "integrity" "sha512-pkVj0r2nbZaj3+bB9CGPNistCUyoCgS2SmawzugrZs5oMlFWlgZYuJj+6s3Q98xTGgV/8/ST0njohB6soDi0VA=="
+  "resolved" "https://registry.npmjs.org/react-native-vision-camera/-/react-native-vision-camera-2.15.2.tgz"
+  "version" "2.15.2"
+
 "react-native-web@^0.17.1":
   "version" "0.17.1"
   dependencies:

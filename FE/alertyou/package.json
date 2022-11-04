@@ -33,6 +33,7 @@
     "react-native-svg": "^12.1.1",
     "react-native-toast-message": "^2.1.5",
     "react-native-vector-icons": "^9.2.0",
+    "react-native-vision-camera": "^2.15.2",
     "react-native-web": "^0.17.1",
     "recoil": "^0.7.6",
     "styled-components": "^5.3.6"

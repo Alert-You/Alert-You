@@ -1,6 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {HomeScreen} from '@/screens';
+import {CameraScreen, HomeScreen} from '@/screens';
 
 const Stack = createNativeStackNavigator();
 
@@ -11,6 +11,11 @@ const HomeNavigation = () => {
       <Stack.Screen
         name="HomeScreen"
         component={HomeScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="CameraScreen"
+        component={CameraScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
