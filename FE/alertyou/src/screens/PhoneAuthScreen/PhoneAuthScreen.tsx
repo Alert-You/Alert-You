@@ -10,6 +10,7 @@ import {
 } from 'native-base';
 import {useRecoilState} from 'recoil';
 import {useMutation} from '@tanstack/react-query';
+import {AxiosError} from 'axios';
 
 import {LogoImage, SpinnerButton} from '@/components';
 import {phoneState} from '@/store/signUpState';
@@ -25,12 +26,16 @@ import {
   failSignUp,
 } from './functions';
 import {fetchAuthKey} from './apis';
+import {verifyResponseType} from './types';
 
 const PhoneAuthScreen = ({navigation}: any) => {
-  //타입 지정
-  const {data, mutate, isLoading} = useMutation<any, unknown, any>(state =>
-    fetchAuthKey(state),
-  );
+  //타입은 <데이터, 에러, 변수>
+  const {data, mutate, isLoading} = useMutation<
+    verifyResponseType,
+    AxiosError,
+    string
+  >(state => fetchAuthKey(state));
+
   const [phone, setPhone] = useRecoilState(phoneState);
   const [openInput, setOpenInput] = useState<boolean>(false);
   const [authNumber, setAuthNumber] = useState<string>('');
@@ -60,6 +65,7 @@ const PhoneAuthScreen = ({navigation}: any) => {
       return {phone: ''};
     });
   };
+
   const deleteAuthNumber = (): void => {
     setAuthNumber('');
   };

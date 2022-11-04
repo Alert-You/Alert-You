@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ProfileScreen, TeacherScreen } from "@/screens"
+import {ProfileScreen, TeacherScreen} from '@/screens';
 import { RED } from '@/theme/colorVariants';
 const Stack = createNativeStackNavigator();
 

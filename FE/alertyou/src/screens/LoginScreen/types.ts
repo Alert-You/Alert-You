@@ -8,10 +8,4 @@ export interface loginActionType {
   payload: string;
 }
 
-export interface TokenType {
-  data: {
-    msg: string;
-    tokenId: string;
-  };
-}
 

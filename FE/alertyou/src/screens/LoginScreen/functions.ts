@@ -1,6 +1,5 @@
 import {Alert} from 'react-native';
 import type {loginActionType, loginValueType} from './types';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const loginInitialState: loginValueType = {
   phone: '',
@@ -28,14 +27,6 @@ export const loginReducer = (
       return state;
   }
 };
-
-export const saveToken = async (token: string) => {
-  try {
-    await AsyncStorage.setItem('@token', token);
-  } catch {
-    console.log('기기에 토큰 저장 실패');
-  }
-}
 
 export const phoneValidation = (phone: string): boolean => {
   if (/^[0-9]{2,3}[0-9]{3,4}[0-9]{4}/.test(phone)) {
