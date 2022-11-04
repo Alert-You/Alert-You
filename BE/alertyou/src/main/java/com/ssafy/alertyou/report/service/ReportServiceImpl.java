@@ -2,13 +2,18 @@ package com.ssafy.alertyou.report.service;
 
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.repository.UserRepository;
+import com.ssafy.alertyou.alert.entity.Alert;
+import com.ssafy.alertyou.alert.repository.AlertRepository;
+import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.entity.Opguard;
+import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.bodyguard.repository.OpGuardRepository;
 import com.ssafy.alertyou.report.repository.ReportRepository;
 import com.ssafy.alertyou.report.dto.ReportResDto;
 import com.ssafy.alertyou.report.dto.ReportVictimReqDto;
 import com.ssafy.alertyou.report.dto.ReportWitnessReqDto;
 import com.ssafy.alertyou.report.entity.Report;
+import com.ssafy.alertyou.school.entity.School;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +30,8 @@ public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
     private final OpGuardRepository opGuardRepository;
+    private final CoGuardRepository coGuardRepository;
+    private final AlertRepository alertRepository;
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
 
@@ -112,7 +119,7 @@ public class ReportServiceImpl implements ReportService {
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
 
-        User user = findUser(reportVictimReqDto.getUserId());
+        User user = findUser(reportVictimReqDto.getUserId()); // 이거로 가드 id 찾기
 
         double latitude = reportVictimReqDto.getLatitude();
         double longtitude = reportVictimReqDto.getLongtitude();
@@ -127,13 +134,56 @@ public class ReportServiceImpl implements ReportService {
                     .latitude(latitude)
                     .longtitude(longtitude)
                     .build();
-            reportRepository.save(newReport);
 
+            // 알람 등록: 내가 등록한 가드
+            long alertReportId = reportRepository.save(newReport).getId(); // 등록할 신고 ID
+
+            Report guardReport = findReport(alertReportId);
+            
+            // 특정 사용자의 가드 리스트 확인
+            List<Opguard> OpUserList = opGuardRepository.findAllByUser(user);
+
+            // 기존 알람 목록에 해당 신고-가드가 없을 때만 추가
+            for(Opguard opguard : OpUserList){
+                if(!alertRepository.findByUserAndReport(opguard.getOpGuard(), guardReport).isPresent()){
+                    Alert newAlert = Alert.builder()
+                            .user(opguard.getOpGuard())
+                            .report(guardReport)
+                            .checked(false)
+                            .build();
+                    alertRepository.save(newAlert);
+                }
+            }
+
+            // 알람 등록: 선생님이 등록한 가드
+            School userSchool = user.getSchool(); // 신고 내역에 있는 유저의 학교 ID
+
+            User userTeacher = userRepository.findBySchoolAndRole(userSchool, "teacher"); // 선생님 ID 찾기
+
+            List<Coguard> CoUserList = coGuardRepository.findAllByUser(userTeacher);
+
+            // 기존 알람 목록에 해당 신고-가드가 없을 때만 추가
+            for(Coguard coguard : CoUserList){
+                if(!alertRepository.findByUserAndReport(coguard.getCoGuard(), guardReport).isPresent()){
+                    Alert newAlert = Alert.builder()
+                            .user(coguard.getCoGuard())
+                            .report(guardReport)
+                            .checked(false)
+                            .build();
+                    alertRepository.save(newAlert);
+                }
+            }
+
+
+
+
+            
             result.put("msg",SUCCESS);
             status = HttpStatus.OK;
 
         }catch (Exception e){
             result.put("msg", FAIL);
+            result.put("error",e.getStackTrace());
             status = HttpStatus.BAD_REQUEST;
 
         }
@@ -151,6 +201,7 @@ public class ReportServiceImpl implements ReportService {
         double longtitude = reportWitnessReqDto.getLongtitude();
         String nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString();
         String content = reportWitnessReqDto.getContent();
+        String place  = reportWitnessReqDto.getPlace();
 
         try{
             Report newReport = Report.builder()
@@ -160,6 +211,7 @@ public class ReportServiceImpl implements ReportService {
                     .latitude(latitude)
                     .longtitude(longtitude)
                     .content(content)
+                    .place(place)
                     .build();
             reportRepository.save(newReport);
 
@@ -190,4 +242,5 @@ public class ReportServiceImpl implements ReportService {
     public List<Opguard> findGuard(User user){
         return opGuardRepository.findAllByOpGuard(user);
     }
+
 }

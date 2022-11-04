@@ -29,8 +29,6 @@ public class Alert {
     @JoinColumn(name = "report_id")
     private Report report;
 
-
-
     private Boolean checked;
 }
 

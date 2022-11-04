@@ -16,5 +16,6 @@ public class ReportWitnessReqDto {
     private double latitude;
     private double longtitude;
     private String content;
+    private String place;
 
 }
