@@ -2,7 +2,6 @@ import {View, Text, Pressable, Dimensions} from 'react-native';
 import React, {useMemo, useState} from 'react';
 import {
   Center,
-  CloseIcon,
   FormControl,
   HStack,
   Input,
@@ -10,53 +9,69 @@ import {
   Select,
   Stack,
 } from 'native-base';
-import {useRecoilState, useRecoilValue} from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {useQuery} from '@tanstack/react-query';
 
 import {LogoImage, SpinnerButton} from '@/components';
 import {MAIN} from '@/theme/colorVariants';
-import {classListState, schoolState} from '@/store/signUpState';
+import {classListState, schoolIdState, schoolState} from '@/store/signUpState';
 
 import {styles} from './style';
-import {formIsNotFilled} from './functions';
+import {failedFetchSchoolId, formIsNotFilled} from './functions';
+import { requestSchoolId } from './apis';
 
 const SignUpScreen = ({navigation}: any) => {
   const [grade, setGrade] = useState<string>('');
   const [classroom, setClassroom] = useState<string>('');
   const schoolValue = useRecoilValue(schoolState);
-  const [school, setSchool] = useRecoilState(schoolState);
-  // const classList = useRecoilValue(classListState);
-  const classList: string[][] = [
-    ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
-    ['1', '2', '3', '4', '5', '6'],
-    ['믿음', '소망', '사랑', '기쁨', '행복', '희망'],
-  ];
+  const classList = useRecoilValue(classListState);
+  const setSchoolId = useSetRecoilState(schoolIdState);
+
   const hasChosenSchool = useMemo(() => classList.length !== 0, [classList]);
-  const hasChosenGrade = useMemo(() => !!grade, [grade])
+  const hasChosenGrade = useMemo(() => !!classList[parseInt(grade)], [grade]);
+  const formIsFilled =
+    schoolValue.address && schoolValue.name && grade && classroom;
+
+  const {refetch} = useQuery(['schoolIdKey'], () => requestSchoolId(schoolValue.name, grade, classroom), {
+    suspense: true,
+    enabled: false,
+    cacheTime: 0,
+    onSuccess: (schoolIdData) => {
+      setSchoolId(schoolIdData.schoolId);
+      moveToNextForm();
+    },
+    onError: () => {
+      failedFetchSchoolId();
+    },
+  });
+
   const moveToSearchSchool = (): void => {
     navigation.navigate('SignUp', {
       screen: 'searchSchoolScreen',
     });
   };
 
-  const chooseGrade = (e:string): void => {
+  const moveToNextForm = (): void => {
+    navigation.navigate('SignUp', {
+      screen: 'SignUpSubScreen',
+    });
+  };
+
+  const chooseGrade = (e: string): void => {
     setGrade(e);
-  }
-  
+  };
+
   const chooseClassroom = (e: string): void => {
-    setClassroom(e)
-  }
+    setClassroom(e);
+  };
 
   const moveToNextPage = (): void => {
-    if (school.address && school.name) {
-      navigation.navigate('SignUp', {
-        screen: 'SignUpSubScreen',
-      });
+    if (formIsFilled) {
+      refetch()
     } else {
       formIsNotFilled();
     }
   };
-
-  console.log(!schoolValue.name)
 
   return (
     <View style={styles.container}>
@@ -87,7 +102,7 @@ const SignUpScreen = ({navigation}: any) => {
                     </Pressable>
                   }
                   autoCorrect={false}
-                  value={school.name}
+                  value={schoolValue.name}
                 />
               </Pressable>
             </FormControl>
@@ -111,7 +126,7 @@ const SignUpScreen = ({navigation}: any) => {
                             <Select.Item
                               key={`gradeItemKey${idx}`}
                               label={`${idx + 1}학년`}
-                              value={String(idx+1)}
+                              value={String(idx + 1)}
                             />
                           );
                         })
@@ -132,15 +147,17 @@ const SignUpScreen = ({navigation}: any) => {
                     _selectedItem={{
                       bg: MAIN.red,
                     }}>
-                    {hasChosenGrade ? classList[parseInt(grade)-1].map((item, idx) => {
-                      return (
-                        <Select.Item
-                          key={`classItemKey${idx}`}
-                          label={`${item}반`}
-                          value={item}
-                        />
-                      );
-                    }): null}
+                    {hasChosenGrade
+                      ? classList[parseInt(grade)].map((item, idx) => {
+                          return (
+                            <Select.Item
+                              key={`classItemKey${idx}`}
+                              label={`${item}반`}
+                              value={item}
+                            />
+                          );
+                        })
+                      : null}
                   </Select>
                 </FormControl>
               </Center>

@@ -1,5 +1,5 @@
-import { FlatList, Pressable, View, Keyboard } from 'react-native';
-import React, {Suspense, useEffect, useState} from 'react';
+import {Pressable, View, Keyboard} from 'react-native';
+import React, {Suspense, useState} from 'react';
 import {Input, ScrollView, SearchIcon, Spinner} from 'native-base';
 import {useQuery} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
@@ -15,21 +15,20 @@ import {schoolResponseType} from './types';
 const SearchSchoolScreen = () => {
   const [school, setSchool] = useState<string>('');
   //리턴값, 에러, data에 담길 데이터, 쿼리 키 타입
-  const {data, refetch} = useQuery<
-    schoolResponseType,
-    AxiosError,
-    schoolResponseType,
-    [string]
-  >(['schoolList'], () => requestSchoolData(school), {
-    suspense: true,
-    enabled: false,
-    cacheTime: 0,
-  });
+  const {data, refetch} = useQuery<schoolResponseType, AxiosError>(
+    ['schoolList'],
+    () => requestSchoolData(school),
+    {
+      suspense: true,
+      enabled: false,
+      cacheTime: 0,
+    },
+  );
 
   const getSchoolList = (): void => {
     Keyboard.dismiss();
     refetch();
-  }
+  };
 
   const changeSchool = (e: string): void => {
     setSchool(e);
@@ -62,7 +61,13 @@ const SearchSchoolScreen = () => {
           <Suspense fallback={<Spinner color={MAIN.red} size="lg" />}>
             <ScrollView>
               {data?.schools.map((item, idx) => {
-                return <SchoolInfo address={item.address} name={item.name} key={`schoolKey ${idx}`}/>
+                return (
+                  <SchoolInfo
+                    address={item.address}
+                    name={item.name}
+                    key={`schoolKey ${idx}`}
+                  />
+                );
               })}
             </ScrollView>
           </Suspense>

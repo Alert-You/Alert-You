@@ -1,44 +1,50 @@
 import {View, Text, Pressable} from 'react-native';
 import React from 'react';
 import {Flex, Badge} from 'native-base';
+import {useSetRecoilState} from 'recoil';
+import {AxiosError} from 'axios';
+import {useQuery} from '@tanstack/react-query';
+
+import {classListState, schoolState} from '@/store/signUpState';
+import {useNavigation} from '@react-navigation/native';
 
 import {styles} from './style';
-import {WHITE} from '@/theme/colorVariants';
-import {useRecoilState, useSetRecoilState} from 'recoil';
-import {classListState, schoolState} from '@/store/signUpState';
-import { useNavigation } from '@react-navigation/native';
-import { gradeClassType } from './types';
-import { AxiosError } from 'axios';
-import { useQuery } from '@tanstack/react-query';
-import { requestGradeClass } from './apis';
+import {gradeClassType} from './types';
+import {requestGradeClass} from './apis';
+import { failedFetchGrade } from './functions';
 
 type Props = {
-  address: string; name: string;
+  address: string;
+  name: string;
 };
 
 const SchoolInfo = ({address, name}: Props) => {
   const navigation = useNavigation<any>();
   const setClassList = useSetRecoilState(classListState);
   const setPickSchool = useSetRecoilState(schoolState);
-  const {refetch} = useQuery<gradeClassType, AxiosError, gradeClassType>(
+  const {refetch} = useQuery<gradeClassType, AxiosError>(
     ['classGrade'],
     () => requestGradeClass(name),
     {
       suspense: true,
       enabled: false,
       cacheTime: 0,
-      onSuccess: (value) => {
-        setClassList(value.classes)
+      onSuccess: value => {
+        console.log(value);
+        setClassList(value.classes);
+        setPickSchool({name, address});
+        navigation.navigate('SignUp', {screen: 'SignUpScreen'});
+      },
+      onError: () => {
+        failedFetchGrade()
       }
     },
   );
 
   //선택한 학교 저장, 학급 및 반 요청 후 이전 페이지로 이동
   const getGradeAndClass = (): void => {
-    setPickSchool({name, address});
-    navigation.navigate('SignUp', {screen: 'SignUpScreen'});
-    refetch()
-  }
+    refetch();
+  };
 
   return (
     <Pressable onPress={getGradeAndClass}>

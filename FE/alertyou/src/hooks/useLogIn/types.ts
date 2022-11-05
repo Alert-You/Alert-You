@@ -6,5 +6,6 @@ export interface loginValueType {
 export interface TokenType {
   accessToken: string;
   message: string;
+  refreshToken: string;
   statusCode: number;
 }

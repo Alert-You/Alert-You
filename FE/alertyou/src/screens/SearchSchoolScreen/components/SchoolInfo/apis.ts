@@ -8,7 +8,7 @@ export const requestGradeClass = async (
   schoolName: string,
 ): Promise<gradeClassType> => {
   const {data} = await axios.get(
-    `http://k7b109.p.ssafy.io:8085/api/school?name=싸피고등학`,
+    `${BASE_URL}${SCHOOL}?name=${schoolName}`,
   );
   return data;
 };

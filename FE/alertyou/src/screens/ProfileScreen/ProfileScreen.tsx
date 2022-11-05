@@ -1,23 +1,20 @@
-import { View, Text, StatusBar } from 'react-native';
+import {View, Text, Button} from 'react-native';
 import React from 'react';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 import {Box} from 'native-base';
 
-import {isLoggedInState, tokenState} from '@/store';
 import {redProfileGradientStyle} from '@/theme/gradient';
 import {ProfileBox, SpinnerButton} from '@/components';
-import { removeToken } from '@/utils/auth';
 
 import {styles} from './style';
-import { useLogout } from '@/hooks';
+import {useLogout} from '@/hooks';
 
 const ProfileScreen = ({navigation}: any) => {
-  const {mutate} = useLogout()
+  const {mutate} = useLogout();
 
   //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
   const logoutHandler = (): void => {
     mutate({});
-  }
+  };
 
   return (
     <>
@@ -38,7 +35,12 @@ const ProfileScreen = ({navigation}: any) => {
         <Box flex={1.3}>
           <View style={styles.studentListButton}>
             <Text style={styles.buttonText}>학생 관리</Text>
-            <SpinnerButton onPress={() => { navigation.navigate('TeacherScreen') }} height={55} fontSize={20}>
+            <SpinnerButton
+              onPress={() => {
+                navigation.navigate('TeacherScreen');
+              }}
+              height={55}
+              fontSize={20}>
               학생 목록 조회
             </SpinnerButton>
           </View>
