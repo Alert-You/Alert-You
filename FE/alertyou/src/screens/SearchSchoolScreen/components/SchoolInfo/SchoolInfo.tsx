@@ -29,7 +29,6 @@ const SchoolInfo = ({address, name}: Props) => {
       cacheTime: 0,
       onSuccess: (value) => {
         setClassList(value.classes)
-        console.log(value.classes)
       }
     },
   );

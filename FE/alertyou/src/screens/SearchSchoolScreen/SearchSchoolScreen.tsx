@@ -2,7 +2,7 @@ import { FlatList, Pressable, View, Keyboard } from 'react-native';
 import React, {Suspense, useEffect, useState} from 'react';
 import {Input, ScrollView, SearchIcon, Spinner} from 'native-base';
 import {useQuery} from '@tanstack/react-query';
-import axios, {AxiosError} from 'axios';
+import {AxiosError} from 'axios';
 import ErrorBoundary from 'react-native-error-boundary';
 
 import {MAIN} from '@/theme/colorVariants';
@@ -10,13 +10,10 @@ import {MAIN} from '@/theme/colorVariants';
 import {styles} from './style';
 import {SchoolInfo} from './components';
 import {requestSchoolData} from './apis';
-import {schoolResponseType, schoolInfoType} from './types';
-import { useRecoilValue } from 'recoil';
-import { classListState } from '@/store/signUpState';
+import {schoolResponseType} from './types';
 
 const SearchSchoolScreen = () => {
   const [school, setSchool] = useState<string>('');
-  const classList = useRecoilValue(classListState)
   //리턴값, 에러, data에 담길 데이터, 쿼리 키 타입
   const {data, refetch} = useQuery<
     schoolResponseType,
@@ -61,7 +58,6 @@ const SearchSchoolScreen = () => {
             onSubmitEditing={getSchoolList}
           />
         </View>
-        {/* flatList + 아무것도 없다면 검색하시오 띄우기 */}
         <View style={styles.schoolListContainer}>
           <Suspense fallback={<Spinner color={MAIN.red} size="lg" />}>
             <ScrollView>
