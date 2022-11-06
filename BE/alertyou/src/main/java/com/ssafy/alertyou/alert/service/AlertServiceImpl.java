@@ -40,12 +40,18 @@ public class AlertServiceImpl implements AlertService{
             for(Alert alert : unreadList){
                 Report alertReport = alert.getReport();
                 unread.add(new AlertResDto(alertReport));
+
             }
 
             for(Alert alert : readList){
                 Report alertReport = alert.getReport();
                 read.add(new AlertResDto(alertReport));
+
             }
+
+            // 최신순 정렬
+            read.sort(Comparator.comparing(AlertResDto::getNoticeDateTime).reversed());
+            unread.sort(Comparator.comparing(AlertResDto::getNoticeDateTime).reversed());
 
             result.put("msg", SUCCESS);
             result.put("read", read);
