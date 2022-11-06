@@ -7,7 +7,13 @@ import {NativeBaseProvider} from 'native-base';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
 
-const queryClinet = new QueryClient();
+const queryClinet = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true
+    }
+  }
+});
 
 const App: React.FunctionComponent = () => (
   <QueryClientProvider client={queryClinet}>
