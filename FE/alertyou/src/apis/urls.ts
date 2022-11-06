@@ -4,6 +4,8 @@ export const VERIFICATION = 'auth/verification/sms';
 export const LOGIN = 'auth/login';
 export const LOGOUT = 'auth/logout';
 export const SIGNUP = 'auth/signup';
+export const ACCESS = 'auth/reissue/access';
+export const REFRESH = 'auth/reissue/refresh';
 
 export const SCHOOL_LIST = 'school/list';
 export const SCHOOL = 'school';

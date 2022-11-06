@@ -8,13 +8,12 @@ import {
   Spinner,
   Stack,
 } from 'native-base';
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useReducer} from 'react';
 import ErrorBoundary from 'react-native-error-boundary';
 
 import {MAIN} from '@/theme/colorVariants';
 import {LogoImage, SpinnerButton} from '@/components';
 import {useLogIn} from '@/hooks';
-import { SplashScreen } from '@/screens';
 
 import {styles} from './style';
 import {
@@ -26,15 +25,8 @@ import {
 } from './functions';
 
 const LoginScreen = ({navigation}: any) => {
-  const [appLoaded, setAppLoaded] = useState(false);
-  const {mutate, isLoading} = useLogIn();
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setAppLoaded(true);
-    }, 2000);
-  }, []);
+  const {mutate: loginMutate, isLoading} = useLogIn();
 
   const changePhoneNumber = (e: string): void => {
     dispatch({type: 'phone', payload: e});
@@ -55,7 +47,7 @@ const LoginScreen = ({navigation}: any) => {
   const submitAndClearForm = () => {
     //유효성 검사 추가
     if (phoneValidation(state.phone)) {
-      mutate(state);
+      loginMutate(state);
     } else if (!state.phone || !state.password) {
       onFailHandler();
     } else {
@@ -69,14 +61,14 @@ const LoginScreen = ({navigation}: any) => {
     navigation.navigate('SignUp');
   };
 
-  return !appLoaded ? <SplashScreen/> : (
+  return (
     <ErrorBoundary>
       <KeyboardAvoidingView style={styles.container}>
         <View style={styles.imageContainer}>
           <LogoImage />
         </View>
-          <View style={styles.formContainer}>
-            {!isLoading ? 
+        <View style={styles.formContainer}>
+          {!isLoading ? (
             <Stack space={4}>
               <FormControl isRequired>
                 <FormControl.Label>휴대폰 번호</FormControl.Label>
@@ -118,21 +110,22 @@ const LoginScreen = ({navigation}: any) => {
                   value={state.password}
                 />
               </FormControl>
-            </Stack>: <Spinner color={MAIN.red} size="lg"/>}
-            <View style={styles.spinnerButtonStyle}>
-              <SpinnerButton
-                onPress={isLoading ? () => {} : submitAndClearForm}>
-                로그인
-              </SpinnerButton>
-            </View>
-            <View style={styles.signUpTextGroup}>
-              <Text style={styles.signUpText}>알럿유가 처음이신가요?</Text>
-              <Text style={styles.signUpNavigator} onPress={moveToSignUp}>
-                회원가입
-              </Text>
-            </View>
+            </Stack>
+          ) : (
+            <Spinner color={MAIN.red} size="lg" />
+          )}
+          <View style={styles.spinnerButtonStyle}>
+            <SpinnerButton onPress={isLoading ? () => {} : submitAndClearForm}>
+              로그인
+            </SpinnerButton>
           </View>
-      
+          <View style={styles.signUpTextGroup}>
+            <Text style={styles.signUpText}>알럿유가 처음이신가요?</Text>
+            <Text style={styles.signUpNavigator} onPress={moveToSignUp}>
+              회원가입
+            </Text>
+          </View>
+        </View>
       </KeyboardAvoidingView>
     </ErrorBoundary>
   );
