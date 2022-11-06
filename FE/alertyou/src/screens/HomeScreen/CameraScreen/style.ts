@@ -23,4 +23,27 @@ export const styles = StyleSheet.create({
     borderColor: 'white',
     borderWidth: diameter / 7,
   },
+
+  container: {
+    flex: 1,
+    backgroundColor: 'blue',
+  },
+
+  previewImage: {
+    width: '100%',
+    height: '100%',
+    borderColor: 'red',
+    borderBottomWidth: 10,
+    backgroundColor: 'white',
+  },
+
+  reportButton: {
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+    borderRadius: 10000,
+    backgroundColor: 'transparent',
+    borderColor: 'white',
+    borderWidth: diameter / 20,
+  },
 });

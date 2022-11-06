@@ -7,10 +7,12 @@ import {
   getNewMicrophonePermission,
 } from '@/utils/permission';
 import {Button, View} from 'native-base';
-// import CameraRoll from '@react-native-community/cameraroll';
 import { CameraRoll } from "@react-native-camera-roll/camera-roll";
+import { useNavigation, NavigationProp } from '@react-navigation/native'
+import { HomeParamList } from '@/navigations/HomeNavigation/HomeNavigation';
 
-const CameraScreen = ({navigation}: any) => {
+const CameraScreen = () => {
+  const navigation = useNavigation<NavigationProp<HomeParamList>>()
   const camera = useRef<Camera>(null);
   const devices = useCameraDevices();
   const device = devices.back;
@@ -19,11 +21,10 @@ const CameraScreen = ({navigation}: any) => {
     const photo = await camera.current?.takePhoto({
       flash: 'off'
     })
-    console.log(typeof(photo), photo);
     if (photo?.path) {
-      const uri = `file://${photo.path}`
-      const result = await CameraRoll.save(uri);
-      console.log('🐤result', result);
+      const uri = await CameraRoll.save(photo.path);
+      const props = {path: photo.path, uri}
+      navigation.navigate('CameraCheckScreen', props)
     }
   }
 
