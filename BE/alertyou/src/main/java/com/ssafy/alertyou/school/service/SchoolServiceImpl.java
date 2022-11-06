@@ -94,8 +94,13 @@ public class SchoolServiceImpl implements SchoolService {
             if (!classes.contains("순회") && isSpecial==false && classes.get(0).get(0).equals("1")) {
                 ArrayList<ArrayList<String>> newclasses = new ArrayList<ArrayList<String>>();
                 for (List<String> str : classes){
-                    String[] sArrays = str.toArray(new String[str.size()]);
-                    newclasses.add(sort(sArrays));
+                    //객체 값이 있을 때에만 정렬, 없다면 그대로 다시 추가
+                    if (!str.isEmpty()){
+                        String[] sArrays = str.toArray(new String[str.size()]);
+                        newclasses.add(sort(sArrays));
+                    }else {
+                        newclasses.add((ArrayList<String>) str);
+                    }
                 }
                 classes = newclasses;
             }
