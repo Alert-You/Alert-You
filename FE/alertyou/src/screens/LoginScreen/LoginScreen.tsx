@@ -8,13 +8,13 @@ import {
   Spinner,
   Stack,
 } from 'native-base';
-import React, {useEffect, useReducer} from 'react';
+import React, {useEffect, useReducer, useState} from 'react';
 import ErrorBoundary from 'react-native-error-boundary';
 
 import {MAIN} from '@/theme/colorVariants';
 import {LogoImage, SpinnerButton} from '@/components';
-import {getToken} from '@/utils/auth';
 import {useLogIn} from '@/hooks';
+import { SplashScreen } from '@/screens';
 
 import {styles} from './style';
 import {
@@ -26,14 +26,15 @@ import {
 } from './functions';
 
 const LoginScreen = ({navigation}: any) => {
+  const [appLoaded, setAppLoaded] = useState(false);
   const {mutate, isLoading} = useLogIn();
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
 
-  /////삭제
-  // useEffect(() => {
-  //   getToken();
-  // }, []);
-  /////////
+  useEffect(() => {
+    setTimeout(() => {
+      setAppLoaded(true);
+    }, 2000);
+  }, []);
 
   const changePhoneNumber = (e: string): void => {
     dispatch({type: 'phone', payload: e});
@@ -68,7 +69,7 @@ const LoginScreen = ({navigation}: any) => {
     navigation.navigate('SignUp');
   };
 
-  return (
+  return !appLoaded ? <SplashScreen/> : (
     <ErrorBoundary>
       <KeyboardAvoidingView style={styles.container}>
         <View style={styles.imageContainer}>
