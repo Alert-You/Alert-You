@@ -9,7 +9,7 @@ public class ReportResDto {
     private long reportId;
     private String noticeDateTime;
     private String content;
-    private boolean isVictim;
+    private Boolean isVictim;
     private double latitude;
     private double longtitude;
     private String location;

@@ -30,5 +30,9 @@ public class Alert {
     private Report report;
 
     private Boolean checked;
+
+    public void updateAlert(Boolean checked){
+        this.checked = checked;
+    }
 }
 
