@@ -180,7 +180,6 @@ public class ReportServiceImpl implements ReportService {
 
         }catch (Exception e){
             result.put("msg", FAIL);
-            result.put("error",e.getMessage());
             status = HttpStatus.BAD_REQUEST;
 
         }

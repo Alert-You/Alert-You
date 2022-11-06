@@ -10,5 +10,8 @@ import java.util.Optional;
 
 public interface AlertRepository extends JpaRepository<Alert, Long> {
 
-    public Optional<Alert> findByUserAndReport(User user, Report report);
+    Optional<Alert> findByUserAndReport(User user, Report report);
+    List<Alert> findAllByUserAndChecked(User user, Boolean checked);
+    List<Alert> findAllByUser(User user);
+
 }
