@@ -14,3 +14,9 @@ export interface reportType {
   latitude: number,
   logitude: number,
 }
+
+export interface repType {
+  reportId: number,
+  noticeDateTime: string,
+  isVictim: boolean,
+}
