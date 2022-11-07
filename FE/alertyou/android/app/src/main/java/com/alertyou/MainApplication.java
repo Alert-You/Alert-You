@@ -11,6 +11,7 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import com.alertyou.newarchitecture.MainApplicationReactNativeHost;
+import com.reactnativecommunity.cameraroll.CameraRollPackage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           new SplashScreenReactPackage();
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
+          // packages.add(new CameraRollPackage());
           return packages;
         }
 

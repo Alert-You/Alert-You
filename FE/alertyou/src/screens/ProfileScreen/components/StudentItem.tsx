@@ -1,18 +1,27 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Pressable, View } from 'native-base'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
-import { studentType } from '@/types'
+import { studentsType } from '@/types'
 import { FlatListItem } from '@/components'
 import { MAIN, RED, WHITE } from '@/theme/colorVariants'
+import { useNavigation, NavigationProp } from '@react-navigation/native'
+import { ProfileParamList } from '@/navigations/ProfileNavigation/ProfileNavigation'
 
-const StudentItem: React.FC<{ item: studentType }> = ({ item }) => {
-  const moveToDetail = <Pressable>
+const StudentItem: React.FC<{ item: studentsType; }> = ({ item }) => {
+  const navigation = useNavigation<NavigationProp<ProfileParamList>>().navigate
+
+  const onClick = useCallback(() => {
+    navigation('StudentDetail', { studentId: item.studentId });
+  }, [navigation]);
+
+  const moveToDetail = <Pressable onPress={onClick}>
     <MaterialCommunityIcons
       name='chevron-right'
       size={25}
       color={MAIN.mainFont} />
   </Pressable>
+
 
   let icon = <View>
     <MaterialCommunityIcons

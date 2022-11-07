@@ -1,13 +1,13 @@
-import {View, Text} from 'react-native';
+import { View } from 'react-native';
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {MAIN} from '@/theme/colorVariants';
-import {Divider} from 'native-base';
+import { MAIN } from '@/theme/colorVariants';
+import { Divider, Text } from 'native-base';
 
-import {styles} from './style';
-import {Props} from './types';
+import { styles } from './style';
+import { Props } from './types';
 
-const ProfileBox = ({schoolInfo, role, phone}: Props) => {
+const ProfileBox = ({ schoolInfo, role, phone }: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
