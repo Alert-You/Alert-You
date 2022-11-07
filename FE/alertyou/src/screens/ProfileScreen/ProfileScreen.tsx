@@ -1,18 +1,18 @@
-import { View, Text, StatusBar } from 'react-native';
+import { View, Text, StatusBar, Button } from 'react-native';
 import React from 'react';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import {Box} from 'native-base';
+import { Box } from 'native-base';
 
-import {isLoggedInState, tokenState} from '@/store';
-import {redProfileGradientStyle} from '@/theme/gradient';
-import {ProfileBox, SpinnerButton} from '@/components';
+import { isLoggedInState, tokenState } from '@/store';
+import { redProfileGradientStyle } from '@/theme/gradient';
+import { ProfileBox, SpinnerButton } from '@/components';
 import { removeToken } from '@/utils/auth';
 
-import {styles} from './style';
+import { styles } from './style';
 import { useLogout } from '@/hooks';
 
-const ProfileScreen = ({navigation}: any) => {
-  const {mutate} = useLogout()
+const ProfileScreen = ({ navigation }: any) => {
+  const { mutate } = useLogout()
 
   //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
   const logoutHandler = (): void => {
