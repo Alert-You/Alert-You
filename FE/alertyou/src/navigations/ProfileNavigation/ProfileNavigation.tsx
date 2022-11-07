@@ -1,13 +1,21 @@
 import React from 'react';
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {ProfileScreen, TeacherScreen} from '@/screens';
+import { ProfileScreen, TeacherScreen } from "@/screens"
+import { StudentDetail } from '@/screens/ProfileScreen';
 import { RED } from '@/theme/colorVariants';
-const Stack = createNativeStackNavigator();
+
+
+export type ProfileParamList = {
+  ProfileScreen: undefined,
+  TeacherScreen: undefined,
+  StudentDetail: { studentId: number }
+}
+const Stack = createNativeStackNavigator<ProfileParamList>();
 
 const ProfileNavigation = () => {
   const schoolName: string = '대전광역시 유성구 싸피고등학교'
   return (
-    //알아서 initialRouteName 바꾸세요.
     <Stack.Navigator initialRouteName="ProfileScreen">
       <Stack.Screen name="ProfileScreen" component={ProfileScreen} options={{
         headerShown: false
@@ -24,6 +32,11 @@ const ProfileNavigation = () => {
           backgroundColor: RED.red700,
         }
       }} />
+      <Stack.Screen
+        name="StudentDetail"
+        component={StudentDetail}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };

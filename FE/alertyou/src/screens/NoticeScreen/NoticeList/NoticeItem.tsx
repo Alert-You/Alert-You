@@ -1,12 +1,14 @@
-import { Icon, View } from 'native-base'
+import { View } from 'native-base'
 import React, { useCallback } from 'react'
+import { Pressable } from 'react-native'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
 import { noticeListType } from '@/types'
 import { FlatListItem } from '@/components'
 import { WHITE, RED, MAIN } from '@/theme/colorVariants'
-import { Pressable } from 'react-native'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { NoticeParamList } from '@/navigations/NoticeNavigation/NoticeNavigation'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
 const NoticeItem: React.FC<{ item: noticeListType }> = ({ item }) => {
   const navigation = useNavigation<NavigationProp<NoticeParamList>>()
 
@@ -59,6 +61,8 @@ const NoticeItem: React.FC<{ item: noticeListType }> = ({ item }) => {
   } else if (dif < mon) {
     subTitle = Math.trunc(dif / day) + '일 전';
     //달보다 작으면 몇일 전인지
+  } else {
+    subTitle = item.noticeDateTime
   }
   const onClick = useCallback(() => {
     navigation.navigate('NoticeMap', { reportId: item.reportId });

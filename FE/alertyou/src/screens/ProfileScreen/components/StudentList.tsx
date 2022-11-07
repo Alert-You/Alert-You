@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
 import { FlatList, Text, View } from 'native-base'
 
-import { studentType } from '@/types';
+import { studentsType } from '@/types';
 
 import { styles } from '../style';
 import StudentItem from './StudentItem';
 
-const StudentList: React.FC<{ students: studentType[]; grade: string; classRoom: string }> = ({ students, grade, classRoom }) => {
+const StudentList: React.FC<{ students: studentsType[]; grade: string; classRoom: string; }> = ({ students, grade, classRoom }) => {
   let gradeNum: number = 0
 
   if (grade === '0') {
@@ -21,7 +21,7 @@ const StudentList: React.FC<{ students: studentType[]; grade: string; classRoom:
     gradeNum = 6
   }
 
-  const renderItem = useCallback(({ item }: { item: studentType }) => {
+  const renderItem = useCallback(({ item }: { item: studentsType }) => {
     return <StudentItem item={item} />;
   }, []);
   return (
