@@ -1,6 +1,6 @@
-import {View, Text, Button, Pressable} from 'react-native';
+import {View, Text, Button, Pressable, Alert} from 'react-native';
 import React, {Suspense} from 'react';
-import {Box, Menu, Spinner} from 'native-base';
+import {Box, Spinner} from 'native-base';
 import {useQuery} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 
@@ -15,7 +15,6 @@ import {profileResponseType} from './types';
 import {MAIN} from '@/theme/colorVariants';
 import ErrorBoundary from 'react-native-error-boundary';
 import {CustomSpinner} from '@/screens/ProfileScreen';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ProfileScreen = ({navigation}: any) => {
   const {data} = useQuery<profileResponseType, AxiosError>(
@@ -34,6 +33,19 @@ const ProfileScreen = ({navigation}: any) => {
     });
   };
 
+  const confirmLogout = (): void => {
+    Alert.alert('로그아웃', '정말로 로그아웃 하시겠습니까?', [
+      {
+        text: '취소',
+      },
+      {
+        text: '로그아웃',
+        style: 'cancel',
+        onPress: () => logoutHandler()
+      },
+    ]);
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -41,24 +53,6 @@ const ProfileScreen = ({navigation}: any) => {
           <Box bg={redProfileGradientStyle} w="100%" h="100%">
             <View style={styles.headerStyle}>
               <Text style={styles.headerText}>프로필</Text>
-              <View style={styles.menuContainer}>
-                <Menu
-                  w="190"
-                  trigger={triggerProps => {
-                    return (
-                      <Pressable {...triggerProps}>
-                        <MaterialCommunityIcons
-                          name="dots-vertical"
-                          size={28}
-                          color={MAIN.mainFont}
-                        />
-                      </Pressable>
-                    );
-                  }}>
-                  <Menu.Item>회원정보수정</Menu.Item>
-                  <Menu.Item>로그아웃</Menu.Item>
-                </Menu>
-              </View>
             </View>
             <Text style={styles.nameText}>{data?.name}</Text>
           </Box>
@@ -87,7 +81,10 @@ const ProfileScreen = ({navigation}: any) => {
             </SpinnerButton>
           </View>
         </Box>
-        <Button title="로그아웃" onPress={logoutHandler} />
+        <Pressable style={styles.logoutButton} onPress={confirmLogout}>
+          <Text style={styles.logoutText}>로그아웃</Text>
+        </Pressable>
+        {/* <Button title="로그아웃" onPress={logoutHandler} /> */}
       </View>
     </>
   );

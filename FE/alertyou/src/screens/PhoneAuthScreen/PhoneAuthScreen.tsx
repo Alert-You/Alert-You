@@ -71,7 +71,7 @@ const PhoneAuthScreen = ({navigation}: any) => {
       render: () => {
         return <ToastView />;
       },
-      duration: 4000,
+      duration: 2000,
     });
   };
 

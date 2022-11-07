@@ -138,13 +138,14 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
-  // toggleMenu: {
-  //   position: 'absolute',
-  //   right: 0,
-  // },
-  menuContainer: {
-    position: 'absolute',
-    right: 15,
-    top: 15,
+  logoutText: {
+    fontSize: 16,
+    fontWeight: FONT_WEIGHT.SemiBold,
+    color: 'red'
   },
+  logoutButton: {
+    position: 'absolute',
+    right: 10,
+    bottom: 10,
+  }
 });
