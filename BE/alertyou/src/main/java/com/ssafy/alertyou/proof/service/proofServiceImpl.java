@@ -91,16 +91,17 @@ public class proofServiceImpl implements ProofService {
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
         if (teacher.isActive() == true && teacher.getRole().equals("teacher")){
-            List<Proof> entityList = proofRepository.findAllByUserOrderByCreatedAtDesc(findUser(id));
-            List<ProofListResDto> list = new ArrayList<>();
-            for (Proof proof : entityList){
-                list.add(new ProofListResDto(proof));
-            }
-            if (!list.isEmpty()){
+            try {
+                List<Proof> entityList = proofRepository.findAllByUserOrderByCreatedAtDesc(findUser(id));
+                List<ProofListResDto> list = new ArrayList<>();
+                for (Proof proof : entityList){
+                    list.add(new ProofListResDto(proof));
+                }
+
                 result.put("msg",SUCCESS);
                 result.put("proofs", list);
                 status = HttpStatus.OK;
-            } else if(list.isEmpty()){
+            } catch (Exception e){
                 result.put("msg",FAIL);
                 status = HttpStatus.BAD_REQUEST;
             }
