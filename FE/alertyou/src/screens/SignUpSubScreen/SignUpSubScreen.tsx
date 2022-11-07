@@ -22,7 +22,7 @@ const SignUpSubScreen = ({navigation}: any) => {
 
   const changeName = (e: string): void => {
     setAccount(state => {
-      return {...state, name: e.trim()};
+      return {...state, username: e.trim()};
     });
   };
 
@@ -34,7 +34,7 @@ const SignUpSubScreen = ({navigation}: any) => {
 
   const deleteName = (): void => {
     setAccount(state => {
-      return {...state, name: ''};
+      return {...state, username: ''};
     });
   };
 
@@ -81,12 +81,12 @@ const SignUpSubScreen = ({navigation}: any) => {
                 focusOutlineColor={MAIN.red}
                 InputRightElement={
                   <Pressable onPress={deleteName}>
-                    {account.name ? <CloseIcon color={MAIN.red} /> : null}
+                    {account.username ? <CloseIcon color={MAIN.red} /> : null}
                   </Pressable>
                 }
                 onChangeText={changeName}
                 autoCorrect={false}
-                value={account.name}
+                value={account.username}
               />
             </FormControl>
             <FormControl isRequired isInvalid={isValid}>

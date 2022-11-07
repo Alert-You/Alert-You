@@ -252,10 +252,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    // implementation 'com.android.support:multidex:2.0.1' //enter the latest multidex version
-
-    // implementation project(':@react-native-camera-roll_camera-roll')
-
+    implementation project(':react-native-splash-screen')
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

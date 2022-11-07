@@ -16,4 +16,7 @@ export const styles = StyleSheet.create({
     color: MAIN.mainFont,
     fontWeight: 'bold',
   },
+  selectButton: {
+    flex: 1
+  }
 });

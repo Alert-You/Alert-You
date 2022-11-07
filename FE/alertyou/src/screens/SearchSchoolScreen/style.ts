@@ -12,8 +12,11 @@ export const styles = StyleSheet.create({
   },
   schoolListContainer: {
     flex: 1,
-    // borderWidth: 1,
     marginHorizontal: 16,
     marginVertical: 16,
+    justifyContent: 'center'
   },
+  scrollViewContainer: {
+    flex: 1
+  }
 });

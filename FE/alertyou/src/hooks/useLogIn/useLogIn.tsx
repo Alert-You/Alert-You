@@ -17,9 +17,10 @@ const useLogIn = () => {
     credentials => loginRequest(credentials),
     {
       onSuccess: successData => {
+        //로그인 성공 => access토큰은 atom, refresh토큰은 EncryptedStorage
         setToken(successData.accessToken);
         setIsLoggedIn(true);
-        saveToken(successData.accessToken);
+        saveToken(successData.refreshToken);
       },
       onError: () => {
         onFailHandler();

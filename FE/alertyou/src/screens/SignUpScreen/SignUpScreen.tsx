@@ -1,25 +1,49 @@
 import {View, Text, Pressable, Dimensions} from 'react-native';
-import React from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   Center,
-  CloseIcon,
   FormControl,
   HStack,
   Input,
   SearchIcon,
+  Select,
   Stack,
 } from 'native-base';
-import {useRecoilState} from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {useQuery} from '@tanstack/react-query';
 
 import {LogoImage, SpinnerButton} from '@/components';
 import {MAIN} from '@/theme/colorVariants';
-import {schoolState} from '@/store/signUpState';
+import {classListState, schoolIdState, schoolState} from '@/store/signUpState';
 
 import {styles} from './style';
-import {formIsNotFilled} from './functions';
+import {failedFetchSchoolId, formIsNotFilled} from './functions';
+import { requestSchoolId } from './apis';
 
 const SignUpScreen = ({navigation}: any) => {
-  const [school, setSchool] = useRecoilState(schoolState);
+  const [grade, setGrade] = useState<string>('');
+  const [classroom, setClassroom] = useState<string>('');
+  const schoolValue = useRecoilValue(schoolState);
+  const classList = useRecoilValue(classListState);
+  const setSchoolId = useSetRecoilState(schoolIdState);
+
+  const hasChosenSchool = useMemo(() => classList.length !== 0, [classList]);
+  const hasChosenGrade = useMemo(() => !!classList[parseInt(grade)], [grade]);
+  const formIsFilled =
+    schoolValue.address && schoolValue.name && grade && classroom;
+
+  const {refetch} = useQuery(['schoolIdKey'], () => requestSchoolId(schoolValue.name, grade, classroom), {
+    suspense: true,
+    enabled: false,
+    cacheTime: 0,
+    onSuccess: (schoolIdData) => {
+      setSchoolId(schoolIdData.schoolId);
+      moveToNextForm();
+    },
+    onError: () => {
+      failedFetchSchoolId();
+    },
+  });
 
   const moveToSearchSchool = (): void => {
     navigation.navigate('SignUp', {
@@ -27,11 +51,23 @@ const SignUpScreen = ({navigation}: any) => {
     });
   };
 
+  const moveToNextForm = (): void => {
+    navigation.navigate('SignUp', {
+      screen: 'SignUpSubScreen',
+    });
+  };
+
+  const chooseGrade = (e: string): void => {
+    setGrade(e);
+  };
+
+  const chooseClassroom = (e: string): void => {
+    setClassroom(e);
+  };
+
   const moveToNextPage = (): void => {
-    if (school.address && school.name) {
-      navigation.navigate('SignUp', {
-        screen: 'SignUpSubScreen',
-      });
+    if (formIsFilled) {
+      refetch()
     } else {
       formIsNotFilled();
     }
@@ -66,7 +102,7 @@ const SignUpScreen = ({navigation}: any) => {
                     </Pressable>
                   }
                   autoCorrect={false}
-                  value={school.name}
+                  value={schoolValue.name}
                 />
               </Pressable>
             </FormControl>
@@ -74,39 +110,55 @@ const SignUpScreen = ({navigation}: any) => {
               <Center w={(Dimensions.get('window').width - 32) / 2 - 20}>
                 <FormControl isRequired>
                   <FormControl.Label>학년</FormControl.Label>
-                  <Input
-                    type="text"
-                    variant="underlined"
-                    keyboardType="numeric"
-                    maxLength={2}
-                    placeholder="ex) 1"
-                    size="md"
-                    h="9"
-                    color={MAIN.mainFont}
-                    focusOutlineColor={MAIN.red}
-                    // onChangeText={changeGrade}
-                    autoCorrect={false}
-                    // value={school.grade}
-                  />
+                  <Select
+                    isDisabled={!hasChosenSchool || !schoolValue.name}
+                    selectedValue={grade}
+                    accessibilityLabel="학년을 선택하세요"
+                    placeholder="학년"
+                    placeholderTextColor={MAIN.mainFont}
+                    onValueChange={chooseGrade}
+                    _selectedItem={{
+                      bg: MAIN.red,
+                    }}>
+                    {hasChosenSchool
+                      ? classList.map((item, idx) => {
+                          return (
+                            <Select.Item
+                              key={`gradeItemKey${idx}`}
+                              label={`${idx + 1}학년`}
+                              value={String(idx + 1)}
+                            />
+                          );
+                        })
+                      : null}
+                  </Select>
                 </FormControl>
               </Center>
               <Center w={(Dimensions.get('window').width - 32) / 2 - 20}>
                 <FormControl isRequired>
                   <FormControl.Label>반</FormControl.Label>
-                  <Input
-                    type="text"
-                    variant="underlined"
-                    keyboardType="numeric"
-                    maxLength={2}
-                    placeholder="ex) 2"
-                    size="md"
-                    h="9"
-                    color={MAIN.mainFont}
-                    focusOutlineColor={MAIN.red}
-                    // onChangeText={changeClass}
-                    autoCorrect={false}
-                    // value={school.class}
-                  />
+                  <Select
+                    isDisabled={!hasChosenGrade}
+                    selectedValue={classroom}
+                    accessibilityLabel="반을 선택하세요"
+                    placeholder="반"
+                    placeholderTextColor={MAIN.mainFont}
+                    onValueChange={chooseClassroom}
+                    _selectedItem={{
+                      bg: MAIN.red,
+                    }}>
+                    {hasChosenGrade
+                      ? classList[parseInt(grade)].map((item, idx) => {
+                          return (
+                            <Select.Item
+                              key={`classItemKey${idx}`}
+                              label={`${item}반`}
+                              value={item}
+                            />
+                          );
+                        })
+                      : null}
+                  </Select>
                 </FormControl>
               </Center>
             </HStack>

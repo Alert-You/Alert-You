@@ -3,7 +3,7 @@ import { Box, Select, View } from 'native-base'
 
 import { MAIN } from '@/theme/colorVariants';
 import { StudentList } from '@/screens'
-import { studentType } from '@/types';
+import { studentsType } from '@/types';
 
 import { styles } from './style';
 
@@ -15,27 +15,27 @@ const TeacherScreen = () => {
     ['1', '2', '3', '4', '5', '6',],
     ['믿음', '소망', '사랑', '기쁨', '행복', '희망'],
   ]
-  const students: studentType[] = [
+  const students: studentsType[] = [
     {
-      userId: 1,
+      studentId: 1,
       name: '이현정',
       phone: '010-1234-5678',
       isGuard: false
     },
     {
-      userId: 2,
+      studentId: 2,
       name: '송상진',
       phone: '010-2345-6789',
       isGuard: true
     },
     {
-      userId: 3,
+      studentId: 3,
       name: '박승훈',
       phone: '010-3456-7890',
       isGuard: false
     },
     {
-      userId: 4,
+      studentId: 4,
       name: '박시원',
       phone: '010-4567-8901',
       isGuard: true

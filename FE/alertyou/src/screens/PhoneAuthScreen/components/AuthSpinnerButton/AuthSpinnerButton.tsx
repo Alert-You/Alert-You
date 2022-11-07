@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import {Text, TouchableOpacity } from 'react-native'
 import React, { Suspense } from 'react'
 import { Spinner } from 'native-base';
 import { styles } from './style';

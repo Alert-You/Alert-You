@@ -34,6 +34,10 @@ export const styles = StyleSheet.create({
     left: 16,
     bottom: 135,
   },
+  profileBox: {
+    marginTop: 16,
+    marginHorizontal: 16
+  },
   studentListButton: {
     marginTop: 100,
     marginHorizontal: 16,
@@ -69,5 +73,65 @@ export const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: FONT_WEIGHT.Regular,
     color: MAIN.mainFont,
-  }
+  },
+  arrowBox: {
+    color: MAIN.red
+  },
+  headerBox: {
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: "space-between",
+    backgroundColor: RED.redBg,
+    marginVertical: 16,
+    marginHorizontal: 16,
+    zIndex: 1
+  },
+  textBox: {
+    fontSize: 20,
+    fontWeight: FONT_WEIGHT.Bold,
+    color: MAIN.mainFont,
+    paddingTop: 4
+  },
+  dotContainer: {
+    position: 'absolute',
+    right: 0,
+    top: 26,
+    width: Dimensions.get('window').width - 250,
+    elevation: 6,
+    backgroundColor: WHITE.white,
+    height: 60,
+    borderRadius: 4,
+    zIndex: 2
+  },
+  dotContent: {
+    margin: 4,
+    marginLeft: 8,
+  },
+  guardText: {
+    fontSize: 15,
+    color: MAIN.mainFont,
+  },
+  excludeText: {
+    fontSize: 15,
+    color: RED.red700,
+  },
+  tabBoxGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 32
+  },
+  tabBox: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '50%',
+    marginVertical: 12,
+  },
+  tabText: {
+    fontSize: 17,
+    color: MAIN.mainFont,
+    marginBottom: 12
+  },
+
 })
