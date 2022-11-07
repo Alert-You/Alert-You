@@ -85,38 +85,6 @@ public class ReportServiceImpl implements ReportService {
         return new ResponseEntity<>(result, status);
 
     }
-    public ResponseEntity<Map<String, Object>> getReportBodyGuardList(String token) throws Exception{
-
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
-        List<ReportResDto> list = new ArrayList<>();
-
-        User user = findUserByPhone(decodeToken(token));
-        List<Opguard> guardlist = findGuard(user);
-
-
-        for(Opguard opguard : guardlist){
-            User guarduser = opguard.getUser();
-            List<Report> reportlist = reportRepository.findAllByReUser(guarduser);
-
-            for(Report report : reportlist){
-                list.add(new ReportResDto(report));
-            }
-
-        }
-
-        if (!list.isEmpty()){
-            result.put("msg",SUCCESS);
-            result.put("reports", list);
-            status = HttpStatus.OK;
-        } else if(list.isEmpty()){
-            result.put("msg",FAIL);
-            status = HttpStatus.BAD_REQUEST;
-        }
-
-        return new ResponseEntity<>(result, status);
-
-    }
 
     public ResponseEntity<Map<String, Object>> addReportVictim(ReportVictimReqDto reportVictimReqDto) throws Exception{
 

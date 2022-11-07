@@ -26,11 +26,6 @@ public class ReportController {
         return reportService.getReportDetail(id);
     }
 
-    @GetMapping(value = "/bodyguardlist")
-    public ResponseEntity<Map<String, Object>> ReportBodyGuardList(@RequestHeader(value = "Authorization") String token) throws Exception{
-        return reportService.getReportBodyGuardList(token);
-    }
-
     @PostMapping("/victim")
     public ResponseEntity<Map<String, Object>> ReportVictimAdd(@RequestBody ReportVictimReqDto reportVictimReqDto) throws Exception {
         return reportService.addReportVictim(reportVictimReqDto);
