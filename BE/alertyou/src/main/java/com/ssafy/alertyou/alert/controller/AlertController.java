@@ -15,8 +15,8 @@ public class AlertController {
     private final AlertService alertService;
 
     @GetMapping(value = "/list")
-    public ResponseEntity<Map<String, Object>> AlertList(@RequestParam("userId") long id) throws Exception{
-        return alertService.getAlertList(id);
+    public ResponseEntity<Map<String, Object>> AlertList(@RequestHeader(value = "Authorization") String token) throws Exception{
+        return alertService.getAlertList(token);
     }
 
     @PutMapping(value = "/check")
