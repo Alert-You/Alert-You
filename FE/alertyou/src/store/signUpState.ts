@@ -1,9 +1,10 @@
 import {atom, selector} from 'recoil';
 
-interface signUpType {
+export interface signUpType {
   phone: string;
   password: string;
-  name: string;
+  username: string;
+  schoolId: number|null;
 }
 
 interface schoolInfoType {
@@ -16,7 +17,7 @@ interface phoneType {
 
 interface accountType {
   password: string;
-  name: string;
+  username: string;
 }
 
 
@@ -37,7 +38,7 @@ export const accountState = atom<accountType>({
   key: 'accountState',
   default: {
     password: '',
-    name: '',
+    username: '',
   },
 });
 
@@ -48,15 +49,22 @@ export const phoneState = atom<phoneType>({
   }
 })
 
+export const schoolIdState = atom<number|null>({
+  key: 'schoolIdState',
+  default: null
+})
+
 export const signUpState = selector<signUpType>({
   key: 'signUpState',
   get: ({ get }) => {
     const account = get(accountState)
     const phone = get(phoneState)
+    const schoolId = get(schoolIdState)
     return {
       phone: phone.phone.trim(),
       password: account.password.trim(),
-      name: account.name.trim()
+      username: account.username.trim(),
+      schoolId: schoolId
     }
   }
 });

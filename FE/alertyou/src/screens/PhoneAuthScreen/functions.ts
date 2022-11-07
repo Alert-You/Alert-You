@@ -30,6 +30,6 @@ export const failSignUp = () => {
   Alert.alert('가입 실패', '인증에 실패했습니다. 다시 인증을 진행해주세요..', [{text: '확인'}]);
 }
 
-export const hasDuplicateAcc = () => {
-  Alert.alert('가입 실패', '이미 가입된 유저입니다.', [{text: '확인'}]);
+export const errorOccured = (err:string) => {
+  Alert.alert('가입 실패', err, [{text: '확인'}]);
 }

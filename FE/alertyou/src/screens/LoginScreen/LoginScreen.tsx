@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import {
   CloseIcon,
   FormControl,
@@ -8,12 +8,11 @@ import {
   Spinner,
   Stack,
 } from 'native-base';
-import React, {useEffect, useReducer} from 'react';
+import React, {useReducer} from 'react';
 import ErrorBoundary from 'react-native-error-boundary';
 
 import {MAIN} from '@/theme/colorVariants';
 import {LogoImage, SpinnerButton} from '@/components';
-import {getToken} from '@/utils/auth';
 import {useLogIn} from '@/hooks';
 
 import {styles} from './style';
@@ -26,14 +25,8 @@ import {
 } from './functions';
 
 const LoginScreen = ({navigation}: any) => {
-  const {mutate, isLoading} = useLogIn();
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
-
-  /////삭제
-  // useEffect(() => {
-  //   getToken();
-  // }, []);
-  /////////
+  const {mutate: loginMutate, isLoading} = useLogIn();
 
   const changePhoneNumber = (e: string): void => {
     dispatch({type: 'phone', payload: e});
@@ -54,7 +47,7 @@ const LoginScreen = ({navigation}: any) => {
   const submitAndClearForm = () => {
     //유효성 검사 추가
     if (phoneValidation(state.phone)) {
-      mutate(state);
+      loginMutate(state);
     } else if (!state.phone || !state.password) {
       onFailHandler();
     } else {
@@ -74,8 +67,8 @@ const LoginScreen = ({navigation}: any) => {
         <View style={styles.imageContainer}>
           <LogoImage />
         </View>
-          <View style={styles.formContainer}>
-            {!isLoading ? 
+        <View style={styles.formContainer}>
+          {!isLoading ? (
             <Stack space={4}>
               <FormControl isRequired>
                 <FormControl.Label>휴대폰 번호</FormControl.Label>
@@ -117,21 +110,23 @@ const LoginScreen = ({navigation}: any) => {
                   value={state.password}
                 />
               </FormControl>
-            </Stack>: <Spinner color={MAIN.red} size="lg"/>}
-            <View style={styles.spinnerButtonStyle}>
-              <SpinnerButton
-                onPress={isLoading ? () => {} : submitAndClearForm}>
-                로그인
-              </SpinnerButton>
-            </View>
-            <View style={styles.signUpTextGroup}>
-              <Text style={styles.signUpText}>알럿유가 처음이신가요?</Text>
-              <Text style={styles.signUpNavigator} onPress={moveToSignUp}>
-                회원가입
-              </Text>
-            </View>
+            </Stack>
+          ) : (
+            <Spinner color={MAIN.red} size="lg" />
+          )}
+          <View style={styles.spinnerButtonStyle}>
+            <SpinnerButton onPress={isLoading ? () => {} : submitAndClearForm}>
+              로그인
+            </SpinnerButton>
           </View>
-      
+          <View style={styles.signUpTextGroup}>
+            <Text style={styles.signUpText}>알럿유가 처음이신가요?</Text>
+            <Text style={styles.signUpNavigator} onPress={moveToSignUp}>
+              회원가입
+            </Text>
+          </View>
+          <Button title="로그인 더미" onPress={() => loginMutate({phone: '01012345678', password: 'asd123'})}/>
+        </View>
       </KeyboardAvoidingView>
     </ErrorBoundary>
   );

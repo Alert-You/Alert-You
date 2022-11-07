@@ -16,11 +16,13 @@ export const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   signUpText: {
+    marginTop: 3,
     textAlign: 'center',
-    fontSize: 12,
+    fontSize: 14,
   },
   signUpNavigator: {
-    fontSize: 12,
+    marginTop: 3,
+    fontSize: 14,
     marginLeft: 4,
     textDecorationLine: 'underline',
     fontWeight: FONT_WEIGHT.Bold,

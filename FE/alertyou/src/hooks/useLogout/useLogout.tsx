@@ -9,7 +9,7 @@ import { isLoggedInState, tokenState } from '@/store';
 const useLogout = () => {
   const setIsLoggedIn = useSetRecoilState(isLoggedInState);
   const tokenRemover = useSetRecoilState(tokenState);
-  return useMutation<logoutResponseType, unknown, unknown>(logoutRequest,
+  return useMutation<logoutResponseType, unknown, string>(token => logoutRequest(token),
     {
       onSuccess: () => {
         tokenRemover('');

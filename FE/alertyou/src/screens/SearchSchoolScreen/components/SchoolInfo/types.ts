@@ -1,4 +1,4 @@
 export interface gradeClassType {
   msg: string,
-  classes: string[][]
+  classes: string[][] | any
 }
