@@ -7,13 +7,18 @@ import {ProfileBox, SpinnerButton} from '@/components';
 
 import {styles} from './style';
 import {useLogout} from '@/hooks';
+import {getToken} from '@/utils/auth';
 
 const ProfileScreen = ({navigation}: any) => {
   const {mutate} = useLogout();
 
   //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
   const logoutHandler = (): void => {
-    mutate({});
+    getToken().then(res => {
+      if (res) {
+        mutate(res);
+      }
+    });
   };
 
   return (

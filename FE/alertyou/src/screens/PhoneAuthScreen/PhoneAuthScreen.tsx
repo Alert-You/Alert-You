@@ -9,7 +9,7 @@ import {
   useToast,
 } from 'native-base';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {MutationObserver, useMutation} from '@tanstack/react-query';
+import {useMutation} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 
 import {LogoImage, SpinnerButton} from '@/components';
@@ -120,6 +120,7 @@ const PhoneAuthScreen = ({navigation}: any) => {
 
   const submitSignUp = (): void => {
     if (allowSignUp) {
+      console.log(signUpValue)
       signUpMutate.mutate(signUpValue);
     } else if (!allowSignUp) {
       //회원가입 실패(요청 이후의 알럿으로 분기처리)

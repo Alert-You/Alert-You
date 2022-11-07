@@ -15,7 +15,7 @@ import {schoolResponseType} from './types';
 const SearchSchoolScreen = () => {
   const [school, setSchool] = useState<string>('');
   //리턴값, 에러, data에 담길 데이터, 쿼리 키 타입
-  const {data, refetch} = useQuery<schoolResponseType, AxiosError>(
+  const {data, refetch, fetchStatus, status} = useQuery<schoolResponseType, AxiosError>(
     ['schoolList'],
     () => requestSchoolData(school),
     {
@@ -33,48 +33,52 @@ const SearchSchoolScreen = () => {
   const changeSchool = (e: string): void => {
     setSchool(e);
   };
-
+  console.log(fetchStatus)
+  console.log(status)
   //선택 시, 해당 정보를 가지고 뒤돌아가기
   return (
-    <ErrorBoundary>
-      <View style={styles.container}>
-        <View style={styles.searchContainer}>
-          <Input
-            type="text"
-            // rounded="md"
-            variant="underlined"
-            placeholder="ex) 싸피고등학교"
-            size="md"
-            color={MAIN.mainFont}
-            focusOutlineColor={MAIN.red}
-            InputRightElement={
-              <Pressable onPress={getSchoolList}>
-                <SearchIcon mr="3" size="md" />
-              </Pressable>
-            }
-            autoCorrect={false}
-            onChangeText={changeSchool}
-            onSubmitEditing={getSchoolList}
-          />
-        </View>
-        <View style={styles.schoolListContainer}>
-          <Suspense fallback={<Spinner color={MAIN.red} size="lg" />}>
-            <ScrollView>
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <Input
+          type="text"
+          // rounded="md"
+          variant="underlined"
+          placeholder="ex) 싸피고등학교"
+          size="md"
+          color={MAIN.mainFont}
+          focusOutlineColor={MAIN.red}
+          InputRightElement={
+            <Pressable onPress={getSchoolList}>
+              <SearchIcon mr="3" size="md" />
+            </Pressable>
+          }
+          autoCorrect={false}
+          onChangeText={changeSchool}
+          onSubmitEditing={getSchoolList}
+        />
+      </View>
+      <Suspense>
+        <ErrorBoundary>
+          <View style={styles.schoolListContainer}>
+          {fetchStatus === 'idle' || fetchStatus !== 'fetching' ? 
+            <ScrollView style={styles.scrollViewContainer}>
               {data?.schools.map((item, idx) => {
                 return (
                   <SchoolInfo
-                    address={item.address}
+                  address={item.address}
                     name={item.name}
                     key={`schoolKey ${idx}`}
+                    idx={idx}
                   />
-                );
+                  );
               })}
             </ScrollView>
-          </Suspense>
-        </View>
+            : <Spinner color={MAIN.red} size="lg"/>}
+          </View>
+        </ErrorBoundary>
+      </Suspense>
       </View>
-    </ErrorBoundary>
-  );
+      );
 };
 
 export default SearchSchoolScreen;

@@ -9,8 +9,6 @@ export const fetchAuthKey = async (phone: string): Promise<verifyResponseType> =
 };
 
 export const reqeustSignUp = async (credentials: signUpType) => {
-  const {data} = await axios.post(`${BASE_URL}${SIGNUP}`, {
-    data: credentials
-  })
+  const {data} = await axios.post(`${BASE_URL}${SIGNUP}`, credentials)
   return data
 }

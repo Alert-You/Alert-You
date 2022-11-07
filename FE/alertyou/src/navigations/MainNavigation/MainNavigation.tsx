@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useRecoilValue} from 'recoil';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
 import {
   HomeNavigation,
   NoticeNavigation,
@@ -21,6 +21,7 @@ const Tab = createBottomTabNavigator();
 const MainNavigation = () => {
   const {mutate: refreshMutate} = useRefreshToken();
   const appLoaded = useRecoilValue(splashState);
+  const setSplashState = useSetRecoilState(splashState);
   
   //자동로그인 로직
   useEffect(() => {
@@ -28,6 +29,10 @@ const MainNavigation = () => {
       if (token) {
         //처리가 끝날 시에 스플레쉬 스크린이 꺼짐
         refreshMutate(token);
+      } else {
+        setTimeout(() => {
+          setSplashState(true);
+        }, 2000);
       }
     });
   }, []);

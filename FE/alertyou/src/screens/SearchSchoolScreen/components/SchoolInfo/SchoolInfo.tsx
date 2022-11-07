@@ -11,33 +11,33 @@ import {useNavigation} from '@react-navigation/native';
 import {styles} from './style';
 import {gradeClassType} from './types';
 import {requestGradeClass} from './apis';
-import { failedFetchGrade } from './functions';
+import {failedFetchGrade} from './functions';
 
 type Props = {
   address: string;
   name: string;
+  idx: number;
 };
 
-const SchoolInfo = ({address, name}: Props) => {
+const SchoolInfo = ({address, name, idx}: Props) => {
   const navigation = useNavigation<any>();
   const setClassList = useSetRecoilState(classListState);
   const setPickSchool = useSetRecoilState(schoolState);
   const {refetch} = useQuery<gradeClassType, AxiosError>(
-    ['classGrade'],
+    ['classGrade', idx],
     () => requestGradeClass(name),
     {
       suspense: true,
       enabled: false,
       cacheTime: 0,
       onSuccess: value => {
-        console.log(value);
         setClassList(value.classes);
         setPickSchool({name, address});
         navigation.navigate('SignUp', {screen: 'SignUpScreen'});
       },
       onError: () => {
-        failedFetchGrade()
-      }
+        failedFetchGrade();
+      },
     },
   );
 
@@ -47,20 +47,22 @@ const SchoolInfo = ({address, name}: Props) => {
   };
 
   return (
-    <Pressable onPress={getGradeAndClass}>
-      <View style={styles.container}>
-        <Flex w="100%" direction="row" alignItems="center">
-          <Badge variant="solid" colorScheme="warning">
-            학교
-          </Badge>
-          <Text style={styles.schoolText}>{name}</Text>
-        </Flex>
-        <Flex w="100%" direction="row" alignItems="center">
-          <Badge colorScheme="warning">주소</Badge>
-          <Text style={styles.schoolText}>{address}</Text>
-        </Flex>
-      </View>
-    </Pressable>
+    <>
+      <Pressable onPress={getGradeAndClass}>
+        <View style={styles.container}>
+          <Flex w="100%" direction="row" alignItems="center">
+            <Badge variant="solid" colorScheme="warning">
+              학교
+            </Badge>
+            <Text style={styles.schoolText}>{name}</Text>
+          </Flex>
+          <Flex w="100%" direction="row" alignItems="center">
+            <Badge colorScheme="warning">주소</Badge>
+            <Text style={styles.schoolText}>{address}</Text>
+          </Flex>
+        </View>
+      </Pressable>
+    </>
   );
 };
 

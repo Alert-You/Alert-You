@@ -10,5 +10,6 @@ export const requestGradeClass = async (
   const {data} = await axios.get(
     `${BASE_URL}${SCHOOL}?name=${schoolName}`,
   );
+  console.log(data)
   return data;
 };
