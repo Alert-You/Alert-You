@@ -126,14 +126,19 @@ public class UserController {
     }
     
 
-    @PutMapping("/edit/{phone}")
+    @PutMapping("/update")
     @ApiOperation(value = "회원 정보 수정", notes = "회원 정보를 수정한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원 수정 성공"),
             @ApiResponse(code = 401, message = "회원 수정 실패"),
             @ApiResponse(code = 404, message = "404 NOT FOUND")
     })
-    public ResponseEntity<BaseResponseBody> updateUser(@PathVariable("phone") String phone, @RequestBody @ApiParam(value="회원 정보 수정 입력 정보", required = true) UserSignupReqDto userRequestDto) {
+    public ResponseEntity<BaseResponseBody> updateUser(@RequestBody @ApiParam(value="회원 정보 수정 입력 정보", required = true) UserSignupReqDto userRequestDto, HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization");
+        if (accessToken == null) {
+            return ResponseEntity.status(404).body(BaseResponseBody.result(404, "Access 토큰이 없습니다."));
+        }
+        String phone = authRefreshTokenService.getPhoneFromToken(accessToken);
         User user = userService.getUserByPhone(phone); // 현재 유저 정보를 가져온다
         boolean result = userService.modifyUserInfo(user, userRequestDto); // 유저 정보를 수정하여 저장한다. 단, 만약에 이미 존재하는 핸드폰 번호이면 수정 불가능하다
         if (!result) {
@@ -199,14 +204,19 @@ public class UserController {
     }
 
 
-    @GetMapping("/{phone}")
+    @GetMapping("/profile")
     @ApiOperation(value = "회원 상세 정보 조회", notes = "휴대 전화 번호를 입력하여 회원 상세 정보를 확인한다.")
     @ApiResponses({
             @ApiResponse(code = 200, message = "회원 상세 정보 조회 성공"),
             @ApiResponse(code = 401, message = "권한 없음"),
             @ApiResponse(code = 404, message = "회원을 찾을 수 없음")
     })
-    public ResponseEntity<? extends BaseResponseBody> getUser(@PathVariable("phone") String phone) {
+    public ResponseEntity<? extends BaseResponseBody> getUser(HttpServletRequest request) {
+        String accessToken = request.getHeader("Authorization");
+        if (accessToken == null) {
+            return ResponseEntity.status(404).body(BaseResponseBody.result(404, "Access 토큰이 없습니다."));
+        }
+        String phone = authRefreshTokenService.getPhoneFromToken(accessToken);
         User user = userService.getUserByPhone(phone);
         if (user == null || !user.isActive()) { // 유저가 존재하지 않거나 탈퇴 유저이면
             return ResponseEntity.status(404).body(BaseResponseBody.result(404, "존재하지 않는 유저입니다."));
