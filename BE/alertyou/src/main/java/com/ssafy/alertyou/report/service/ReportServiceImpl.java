@@ -8,6 +8,7 @@ import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.entity.Opguard;
 import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.bodyguard.repository.OpGuardRepository;
+import com.ssafy.alertyou.report.dto.ReportListResDto;
 import com.ssafy.alertyou.report.repository.ReportRepository;
 import com.ssafy.alertyou.report.dto.ReportResDto;
 import com.ssafy.alertyou.report.dto.ReportVictimReqDto;
@@ -40,14 +41,14 @@ public class ReportServiceImpl implements ReportService {
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
 
-        List<ReportResDto> list = new ArrayList<>();
+        List<ReportListResDto> list = new ArrayList<>();
 
         User user = findUser(id);
 
         List<Report> reportlist = reportRepository.findAllByReUser(user);
 
         for(Report report : reportlist){
-            list.add(new ReportResDto(report));
+            list.add(new ReportListResDto(report));
         }
 
         if (!list.isEmpty()){
