@@ -1,2 +1,2 @@
 export {default as HomeScreen} from './HomeScreen';
-export {CameraScreen, CameraCheckScreen} from './CameraScreen';
+export {CameraScreen, CameraCheckScreen, GalleryScreen} from './CameraScreen';

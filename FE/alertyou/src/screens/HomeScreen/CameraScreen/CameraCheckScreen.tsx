@@ -12,11 +12,9 @@ interface PropsType {
 }
 
 const CameraCheckScreen = ({navigation}: PropsType) => {
-  const path = useRoute<RouteProp<HomeParamList>>().params?.path;
   const uri = useRoute<RouteProp<HomeParamList>>().params?.uri;
-
   const reportImage = (imgURI: string | undefined) => {
-    const fileURI = `file://${imgURI}}`;
+    // const fileURI = `file://${imgURI}}`;
     Toast.show({
       type: 'info',
       text1: '현장 촬영 접수 완료',
@@ -33,7 +31,7 @@ const CameraCheckScreen = ({navigation}: PropsType) => {
         </Center>
       </View>
       <View style={styles.cameraButtonContainer}>
-        <Button style={styles.reportButton} onPress={() => reportImage(path)}>
+        <Button style={styles.reportButton} onPress={() => reportImage(uri)}>
         <MaterialCommunityIcons
           name="email-send-outline"
           size={40}

@@ -23,8 +23,7 @@ const CameraScreen = () => {
     })
     if (photo?.path) {
       const uri = await CameraRoll.save(photo.path);
-      const props = {path: photo.path, uri}
-      navigation.navigate('CameraCheckScreen', props)
+      navigation.navigate('CameraCheckScreen', {uri})
     }
   }
 

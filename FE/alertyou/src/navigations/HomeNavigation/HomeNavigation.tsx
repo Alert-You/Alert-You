@@ -1,12 +1,18 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {CameraScreen, CameraCheckScreen, HomeScreen} from '@/screens';
+import {
+  CameraScreen,
+  CameraCheckScreen,
+  HomeScreen,
+  GalleryScreen,
+} from '@/screens';
 
 export type HomeParamList = {
-  HomeScreen: undefined,
-  CameraScreen: undefined,
-  CameraCheckScreen: { uri: string, path: string },
-}
+  HomeScreen: undefined;
+  CameraScreen: undefined;
+  CameraCheckScreen: {uri: string};
+  GalleryScreen: undefined;
+};
 
 const Stack = createNativeStackNavigator<HomeParamList>();
 
@@ -26,6 +32,11 @@ const HomeNavigation = () => {
       <Stack.Screen
         name="CameraCheckScreen"
         component={CameraCheckScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="GalleryScreen"
+        component={GalleryScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
