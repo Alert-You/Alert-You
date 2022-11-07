@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import {
   CloseIcon,
   FormControl,
@@ -125,6 +125,7 @@ const LoginScreen = ({navigation}: any) => {
               회원가입
             </Text>
           </View>
+          <Button title="로그인 더미" onPress={() => loginMutate({phone: '01012345678', password: 'asd123'})}/>
         </View>
       </KeyboardAvoidingView>
     </ErrorBoundary>
