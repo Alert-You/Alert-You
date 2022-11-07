@@ -1,12 +1,12 @@
-export const BASE_URL = 'http://k7b109.p.ssafy.io:8085/api/';
+export const BASE_URL = 'https://k7b109.p.ssafy.io/api/';
 
-export const VERIFICATION = 'auth/verification/sms';
-export const LOGIN = 'auth/login';
-export const LOGOUT = 'auth/logout';
-export const SIGNUP = 'auth/signup';
-export const ACCESS = 'auth/reissue/access';
-export const REFRESH = 'auth/reissue/refresh';
+export const VERIFICATION = `${BASE_URL}auth/verification/sms`;
+export const LOGIN = `${BASE_URL}auth/login`;
+export const LOGOUT = `${BASE_URL}auth/logout`;
+export const SIGNUP = `${BASE_URL}auth/signup`;
+export const ACCESS = `${BASE_URL}auth/reissue/access`;
+export const REFRESH = `${BASE_URL}auth/reissue/refresh`;
 
-export const SCHOOL_LIST = 'school/list';
-export const SCHOOL = 'school';
-export const SCHOOL_ID = 'school/search';
+export const SCHOOL_LIST = `${BASE_URL}school/list`;
+export const SCHOOL = `${BASE_URL}school`;
+export const SCHOOL_ID = `${BASE_URL}school/search`;
