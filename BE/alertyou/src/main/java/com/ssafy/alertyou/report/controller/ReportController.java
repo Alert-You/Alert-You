@@ -27,8 +27,8 @@ public class ReportController {
     }
 
     @GetMapping(value = "/bodyguardlist")
-    public ResponseEntity<Map<String, Object>> ReportBodyGuardList(@RequestParam("guardId") long id) throws Exception{
-        return reportService.getReportBodyGuardList(id);
+    public ResponseEntity<Map<String, Object>> ReportBodyGuardList(@RequestHeader(value = "Authorization") String token) throws Exception{
+        return reportService.getReportBodyGuardList(token);
     }
 
     @PostMapping("/victim")
