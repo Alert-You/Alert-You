@@ -59,7 +59,7 @@ public class AlertServiceImpl implements AlertService{
 
             result.put("msg", SUCCESS);
             result.put("read", read);
-            result.put("unread", unRead);
+            result.put("unRead", unRead);
             status = HttpStatus.OK;
 
         }catch (Exception e){
