@@ -21,30 +21,6 @@ import {formIsNotFilled} from './functions';
 const SignUpScreen = ({navigation}: any) => {
   const [school, setSchool] = useRecoilState(schoolState);
 
-  const changeGrade = (e: string): void => {
-    setSchool(state => {
-      return {...state, grade: e.trim()};
-    });
-  };
-
-  const changeClass = (e: string): void => {
-    setSchool(state => {
-      return {...state, class: e.trim()};
-    });
-  };
-
-  const deleteGrade = (): void => {
-    setSchool(state => {
-      return {...state, grade: ''};
-    });
-  };
-
-  const deleteClass = (): void => {
-    setSchool(state => {
-      return {...state, class: ''};
-    });
-  };
-
   const moveToSearchSchool = (): void => {
     navigation.navigate('SignUp', {
       screen: 'searchSchoolScreen',
@@ -52,7 +28,7 @@ const SignUpScreen = ({navigation}: any) => {
   };
 
   const moveToNextPage = (): void => {
-    if (school.class && school.school && school.grade) {
+    if (school.address && school.name) {
       navigation.navigate('SignUp', {
         screen: 'SignUpSubScreen',
       });
@@ -90,7 +66,7 @@ const SignUpScreen = ({navigation}: any) => {
                     </Pressable>
                   }
                   autoCorrect={false}
-                  value={school.school}
+                  value={school.name}
                 />
               </Pressable>
             </FormControl>
@@ -108,14 +84,9 @@ const SignUpScreen = ({navigation}: any) => {
                     h="9"
                     color={MAIN.mainFont}
                     focusOutlineColor={MAIN.red}
-                    InputRightElement={
-                      <Pressable onPress={deleteGrade}>
-                        {school.grade ? <CloseIcon color={MAIN.red} /> : null}
-                      </Pressable>
-                    }
-                    onChangeText={changeGrade}
+                    // onChangeText={changeGrade}
                     autoCorrect={false}
-                    value={school.grade}
+                    // value={school.grade}
                   />
                 </FormControl>
               </Center>
@@ -132,14 +103,9 @@ const SignUpScreen = ({navigation}: any) => {
                     h="9"
                     color={MAIN.mainFont}
                     focusOutlineColor={MAIN.red}
-                    InputRightElement={
-                      <Pressable onPress={deleteClass}>
-                        {school.class ? <CloseIcon color={MAIN.red} /> : null}
-                      </Pressable>
-                    }
-                    onChangeText={changeClass}
+                    // onChangeText={changeClass}
                     autoCorrect={false}
-                    value={school.class}
+                    // value={school.class}
                   />
                 </FormControl>
               </Center>

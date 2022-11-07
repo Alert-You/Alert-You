@@ -8,15 +8,25 @@ import {Props} from './types';
 import {styles} from './style';
 
 const SpinnerButton = (props: Props) => {
-  const {onPress, children, height = 45, fontSize=16} = props;
+  const {
+    onPress,
+    children,
+    height = 45,
+    fontSize = 16,
+    isLoading = false,
+  } = props;
 
   return (
     <TouchableOpacity
       style={[styles.loginButton, {height}]}
       activeOpacity={0.8}
       onPress={onPress}>
-      <Suspense fallback={<Spinner color={WHITE.white}/>}>
-        <Text style={[styles.loginButtonText, {fontSize}]}>{children}</Text>
+      <Suspense fallback={<Spinner color={WHITE.white} />}>
+        {!isLoading ? (
+          <Text style={[styles.loginButtonText, {fontSize}]}>{children}</Text>
+        ) : (
+          <Spinner color={WHITE.white} size="md"/>
+        )}
       </Suspense>
     </TouchableOpacity>
   );

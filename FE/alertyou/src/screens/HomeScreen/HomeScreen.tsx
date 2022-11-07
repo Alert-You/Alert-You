@@ -36,7 +36,7 @@ const HomeScreen = ({navigation}: Props) => {
           toggleIsEmergency={toggleIsEmergency}
           isEmergency={isEmergency}
         />
-        {isEmergency ? <HelpText /> : <ReportBtns />}
+        {isEmergency ? <HelpText /> : <ReportBtns navigation={navigation}/>}
       </Box>
     </ScrollView>
   );
