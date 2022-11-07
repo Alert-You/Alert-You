@@ -78,4 +78,14 @@ public class UserService {
         return UserInfoResDto.result(200, "유저 정보 조회 완료", schoolName, user.getUsername(), role, phone);
     }
 
+    // 유저 삭제 로직(나중에 삭제)
+    public boolean removeUser(String phone) {
+        User user = userRepository.findByPhone(phone);
+        if (user == null) {
+            return false;
+        }
+        userRepository.delete(user);
+        return true;
+    }
+
 }

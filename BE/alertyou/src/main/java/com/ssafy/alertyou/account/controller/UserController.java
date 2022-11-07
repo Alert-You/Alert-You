@@ -176,7 +176,7 @@ public class UserController {
             @ApiResponse(code = 401, message = "권한이 없습니다"),
             @ApiResponse(code = 404, message = "토큰이 없거나 유효하지 않습니다")
     })
-    public ResponseEntity<BaseResponseBody> reissueRefresh(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<? extends BaseResponseBody> reissueRefresh(HttpServletRequest request, HttpServletResponse response) {
         // 리프레시 토큰을 재발급해준다. => 유효한 리프레시 토큰일 경우에만 발급
         String refreshToken = request.getHeader("refreshToken");
         if (refreshToken == null || !authRefreshTokenService.getTokenExpiration(refreshToken)) {
@@ -213,6 +213,16 @@ public class UserController {
         }
         UserInfoResDto userInfoResDto = userService.getUserInfo(phone);
         return ResponseEntity.status(200).body(userInfoResDto);
+    }
+
+    @DeleteMapping("/delete/{phone}") // 나중에 삭제
+    @ApiOperation(value = "회원 완전 삭제 api", notes = "회원가입 테스트 목적 회원 완전 삭제 api")
+    public ResponseEntity<BaseResponseBody> deleteUser(@PathVariable("phone") String phone) {
+        boolean ret = userService.removeUser(phone);
+        if (ret) {
+            return ResponseEntity.status(200).body(BaseResponseBody.result(200, "삭제 성공"));
+        }
+        return ResponseEntity.status(404).body(BaseResponseBody.result(404, "해당 유저가 없습니다."));
     }
 
 
