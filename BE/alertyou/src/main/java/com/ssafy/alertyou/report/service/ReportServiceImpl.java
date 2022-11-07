@@ -1,6 +1,10 @@
 package com.ssafy.alertyou.report.service;
 
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssafy.alertyou.account.entity.User;
+import com.ssafy.alertyou.account.jwt.JwtProperties;
+import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.alert.entity.Alert;
 import com.ssafy.alertyou.alert.repository.AlertRepository;
@@ -81,14 +85,13 @@ public class ReportServiceImpl implements ReportService {
         return new ResponseEntity<>(result, status);
 
     }
-    public ResponseEntity<Map<String, Object>> getReportBodyGuardList(long id) throws Exception{
+    public ResponseEntity<Map<String, Object>> getReportBodyGuardList(String token) throws Exception{
 
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
-
         List<ReportResDto> list = new ArrayList<>();
 
-        User user = findUser(id);
+        User user = findUserByPhone(decodeToken(token));
         List<Opguard> guardlist = findGuard(user);
 
 
@@ -280,4 +283,13 @@ public class ReportServiceImpl implements ReportService {
         return opGuardRepository.findAllByOpGuard(user);
     }
 
+    public User findUserByPhone(String phone){
+        return userRepository.findByPhone(phone);
+    }
+
+    public String decodeToken(String token) throws Exception{
+        JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
+        DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
+        return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
+    }
 }
