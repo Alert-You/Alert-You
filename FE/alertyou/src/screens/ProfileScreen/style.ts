@@ -141,7 +141,7 @@ export const styles = StyleSheet.create({
   logoutText: {
     fontSize: 16,
     fontWeight: FONT_WEIGHT.SemiBold,
-    color: 'red'
+    color: MAIN.placeholder
   },
   logoutButton: {
     position: 'absolute',

@@ -50,21 +50,22 @@ const MainNavigation = () => {
           initialRouteName="Home"
           screenOptions={{
             tabBarActiveTintColor: MAIN.red,
-            tabBarShowLabel: false,
+            // tabBarShowLabel: false,
             tabBarHideOnKeyboard: true,
-            tabBarStyle: {height: 60}
-          }}
-          >
+            tabBarStyle: {height: 60, paddingTop: 7, paddingBottom: 7},
+          }}>
           <Tab.Screen
             name="Notice"
             component={NoticeNavigation}
             options={{
               headerShown: false,
+              title: '알림',
+              tabBarLabelStyle: {fontSize: 12},
               tabBarIcon: ({color}) => (
                 <MaterialCommunityIcons
                   color={color}
-                  size={35}
-                  name="bell-alert-outline"
+                  size={30}
+                  name="bell-outline"
                 />
               ),
             }}
@@ -74,10 +75,12 @@ const MainNavigation = () => {
             component={HomeNavigation}
             options={{
               headerShown: false,
+              title: '홈',
+              tabBarLabelStyle: {fontSize: 12},
               tabBarIcon: ({color}) => (
                 <MaterialCommunityIcons
                   color={color}
-                  size={35}
+                  size={30}
                   name="home-outline"
                 />
               ),
@@ -88,10 +91,12 @@ const MainNavigation = () => {
             component={ProfileNavigation}
             options={{
               headerShown: false,
+              title: '마이페이지',
+              tabBarLabelStyle: {fontSize: 12},
               tabBarIcon: ({color}) => (
                 <MaterialCommunityIcons
                   color={color}
-                  size={35}
+                  size={30}
                   name="account-outline"
                 />
               ),

@@ -94,7 +94,7 @@ const SignUpSubScreen = ({navigation}: any) => {
               <Input
                 type="password"
                 variant="underlined"
-                placeholder="숫자, 영어 소문자, 대문자, 특수문자를 입력하세요."
+                placeholder="숫자, 영어 소문자, 대문자, 특수문자를 포함한 비밀번호"
                 size="md"
                 h="9"
                 color={MAIN.mainFont}
