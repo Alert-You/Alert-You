@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.widget.RemoteViews;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,16 +17,8 @@ public class AlertWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        try {
-            SharedPreferences sharedPref = context.getSharedPreferences("DATA", Context.MODE_PRIVATE);
-            String appString = sharedPref.getString("appData", "{\"text\":'no data'}");
-            JSONObject appData = new JSONObject(appString);
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.alert_widget);
-            views.setTextViewText(R.id.appwidget_text, appData.getString("text"));
             appWidgetManager.updateAppWidget(appWidgetId, views);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

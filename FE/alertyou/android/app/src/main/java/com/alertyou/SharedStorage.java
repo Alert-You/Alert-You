@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SharedStorage extends ReactContextBaseJavaModule {
     ReactApplicationContext context;
@@ -38,6 +39,5 @@ public class SharedStorage extends ReactContextBaseJavaModule {
         int[] ids = AppWidgetManager.getInstance(getCurrentActivity().getApplicationContext()).getAppWidgetIds(new ComponentName(getCurrentActivity().getApplicationContext(), AlertWidget.class));
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         getCurrentActivity().getApplicationContext().sendBroadcast(intent);
-
     }
 }

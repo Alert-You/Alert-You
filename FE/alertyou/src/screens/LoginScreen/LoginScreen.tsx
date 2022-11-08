@@ -24,21 +24,10 @@ import {
   phoneValidation,
 } from './functions';
 
-const group = 'group.asap';
-const SharedStorage = NativeModules.SharedStorage;
-
 const LoginScreen = ({navigation}: any) => {
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
   const {mutate: loginMutate, isLoading} = useLogIn();
-  
-  //////////////////////////////////////////
-  const [text, setText] = useState('');
-  const widgetData = {text};
-  const handleSubmit = async () => {
-    // Android
-    SharedStorage.set(JSON.stringify({text}));
-  }; 
-  ///////////////////////
+
   const changePhoneNumber = (e: string): void => {
     dispatch({type: 'phone', payload: e});
   };
@@ -142,15 +131,6 @@ const LoginScreen = ({navigation}: any) => {
               loginMutate({phone: '01012345678', password: 'asd123'})
             }
           />
-          <View>
-            <TextInput
-              onChangeText={newText => setText(newText)}
-              value={text}
-              returnKeyType="send"
-              onEndEditing={handleSubmit}
-              placeholder="Enter the text to display on the Widget"
-            />
-          </View>
         </View>
       </KeyboardAvoidingView>
     </ErrorBoundary>
