@@ -43,13 +43,13 @@ public class AlertServiceImpl implements AlertService{
         try{
             for(Alert alert : unreadList){
                 Report alertReport = alert.getReport();
-                unRead.add(new AlertResDto(alertReport));
+                unRead.add(new AlertResDto(alertReport, alert));
 
             }
 
             for(Alert alert : readList){
                 Report alertReport = alert.getReport();
-                read.add(new AlertResDto(alertReport));
+                read.add(new AlertResDto(alertReport, alert));
 
             }
 

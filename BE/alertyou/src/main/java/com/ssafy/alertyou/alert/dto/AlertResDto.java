@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 @Getter
 public class AlertResDto {
 
+    private long alertId;
     private long reportId;
     private String noticeDateTime;
     private Boolean isVictim;
 
-    public AlertResDto(Report entity){
+    public AlertResDto(Report entity, Alert entityAlert){
+        this.alertId = entityAlert.getId();
         this.reportId = entity.getId();
         this.noticeDateTime = entity.getNoticeDateTime();
         this.isVictim = entity.getIsVictim();
