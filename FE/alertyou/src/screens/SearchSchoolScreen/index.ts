@@ -1,0 +1,1 @@
+export {default as SearchSchoolScreen} from './SearchSchoolScreen';
