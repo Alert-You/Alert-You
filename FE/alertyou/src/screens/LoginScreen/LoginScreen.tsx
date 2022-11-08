@@ -1,4 +1,4 @@
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, NativeModules, TextInput} from 'react-native';
 import {
   CloseIcon,
   FormControl,
@@ -8,7 +8,7 @@ import {
   Spinner,
   Stack,
 } from 'native-base';
-import React, {useReducer} from 'react';
+import React, {useReducer, useState} from 'react';
 import ErrorBoundary from 'react-native-error-boundary';
 
 import {MAIN} from '@/theme/colorVariants';
@@ -24,10 +24,21 @@ import {
   phoneValidation,
 } from './functions';
 
+const group = 'group.asap';
+const SharedStorage = NativeModules.SharedStorage;
+
 const LoginScreen = ({navigation}: any) => {
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
   const {mutate: loginMutate, isLoading} = useLogIn();
-
+  
+  //////////////////////////////////////////
+  const [text, setText] = useState('');
+  const widgetData = {text};
+  const handleSubmit = async () => {
+    // Android
+    SharedStorage.set(JSON.stringify({text}));
+  }; 
+  ///////////////////////
   const changePhoneNumber = (e: string): void => {
     dispatch({type: 'phone', payload: e});
   };
@@ -131,6 +142,15 @@ const LoginScreen = ({navigation}: any) => {
               loginMutate({phone: '01012345678', password: 'asd123'})
             }
           />
+          <View>
+            <TextInput
+              onChangeText={newText => setText(newText)}
+              value={text}
+              returnKeyType="send"
+              onEndEditing={handleSubmit}
+              placeholder="Enter the text to display on the Widget"
+            />
+          </View>
         </View>
       </KeyboardAvoidingView>
     </ErrorBoundary>

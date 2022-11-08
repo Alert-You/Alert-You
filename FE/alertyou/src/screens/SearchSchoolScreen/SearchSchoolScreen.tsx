@@ -15,7 +15,7 @@ import {schoolResponseType} from './types';
 const SearchSchoolScreen = () => {
   const [school, setSchool] = useState<string>('');
   //리턴값, 에러, data에 담길 데이터, 쿼리 키 타입
-  const {data, refetch, fetchStatus, status} = useQuery<schoolResponseType, AxiosError>(
+  const {data, refetch, fetchStatus} = useQuery<schoolResponseType, AxiosError>(
     ['schoolList'],
     () => requestSchoolData(school),
     {
