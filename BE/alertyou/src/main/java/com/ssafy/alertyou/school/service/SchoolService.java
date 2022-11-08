@@ -8,8 +8,8 @@ import java.util.Map;
 
 public interface SchoolService {
     public ResponseEntity<Map<String, Object>> getSchools(String word) throws Exception;
-    public ResponseEntity<Map<String, Object>> getGradesAndClasses(String name) throws Exception;
+    public ResponseEntity<Map<String, Object>> getGradesAndClasses(String token, String name, String address) throws Exception;
 
-    public ResponseEntity<Map<String, Object>> getSchoolsNumber(String name, int grade, String classRoom) throws Exception;
+    public ResponseEntity<Map<String, Object>> getSchoolsNumber(String name,String address, int grade, String classRoom) throws Exception;
 
     }

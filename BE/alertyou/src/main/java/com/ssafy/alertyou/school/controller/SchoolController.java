@@ -22,13 +22,13 @@ public class SchoolController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> GradeAndClassRoomList(@RequestParam String name) throws Exception {
-        return schoolService.getGradesAndClasses(name);
+    public ResponseEntity<Map<String, Object>> GradeAndClassRoomList(@RequestHeader(required = false, value = "Authorization") String token, @RequestParam(required = false) String name, String address) throws Exception {
+        return schoolService.getGradesAndClasses(token, name, address);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Map<String, Object>> SchoolNumberDetail(@RequestParam String name, int grade, String classRoom) throws Exception {
-        return schoolService.getSchoolsNumber(name, grade, classRoom);
+    public ResponseEntity<Map<String, Object>> SchoolNumberDetail(@RequestParam String name, String address, int grade, String classRoom) throws Exception {
+        return schoolService.getSchoolsNumber(name, address, grade, classRoom);
     }
 
 }
