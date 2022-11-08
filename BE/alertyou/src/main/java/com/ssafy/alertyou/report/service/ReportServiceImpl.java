@@ -44,22 +44,22 @@ public class ReportServiceImpl implements ReportService {
 
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
-
         List<ReportListResDto> list = new ArrayList<>();
 
-        User user = findUser(id);
+        try{
+            User user = findUser(id);
 
-        List<Report> reportlist = reportRepository.findAllByReUser(user);
+            List<Report> reportlist = reportRepository.findAllByReUser(user);
 
-        for(Report report : reportlist){
-            list.add(new ReportListResDto(report));
-        }
+            for(Report report : reportlist){
+                list.add(new ReportListResDto(report));
+            }
 
-        if (!list.isEmpty()){
             result.put("msg",SUCCESS);
             result.put("reports", list);
             status = HttpStatus.OK;
-        } else if(list.isEmpty()){
+
+        } catch (Exception e){
             result.put("msg",FAIL);
             status = HttpStatus.BAD_REQUEST;
         }
@@ -111,41 +111,7 @@ public class ReportServiceImpl implements ReportService {
             // 알람 등록: 내가 등록한 가드
             long alertReportId = reportRepository.save(newReport).getId(); // 등록할 신고 ID
 
-            Report guardReport = findReport(alertReportId);
-            
-            // 특정 사용자의 가드 리스트 확인
-            List<Opguard> OpUserList = opGuardRepository.findAllByUser(user);
-
-            // 기존 알람 목록에 해당 신고-가드가 없을 때만 추가
-            for(Opguard opguard : OpUserList){
-                if(!alertRepository.findByUserAndReport(opguard.getOpGuard(), guardReport).isPresent()){
-                    Alert newAlert = Alert.builder()
-                            .user(opguard.getOpGuard())
-                            .report(guardReport)
-                            .checked(false)
-                            .build();
-                    alertRepository.save(newAlert);
-                }
-            }
-
-            // 알람 등록: 선생님이 등록한 가드
-            School userSchool = user.getSchool(); // 신고 내역에 있는 유저의 학교 ID
-
-            User userTeacher = userRepository.findBySchoolAndRole(userSchool, "teacher"); // 선생님 ID 찾기
-
-            List<Coguard> CoUserList = coGuardRepository.findAllByUser(userTeacher);
-
-            // 기존 알람 목록에 해당 신고-가드가 없을 때만 추가
-            for(Coguard coguard : CoUserList){
-                if(!alertRepository.findByUserAndReport(coguard.getCoGuard(), guardReport).isPresent()){
-                    Alert newAlert = Alert.builder()
-                            .user(coguard.getCoGuard())
-                            .report(guardReport)
-                            .checked(false)
-                            .build();
-                    alertRepository.save(newAlert);
-                }
-            }
+            addAlert(alertReportId, user);
 
             result.put("msg",SUCCESS);
             status = HttpStatus.OK;
@@ -186,42 +152,7 @@ public class ReportServiceImpl implements ReportService {
 
             long alertReportId = reportRepository.save(newReport).getId();
 
-            Report guardReport = findReport(alertReportId);
-
-            // 특정 사용자의 가드 리스트 확인
-            List<Opguard> OpUserList = opGuardRepository.findAllByUser(user);
-
-            // 기존 알람 목록에 해당 신고-가드가 없을 때만 추가
-            for(Opguard opguard : OpUserList){
-                if(!alertRepository.findByUserAndReport(opguard.getOpGuard(), guardReport).isPresent()){
-                    Alert newAlert = Alert.builder()
-                            .user(opguard.getOpGuard())
-                            .report(guardReport)
-                            .checked(false)
-                            .build();
-                    alertRepository.save(newAlert);
-                }
-            }
-
-            // 알람 등록: 선생님이 등록한 가드
-            School userSchool = user.getSchool(); // 신고 내역에 있는 유저의 학교 ID
-
-            User userTeacher = userRepository.findBySchoolAndRole(userSchool, "teacher"); // 선생님 ID 찾기
-
-            List<Coguard> CoUserList = coGuardRepository.findAllByUser(userTeacher);
-
-            // 기존 알람 목록에 해당 신고-가드가 없을 때만 추가
-            for(Coguard coguard : CoUserList){
-                if(!alertRepository.findByUserAndReport(coguard.getCoGuard(), guardReport).isPresent()){
-                    Alert newAlert = Alert.builder()
-                            .user(coguard.getCoGuard())
-                            .report(guardReport)
-                            .checked(false)
-                            .build();
-                    alertRepository.save(newAlert);
-                }
-            }
-
+            addAlert(alertReportId, user);
 
             result.put("msg",SUCCESS);
             status = HttpStatus.OK;
@@ -229,13 +160,9 @@ public class ReportServiceImpl implements ReportService {
         }catch (Exception e){
             result.put("msg", FAIL);
             status = HttpStatus.BAD_REQUEST;
-
         }
-
         return new ResponseEntity<>(result, status);
     }
-
-
 
     public User findUser(long id){
         return userRepository.findById(id)
@@ -259,5 +186,45 @@ public class ReportServiceImpl implements ReportService {
         JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
         DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
         return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
+    }
+
+
+    public void addAlert(long alertReportId, User user){
+
+        Report guardReport = findReport(alertReportId);
+
+        // 특정 사용자의 가드 리스트 확인
+        List<Opguard> OpUserList = opGuardRepository.findAllByUser(user);
+
+        // 기존 알람 목록에 해당 신고-가드가 없을 때만 추가
+        for(Opguard opguard : OpUserList){
+            if(!alertRepository.findByUserAndReport(opguard.getOpGuard(), guardReport).isPresent()){
+                Alert newAlert = Alert.builder()
+                        .user(opguard.getOpGuard())
+                        .report(guardReport)
+                        .checked(false)
+                        .build();
+                alertRepository.save(newAlert);
+            }
+        }
+
+        // 알람 등록: 선생님이 등록한 가드
+        School userSchool = user.getSchool(); // 신고 내역에 있는 유저의 학교 ID
+
+        User userTeacher = userRepository.findBySchoolAndRole(userSchool, "teacher"); // 선생님 ID 찾기
+
+        List<Coguard> CoUserList = coGuardRepository.findAllByUser(userTeacher);
+
+        // 기존 알람 목록에 해당 신고-가드가 없을 때만 추가
+        for(Coguard coguard : CoUserList){
+            if(!alertRepository.findByUserAndReport(coguard.getCoGuard(), guardReport).isPresent()){
+                Alert newAlert = Alert.builder()
+                        .user(coguard.getCoGuard())
+                        .report(guardReport)
+                        .checked(false)
+                        .build();
+                alertRepository.save(newAlert);
+            }
+        }
     }
 }
