@@ -10,6 +10,8 @@ import AudioRecorderPlayer, {
   RecordBackType,
 } from 'react-native-audio-recorder-player';
 import { Platform, PermissionsAndroid, Dimensions } from 'react-native';
+import Toast from 'react-native-toast-message';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {styles} from './style';
 
 interface AudioProps {
@@ -25,6 +27,7 @@ interface AudioState {
   playTime: string;
   duration: string;
   path: string;
+  uri: string;
   navigation: any;
 }
 
@@ -45,6 +48,7 @@ class Audio extends Component<AudioProps, AudioState> {
       playTime: '00:00:00',
       duration: '00:00:00',
       path: '',
+      uri: '',
       navigation: props.navigation,
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
@@ -107,10 +111,11 @@ class Audio extends Component<AudioProps, AudioState> {
     };
 
     const date = new Date().getTime();
-    this.setState({
-      path: `data/user/0/com.alertyou/cache/${date}.mp4`
-    })
+    const path = `data/user/0/com.alertyou/cache/${date}.mp4`
+    this.setState({path});
+
     const uri = await this.audioRecorderPlayer.startRecorder(this.state.path, audioSet);
+    this.setState({uri});
 
     this.audioRecorderPlayer.addRecordBackListener((e: RecordBackType) => {
       this.setState({
@@ -143,11 +148,11 @@ class Audio extends Component<AudioProps, AudioState> {
     console.log(result);
   };
 
-  onStartPlay = async () => {
+  private onStartPlay = async () => {
     const msg = await this.audioRecorderPlayer.startPlayer(this.state.path);
     const volume = await this.audioRecorderPlayer.setVolume(1.0);
     console.log(`file: ${msg}`, `volume: ${volume}`);
-    
+
     this.audioRecorderPlayer.addPlayBackListener((e: PlayBackType) => {
       if (e.currentPosition === e.duration) {
         console.log('finished');
@@ -177,6 +182,25 @@ class Audio extends Component<AudioProps, AudioState> {
     this.audioRecorderPlayer.removePlayBackListener();
   };
 
+  private onReportAudio = async () => {
+    console.log('이 파일을 보낼 것이다.', this.state.uri);
+    if (this.state.uri) {
+      // 서버로 uri 보내는 await 로직
+      Toast.show({
+        type: 'info',
+        text1: '현장 녹음 접수 완료',
+        text2: '현장 녹음 접수가 완료되었습니다!',
+      });
+      this.state.navigation.navigate('HomeScreen'); 
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: '오류',
+        text2: '녹취 파일이 없습니다!',
+      });
+    }
+  }
+
   public render() {
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
@@ -198,27 +222,17 @@ class Audio extends Component<AudioProps, AudioState> {
               Record
             </Button>
             <Button
-              style={[
-                styles.btn,
-                {
-                  marginLeft: 12,
-                },
-              ]}
+              style={styles.btn}
               onPress={this.onPauseRecord}>
               Pause
             </Button>
             <Button
-              style={[
-                styles.btn,
-                {
-                  marginLeft: 12,
-                },
-              ]}
+              style={styles.btn}
               onPress={this.onResumeRecord}>
               Resume
             </Button>
             <Button
-              style={[styles.btn, {marginLeft: 12}]}
+              style={styles.btn}
               onPress={this.onStopRecord}>
               Stop
             </Button>
@@ -242,34 +256,24 @@ class Audio extends Component<AudioProps, AudioState> {
               Play
             </Button>
             <Button
-              style={[
-                styles.btn,
-                {
-                  marginLeft: 12,
-                },
-              ]}
+              style={styles.btn}
               onPress={this.onPausePlay}>
               Pause
             </Button>
             <Button
-              style={[
-                styles.btn,
-                {
-                  marginLeft: 12,
-                },
-              ]}
+              style={styles.btn}
               onPress={this.onResumePlay}>
               Resume
             </Button>
             <Button
-              style={[
-                styles.btn,
-                {
-                  marginLeft: 12,
-                },
-              ]}
+              style={styles.btn}
               onPress={this.onStopPlay}>
               Stop
+            </Button>
+            <Button
+              style={styles.btn}
+              onPress={this.onReportAudio}>
+              신고
             </Button>
           </View>
         </View>

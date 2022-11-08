@@ -51,6 +51,7 @@ export const styles = StyleSheet.create({
   btn: {
     borderColor: 'white',
     borderWidth: 1,
+    margin: 6,
   },
   txt: {
     color: 'white',
