@@ -91,7 +91,8 @@ const StudentDetail = () => {
           <Pressable onPress={() => { setIsOpened(!isOpened) }}>
             <MaterialCommunityIcons
               name='dots-vertical'
-              size={24} />
+              size={24}
+              color={MAIN.mainFont} />
           </Pressable>
         </View>
         {isOpened &&
