@@ -1,6 +1,3 @@
-import { Text } from 'native-base';
-import React from 'react';
-
 import { Audio } from '../components/Audio';
 
 type Props = {
@@ -11,8 +8,7 @@ const AudioScreen = ({navigation}: Props) => {
   
   
   return (
-    // <Audio navigation={navigation}/>
-    <Text>hello</Text>
+    <Audio navigation={navigation}/>
   );
 };
 
