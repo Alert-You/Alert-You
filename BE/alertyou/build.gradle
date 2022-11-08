@@ -1,0 +1,44 @@
+plugins {
+	id 'org.springframework.boot' version '2.5.8'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'java'
+}
+
+group = 'com.ssafy.alertyou'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.auth0:java-jwt:3.10.3' // jwt
+	implementation 'io.springfox:springfox-swagger2:2.9.2' // swagger
+	implementation 'io.springfox:springfox-swagger-ui:2.9.2' // swagger-ui
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1' // json-simple
+	compileOnly 'org.projectlombok:lombok:1.18.20'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'mysql:mysql-connector-java'
+	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE' 	//S3
+	compileOnly 'net.nurigo:javaSDK:2.2' // coolSMS(문자 인증)
+	testImplementation group: 'software.amazon.awssdk', name: 's3', version: '2.18.2'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
