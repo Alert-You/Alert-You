@@ -71,7 +71,7 @@ const PhoneAuthScreen = ({navigation}: any) => {
       render: () => {
         return <ToastView />;
       },
-      duration: 4000,
+      duration: 2000,
     });
   };
 
@@ -136,9 +136,6 @@ const PhoneAuthScreen = ({navigation}: any) => {
       <View style={styles.formContainer}>
         <View style={styles.infoTextContainer}>
           <Text style={styles.infoText}>휴대폰 인증을 진행하세요</Text>
-          <Suspense>
-            <Text>{verifyMutate?.data?.certNumber}</Text>
-          </Suspense>
         </View>
         <View style={styles.formsList}>
           <Stack space={4}>
@@ -147,7 +144,7 @@ const PhoneAuthScreen = ({navigation}: any) => {
               <View style={styles.phoneContainer}>
                 <Input
                   variant="underlined"
-                  placeholder="010xxxx0000"
+                  placeholder=" - 을 제외한 전화번호"
                   keyboardType="numeric"
                   size="md"
                   w="75%"

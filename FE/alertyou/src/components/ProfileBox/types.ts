@@ -1,5 +1,5 @@
 export type Props = {
-  schoolInfo: string;
-  role: string;
-  phone: string;
+  schoolInfo: string | undefined;
+  role: string | undefined;
+  phone: string | undefined;
 };

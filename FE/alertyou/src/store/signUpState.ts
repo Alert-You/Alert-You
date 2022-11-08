@@ -7,7 +7,7 @@ export interface signUpType {
   schoolId: number|null;
 }
 
-interface schoolInfoType {
+export interface schoolInfoType {
   name: string;
   address: string;
 }

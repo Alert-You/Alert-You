@@ -1,15 +1,27 @@
-import {View, Text, Button} from 'react-native';
-import React from 'react';
-import {Box} from 'native-base';
+import {View, Text, Button, Pressable, Alert} from 'react-native';
+import React, {Suspense} from 'react';
+import {Box, Spinner} from 'native-base';
+import {useQuery} from '@tanstack/react-query';
+import {AxiosError} from 'axios';
 
 import {redProfileGradientStyle} from '@/theme/gradient';
 import {ProfileBox, SpinnerButton} from '@/components';
+import {getToken} from '@/utils/auth';
+import {useLogout} from '@/hooks';
 
 import {styles} from './style';
-import {useLogout} from '@/hooks';
-import {getToken} from '@/utils/auth';
+import {requestUserProfile} from './apis';
+import {profileResponseType} from './types';
+import {MAIN} from '@/theme/colorVariants';
+import ErrorBoundary from 'react-native-error-boundary';
+import {CustomSpinner} from '@/screens/ProfileScreen';
 
 const ProfileScreen = ({navigation}: any) => {
+  const {data} = useQuery<profileResponseType, AxiosError>(
+    ['userProfile'],
+    requestUserProfile,
+    {suspense: true},
+  );
   const {mutate} = useLogout();
 
   //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
@@ -21,20 +33,39 @@ const ProfileScreen = ({navigation}: any) => {
     });
   };
 
+  const confirmLogout = (): void => {
+    Alert.alert('로그아웃', '정말로 로그아웃 하시겠습니까?', [
+      {
+        text: '취소',
+      },
+      {
+        text: '로그아웃',
+        style: 'cancel',
+        onPress: () => logoutHandler()
+      },
+    ]);
+  };
+
   return (
     <>
       <View style={styles.container}>
         <View style={styles.profileContainer}>
           <Box bg={redProfileGradientStyle} w="100%" h="100%">
-            <Text style={styles.headerText}>프로필</Text>
-            <Text style={styles.nameText}>곽두팔</Text>
+            <View style={styles.headerStyle}>
+              <Text style={styles.headerText}>프로필</Text>
+            </View>
+            <Text style={styles.nameText}>{data?.name}</Text>
           </Box>
           <View style={styles.profileAbsoluteBox}>
-            <ProfileBox
-              schoolInfo="싸피고등학교 2학년 3반"
-              role="학급원"
-              phone="01022420407"
-            />
+            <Suspense fallback={<Spinner color={MAIN.red} size="md" />}>
+              <ErrorBoundary FallbackComponent={CustomSpinner}>
+                <ProfileBox
+                  schoolInfo={data?.schoolName}
+                  role={data?.role}
+                  phone={data?.phone}
+                />
+              </ErrorBoundary>
+            </Suspense>
           </View>
         </View>
         <Box flex={1.3}>
@@ -50,7 +81,10 @@ const ProfileScreen = ({navigation}: any) => {
             </SpinnerButton>
           </View>
         </Box>
-        <Button title="로그아웃" onPress={logoutHandler} />
+        <Pressable style={styles.logoutButton} onPress={confirmLogout}>
+          <Text style={styles.logoutText}>로그아웃</Text>
+        </Pressable>
+        {/* <Button title="로그아웃" onPress={logoutHandler} /> */}
       </View>
     </>
   );

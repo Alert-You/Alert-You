@@ -1,13 +1,13 @@
-import { View } from 'react-native';
+import {View} from 'react-native';
 import React from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MAIN } from '@/theme/colorVariants';
-import { Divider, Text } from 'native-base';
+import {MAIN} from '@/theme/colorVariants';
+import {Divider, Text} from 'native-base';
 
-import { styles } from './style';
-import { Props } from './types';
+import {styles} from './style';
+import {Props} from './types';
 
-const ProfileBox = ({ schoolInfo, role, phone }: Props) => {
+const ProfileBox = ({schoolInfo, role, phone}: Props) => {
   return (
     <View style={styles.container}>
       <View style={styles.contentContainer}>
@@ -18,7 +18,7 @@ const ProfileBox = ({ schoolInfo, role, phone }: Props) => {
         />
         <View>
           <Text style={styles.contentTitleText}>학교</Text>
-          <Text style={styles.contentText}>{schoolInfo}</Text>
+          <Text style={styles.contentText}>{schoolInfo ? schoolInfo : ''}</Text>
         </View>
       </View>
       <Divider w="90%" />
@@ -30,7 +30,7 @@ const ProfileBox = ({ schoolInfo, role, phone }: Props) => {
         />
         <View>
           <Text style={styles.contentTitleText}>직급</Text>
-          <Text style={styles.contentText}>{role}</Text>
+          <Text style={styles.contentText}>{role ? role : ''}</Text>
         </View>
       </View>
       <Divider w="90%" />
@@ -38,7 +38,7 @@ const ProfileBox = ({ schoolInfo, role, phone }: Props) => {
         <MaterialCommunityIcons name="phone" size={28} color={MAIN.mainFont} />
         <View>
           <Text style={styles.contentTitleText}>연락처</Text>
-          <Text style={styles.contentText}>{phone}</Text>
+          <Text style={styles.contentText}>{phone ? phone : ''}</Text>
         </View>
       </View>
     </View>
