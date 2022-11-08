@@ -56,7 +56,7 @@ public class TeacherServiceImpl implements TeacherService{
             if (grade == null && classRoom == null){
                 school = user.getSchool();
             } else {
-                school = findSchool(user.getSchool().getName(), grade, classRoom);
+                school = findSchool(user.getSchool().getAddress(), grade, classRoom);
             }
             if (list.isEmpty()){
                 List<User> userList = userRepository.findAllBySchoolAndRole(school,ROLE);
@@ -140,8 +140,8 @@ public class TeacherServiceImpl implements TeacherService{
 
 
 
-    public School findSchool(String name, int grade, String classRoom){
-        return schoolRepository.findByNameAndGradeAndClassRoom(name,grade,classRoom)
+    public School findSchool(String address, int grade, String classRoom){
+        return schoolRepository.findByAddressAndGradeAndClassRoom(address,grade,classRoom)
                 .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
     }
 

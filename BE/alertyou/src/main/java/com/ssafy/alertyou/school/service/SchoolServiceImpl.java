@@ -1,5 +1,11 @@
 package com.ssafy.alertyou.school.service;
 
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.ssafy.alertyou.account.entity.User;
+import com.ssafy.alertyou.account.jwt.JwtProperties;
+import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
+import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.school.dto.SchoolSearchResDto;
 import com.ssafy.alertyou.school.entity.School;
 import com.ssafy.alertyou.school.repository.SchoolRepository;
@@ -15,6 +21,7 @@ import java.util.*;
 public class SchoolServiceImpl implements SchoolService {
 
     private final SchoolRepository schoolRepository;
+    private final UserRepository userRepository;
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
 
@@ -54,24 +61,34 @@ public class SchoolServiceImpl implements SchoolService {
 
     ;
 
-    public ResponseEntity<Map<String, Object>> getGradesAndClasses(String name) throws Exception {
+    public ResponseEntity<Map<String, Object>> getGradesAndClasses(String token,String name, String address) throws Exception {
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
         try {
             //1.이름을 포함하고 있는 모든 학교들을 뽑기 (학년 및 반별로 나누어져 들어가있기 때문)
-            List<School> schools = schoolRepository.findAllByName(name);
+            List<School> schools = new ArrayList<>();
+            String schoolName = new String();
+            System.out.println(token);
+            if (token != null){
+                School school = findUserByPhone(decodeToken(token)).getSchool();
+                schools = schoolRepository.findAllByNameAndAddress(school.getName(), school.getAddress());
+                schoolName = school.getName();
+            }else {
+                schools = schoolRepository.findAllByNameAndAddress(name, address);
+                schoolName = name;
+            }
             //2. 리스트 안 리스트형태 생성
             ArrayList<ArrayList<String>> classes = new ArrayList<ArrayList<String>>();
             Boolean isSpecial = false;
             //3. 초등학교라면, 배열 6개 미리 생성 (0~6학년)
-            if (name.contains("초등")) {
+            if (schoolName.contains("초등")) {
                 for (int i = 1; i <= 6; i++) {
                     ArrayList<String> classRoom = new ArrayList<>();
                     classes.add(classRoom);
                 }
                 System.out.println(classes.size());
                 //4. 중고등학교라면, 배열 3개 미리 생성(0-3학년)
-            } else if (name.contains("중학교") || name.contains("고등학교")){
+            } else if (schoolName.contains("중학교") || schoolName.contains("고등학교")){
                 for (int j = 1; j <= 3; j++) {
                     ArrayList<String> classRoom = new ArrayList<>();
                     classes.add(classRoom);
@@ -129,12 +146,12 @@ public class SchoolServiceImpl implements SchoolService {
         return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String, Object>> getSchoolsNumber(String name, int grade, String classRoom) throws Exception {
+    public ResponseEntity<Map<String, Object>> getSchoolsNumber(String name,String address, int grade, String classRoom) throws Exception {
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
 
         try {
-            Long schoolId = findSchool(name,grade,classRoom).getId();
+            Long schoolId = findSchool(address, grade,classRoom).getId();
 
             result.put("msg", SUCCESS);
             result.put("schoolId", schoolId);
@@ -157,9 +174,20 @@ public class SchoolServiceImpl implements SchoolService {
 
 
     public School findSchool(String name, int grade, String classRoom){
-        return schoolRepository.findByNameAndGradeAndClassRoom(name,grade,classRoom)
+        return schoolRepository.findByAddressAndGradeAndClassRoom(name,grade,classRoom)
                 .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
     }
+
+    public User findUserByPhone(String phone){
+        return userRepository.findByPhone(phone);
+    }
+
+    public String decodeToken(String token) throws Exception{
+        JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
+        DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
+        return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
+    }
+
 }
 
 
