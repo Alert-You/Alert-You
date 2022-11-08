@@ -33,8 +33,7 @@ const SearchSchoolScreen = () => {
   const changeSchool = (e: string): void => {
     setSchool(e);
   };
-  console.log(fetchStatus)
-  console.log(status)
+
   //선택 시, 해당 정보를 가지고 뒤돌아가기
   return (
     <View style={styles.container}>
