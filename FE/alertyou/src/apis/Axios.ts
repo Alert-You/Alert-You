@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { getToken } from '@/utils/auth';
+import { BASE_URL } from './urls';
 
 const AxiosInstance = axios.create({
-  baseURL: 'https://k7b109.p.ssafy.io/api/',
-  timeout: 1000,
+  baseURL: BASE_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  },
 });
 
 AxiosInstance.interceptors.request.use(

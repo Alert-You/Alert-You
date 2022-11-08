@@ -1,18 +1,24 @@
-export interface noticeListType {
+export interface noticeItemType {
   isVictim: boolean,
   noticeDateTime: string,
   reportId: number,
-  checked: boolean
+  alertId: number
+}
+
+export interface noticeListType {
+  read: noticeItemType[],
+  unRead: noticeItemType[]
 }
 
 export interface reportType {
-  reportId: number | undefined,
+  reportId: number | null | undefined,
   noticeDateTime: string,
   content: string,
-  isVictim: boolean,
+  isVictim: boolean | null,
   location: string,
-  latitude: number,
-  logitude: number,
+  place: string,
+  latitude: number | null,
+  logitude: number | null,
 }
 
 export interface repType {
