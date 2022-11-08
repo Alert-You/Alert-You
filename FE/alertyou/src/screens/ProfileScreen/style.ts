@@ -6,11 +6,11 @@ import { FONT_WEIGHT } from "@/theme/fontWeightVariants";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: WHITE.white
+    backgroundColor: WHITE.white,
   },
   teacherScreenContainer: {
     flex: 1,
-    backgroundColor: RED.redBg
+    backgroundColor: RED.redBg,
   },
   headerText: {
     color: WHITE.white,
@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
   },
   profileContainer: {
     flex: 1,
-    height: "100%",
+    height: '100%',
   },
   profileAbsoluteBox: {
     left: 16,
@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
   },
   profileBox: {
     marginTop: 16,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   studentListButton: {
     marginTop: 100,
@@ -46,12 +46,12 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 3,
     marginBottom: 5,
-    fontWeight: FONT_WEIGHT.Medium
+    fontWeight: FONT_WEIGHT.Medium,
   },
   selectBoxGroup: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   selectBox: {
     margin: 8,
@@ -59,7 +59,7 @@ export const styles = StyleSheet.create({
   countBox: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   countText: {
     marginHorizontal: 16,
@@ -75,23 +75,23 @@ export const styles = StyleSheet.create({
     color: MAIN.mainFont,
   },
   arrowBox: {
-    color: MAIN.red
+    color: MAIN.red,
   },
   headerBox: {
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     backgroundColor: RED.redBg,
     marginVertical: 16,
     marginHorizontal: 16,
-    zIndex: 1
+    zIndex: 1,
   },
   textBox: {
     fontSize: 20,
     fontWeight: FONT_WEIGHT.Bold,
     color: MAIN.mainFont,
-    paddingTop: 4
+    paddingTop: 4,
   },
   dotContainer: {
     position: 'absolute',
@@ -102,7 +102,7 @@ export const styles = StyleSheet.create({
     backgroundColor: WHITE.white,
     height: 60,
     borderRadius: 4,
-    zIndex: 2
+    zIndex: 2,
   },
   dotContent: {
     margin: 4,
@@ -119,7 +119,7 @@ export const styles = StyleSheet.create({
   tabBoxGroup: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: 32
+    marginTop: 32,
   },
   tabBox: {
     display: 'flex',
@@ -131,7 +131,21 @@ export const styles = StyleSheet.create({
   tabText: {
     fontSize: 17,
     color: MAIN.mainFont,
-    marginBottom: 12
+    marginBottom: 12,
   },
-
-})
+  headerStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  logoutText: {
+    fontSize: 16,
+    fontWeight: FONT_WEIGHT.SemiBold,
+    color: MAIN.placeholder
+  },
+  logoutButton: {
+    position: 'absolute',
+    right: 10,
+    bottom: 10,
+  }
+});

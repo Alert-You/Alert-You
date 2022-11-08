@@ -4,6 +4,6 @@ import axios from 'axios';
 export const requestRefreshToken = async (
   refreshToken: string,
 ): Promise<any> => {
-  const {data} = await axios.post(`${REFRESH}`, refreshToken);
+  const {data} = await axios.post(REFRESH, {}, {headers: {refreshToken}});
   return data;
 };

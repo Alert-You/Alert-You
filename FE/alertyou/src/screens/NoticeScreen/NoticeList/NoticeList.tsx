@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react'
 import { View, Text } from 'react-native'
 import { NoticeItem } from '@/screens/NoticeScreen'
-import { noticeListType } from '@/types'
+import { noticeItemType } from '@/types'
 import { FlatList } from 'native-base'
 
-const NoticeList: React.FC<{ noticeList: noticeListType[] }> = ({ noticeList }) => {
-  const renderItem = useCallback(({ item }: { item: noticeListType }) => {
-    return <NoticeItem item={item} />;
+
+const NoticeList: React.FC<{ noticeList: noticeItemType[] | undefined; read: boolean }> = ({ noticeList, read }) => {
+  const renderItem = useCallback(({ item }: { item: noticeItemType }) => {
+    return <NoticeItem item={item} read={read} />;
   }, []);
 
   return (

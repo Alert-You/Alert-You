@@ -74,7 +74,7 @@ const LoginScreen = ({navigation}: any) => {
                 <FormControl.Label>휴대폰 번호</FormControl.Label>
                 <Input
                   variant="underlined"
-                  placeholder="010xxxx0000"
+                  placeholder="전화번호를 입력해주세요"
                   keyboardType="numeric"
                   size="md"
                   h="9"
@@ -95,7 +95,7 @@ const LoginScreen = ({navigation}: any) => {
                 <Input
                   type="password"
                   variant="underlined"
-                  placeholder="비밀번호"
+                  placeholder="비밀번호를 입력해주세요"
                   size="md"
                   h="9"
                   color={MAIN.mainFont}
@@ -125,7 +125,12 @@ const LoginScreen = ({navigation}: any) => {
               회원가입
             </Text>
           </View>
-          <Button title="로그인 더미" onPress={() => loginMutate({phone: '01012345678', password: 'asd123'})}/>
+          <Button
+            title="로그인 더미"
+            onPress={() =>
+              loginMutate({phone: '01012345678', password: 'asd123'})
+            }
+          />
         </View>
       </KeyboardAvoidingView>
     </ErrorBoundary>

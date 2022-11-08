@@ -10,3 +10,5 @@ export const REFRESH = `${BASE_URL}auth/reissue/refresh`;
 export const SCHOOL_LIST = `${BASE_URL}school/list`;
 export const SCHOOL = `${BASE_URL}school`;
 export const SCHOOL_ID = `${BASE_URL}school/search`;
+
+export const PROFILE = `auth/profile`;
