@@ -67,9 +67,11 @@ public class TeacherServiceImpl implements TeacherService{
                 }
                 result.put("msg",SUCCESS);
                 result.put("students", list);
+                status = HttpStatus.OK;
             }
         }catch (Exception e){
             result.put("msg",FAIL);
+            result.put("error",e.getMessage());
             status = HttpStatus.BAD_REQUEST;
         }
 //        else if (!(grade == null) && classRoom == null){
