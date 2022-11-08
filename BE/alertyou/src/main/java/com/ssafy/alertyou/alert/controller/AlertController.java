@@ -25,7 +25,7 @@ public class AlertController {
     }
 
     @PutMapping(value = "/allcheck")
-    public ResponseEntity<Map<String, Object>> AlertListModify(@RequestParam("userId") long id) throws Exception{
-        return alertService.modifyAlertList(id);
+    public ResponseEntity<Map<String, Object>> AlertListModify(@RequestHeader(value = "Authorization") String token) throws Exception{
+        return alertService.modifyAlertList(token);
     }
 }

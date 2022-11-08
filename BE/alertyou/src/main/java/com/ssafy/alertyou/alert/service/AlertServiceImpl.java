@@ -98,11 +98,11 @@ public class AlertServiceImpl implements AlertService{
 
     }
 
-    public ResponseEntity<Map<String, Object>> modifyAlertList(long id) throws Exception {
+    public ResponseEntity<Map<String, Object>> modifyAlertList(String token) throws Exception {
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
 
-        User user = findUser(id);
+        User user = findUserByPhone(decodeToken(token));
         List<Alert> userList = findAlertList(user);
 
         try{
