@@ -31,7 +31,13 @@ public class SchoolServiceImpl implements SchoolService {
                 }
 
             }
-            List<SchoolSearchResDto> ress = new ArrayList<>(res);
+            List<SchoolSearchResDto> ress = new ArrayList<>();
+            if (res.size() >= 100){
+                ress = new ArrayList<>(res).subList(0,100);
+            }else {
+                ress = new ArrayList<>(res);
+            }
+            System.out.println(ress.size());
             ress.sort(Comparator.naturalOrder());
             Collections.sort(ress);
             result.put("msg", SUCCESS);
