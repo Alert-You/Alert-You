@@ -8,14 +8,22 @@ import lombok.Setter;
 @Getter
 @Setter
 public class LocationResDto extends BaseResponseBody {
-    @ApiModelProperty(name="위치 정보", example = "(34153) 대전광역시 유성구 덕명동 동서대로 삼성화재 유성연수원")
-    private String locationAddress;
+    @ApiModelProperty(name="우편 번호", example = "34153")
+    private String zipCode;
 
-    public static LocationResDto result(Integer statusCode, String message, String locationAddress) {
+    @ApiModelProperty(name="도로명 주소", example = "대전 유성구 동서대로 98-39")
+    private String roadAddress;
+
+    @ApiModelProperty(name="지번", example = "덕명동 124")
+    private String address;
+
+    public static LocationResDto result(Integer statusCode, String message, String zipCode, String roadAddress, String address) {
         LocationResDto ret = new LocationResDto();
         ret.setStatusCode(statusCode);
         ret.setMessage(message);
-        ret.setLocationAddress(locationAddress);
+        ret.setZipCode(zipCode);
+        ret.setRoadAddress(roadAddress);
+        ret.setAddress(address);
         return ret;
     }
 

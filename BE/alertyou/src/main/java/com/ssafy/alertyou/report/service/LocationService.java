@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class LocationService {
     // 역지오 서비스
-    public static String reverseGeo(double longitude, double latitude) { // 경도(longitude): 세로선(x축), 위도(latitude): 가로선(y축)
+    public static String[] reverseGeo(double longitude, double latitude) { // 경도(longitude): 세로선(x축), 위도(latitude): 가로선(y축)
         try {
             String clientId = "co4w5k4lo3"; // 클라이언트 ID
             String clientSecret = "vLrvWalrYx895ya4jmC3XGmWqf3E11ViQJnhppLV"; // 클라이언트 키
@@ -33,43 +33,65 @@ public class LocationService {
                 String body = handler.handleResponse(response);
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode bodyJson = mapper.readTree(body);
-                String address = "";
+                String[] locationAddress = new String[3];
 
+                String zipCode = "00000"; // 우편 번호
                 if (bodyJson.get("results").path(0).get("land").get("addition1").get("value") != null) {
-                    String zipCode = bodyJson.get("results").path(0).get("land").get("addition1").get("value").asText(); // 우편번호
-                    address += "(" + zipCode + ")"; // (우편번호)
+                    zipCode = "(" + bodyJson.get("results").path(0).get("land").get("addition1").get("value").asText() + ")"; // (우편번호)
                 }
 
+                String roadAddress = ""; // 도로명 주소
                 String region1 = bodyJson.get("results").path(0).get("region").get("area1").get("name").asText(); // 시
                 String region2 = bodyJson.get("results").path(0).get("region").get("area2").get("name").asText(); // 군, 구
                 String region3 = bodyJson.get("results").path(0).get("region").get("area3").get("name").asText(); // 동, 읍, 면
-                address += " " + region1 + " " + region2 + " " + region3; // (우편번호) OO시 OO구 OO동
+                roadAddress += region1 + " " + region2; // OO시 OO구
+
+                String address = region3; // 지번 주소 => 기본은 읍/면/동
 
                 if (bodyJson.get("results").path(1).get("land").get("number1") != null) {
                     String addressNum1 = bodyJson.get("results").path(1).get("land").get("number1").asText(); // 지번(토지 본 번호)
-                    address += " " + addressNum1; // (우편번호) OO시 OO구 OO동 000
+                    if (!addressNum1.equals("")) { // 공백이 아닐 경우에만 더 함
+                        address += " " + addressNum1; // OO동 000
+                    }
                 }
 
                 if (bodyJson.get("results").path(1).get("land").get("number2") != null) {
                     String addressNum2 = bodyJson.get("results").path(1).get("land").get("number2").asText(); // 지번(토지 부 번호)
                     if (!addressNum2.equals("")) { // 공백이 아닐 경우에만 더 함
-                        address += " " + addressNum2; // (우편번호) OO시 OO구 OO동 000-00
+                        address += "-" + addressNum2; // OO동 000-00
                     }
                 }
 
                 if (bodyJson.get("results").path(0).get("land").get("name") != null) {
                     String road = bodyJson.get("results").path(0).get("land").get("name").asText(); // 도로명;
-                    address += " " + road;  // (우편번호) OO시 OO구 OO동 OO로
+                    roadAddress += " " + road;  // OO시 OO구 OO로
                 }
 
-                if (bodyJson.get("results").path(0).get("land").get("addition0").get("value") != null) {
-                    String land = bodyJson.get("results").path(0).get("land").get("addition0").get("value").asText(); // 건물
-                    if (!land.equals("")) { // 공백이 아닐 경우에만 더 함
-                        address += " " + land;  // (우편번호) OO시 OO구 OO동 OO로 OO빌딩
+                if (bodyJson.get("results").path(0).get("land").get("number1") != null) {
+                    String buildingNo1 = bodyJson.get("results").path(0).get("land").get("number1").asText(); // 건물 번호1;
+                    if (!buildingNo1.equals("")) { // 공백이 아닐 경우에만 더 함
+                        roadAddress += " " + buildingNo1; // OO시 OO구 OO로 00
                     }
                 }
 
-                return address; // return bodyJson;
+                if (bodyJson.get("results").path(0).get("land").get("number2") != null) {
+                    String buildingNo2 = bodyJson.get("results").path(0).get("land").get("number2").asText(); // 건물 번호2;
+                    if (!buildingNo2.equals("")) { // 공백이 아닐 경우에만 더 함
+                        roadAddress += "-" + buildingNo2; // OO시 OO구 OO로 00-00
+                    }
+                }
+
+                if (bodyJson.get("results").path(0).get("land").get("addition0").get("value") != null) {
+                    String land = bodyJson.get("results").path(0).get("land").get("addition0").get("value").asText(); // 건물명
+                    if (!land.equals("")) { // 공백이 아닐 경우에만 더 함
+                        roadAddress += " " + land;  // (우편번호) OO시 OO구 OO로 00-00 OO빌딩
+                    }
+                }
+
+                locationAddress[0] = zipCode;
+                locationAddress[1] = roadAddress;
+                locationAddress[2] = address;
+                return locationAddress; // return bodyJson;
 
             } else {
                 return null;

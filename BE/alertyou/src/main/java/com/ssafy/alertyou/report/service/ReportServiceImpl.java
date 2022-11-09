@@ -96,7 +96,7 @@ public class ReportServiceImpl implements ReportService {
         double latitude = reportVictimReqDto.getLatitude();
         double longtitude = reportVictimReqDto.getLongtitude();
         String nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString();
-        String location = LocationService.reverseGeo(longtitude, latitude);
+        String[] location = LocationService.reverseGeo(longtitude, latitude);
 
         try{
             Report newReport = Report.builder()
@@ -105,7 +105,7 @@ public class ReportServiceImpl implements ReportService {
                     .noticeDateTime(nowTime)
                     .latitude(latitude)
                     .longtitude(longtitude)
-                    .location(location)
+                    .location(location[1])
                     .build();
 
             // 알람 등록: 내가 등록한 가드
@@ -136,7 +136,7 @@ public class ReportServiceImpl implements ReportService {
         String nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString();
         String content = reportWitnessReqDto.getContent();
         String place  = reportWitnessReqDto.getPlace();
-        String location = LocationService.reverseGeo(longtitude, latitude);
+        String[] location = LocationService.reverseGeo(longtitude, latitude);
 
         try{
             Report newReport = Report.builder()
@@ -147,7 +147,7 @@ public class ReportServiceImpl implements ReportService {
                     .longtitude(longtitude)
                     .content(content)
                     .place(place)
-                    .location(location)
+                    .location(location[1])
                     .build();
 
             long alertReportId = reportRepository.save(newReport).getId();
