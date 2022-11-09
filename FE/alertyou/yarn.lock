@@ -742,12 +742,12 @@
     "@babel/helper-plugin-utils" "^7.18.6"
     "@babel/helper-replace-supers" "^7.18.6"
 
-"@babel/plugin-transform-parameters@^7.0.0", "@babel/plugin-transform-parameters@^7.20.1":
-  "integrity" "sha512-nDvKLrAvl+kf6BOy1UJ3MGwzzfTMgppxwiD2Jb4LO3xjYyZq30oQzDNJbCQpMdG9+j2IXHoiMrw5Cm/L6ZoxXQ=="
-  "resolved" "https://registry.npmjs.org/@babel/plugin-transform-parameters/-/plugin-transform-parameters-7.20.1.tgz"
-  "version" "7.20.1"
+"@babel/plugin-transform-parameters@^7.0.0", "@babel/plugin-transform-parameters@^7.18.8":
+  "integrity" "sha512-ivfbE3X2Ss+Fj8nnXvKJS6sjRG4gzwPMsP+taZC+ZzEGjAYlvENixmt1sZ5Ca6tWls+BlKSGKPJ6OOXvXCbkFg=="
+  "resolved" "https://registry.npmjs.org/@babel/plugin-transform-parameters/-/plugin-transform-parameters-7.18.8.tgz"
+  "version" "7.18.8"
   dependencies:
-    "@babel/helper-plugin-utils" "^7.19.0"
+    "@babel/helper-plugin-utils" "^7.18.6"
 
 "@babel/plugin-transform-property-literals@^7.0.0", "@babel/plugin-transform-property-literals@^7.18.6":
   "integrity" "sha512-cYcs6qlgafTud3PAzrrRNbQtfpQ8+y/+M5tKmksS9+M1ckbH6kzY8MrexEM9mcA6JDsukE19iIRvAyYl463sMg=="
@@ -4615,6 +4615,11 @@
     "domelementtype" "^2.3.0"
     "domhandler" "^5.0.1"
 
+"dooboolab-welcome@^1.3.2":
+  "integrity" "sha512-2NbMaIIURElxEf/UAoVUFlXrO+7n/FRhLCiQlk4fkbGRh9cJ3/f8VEMPveR9m4Ug2l2Zey+UCXjd6EcBqHJ5bw=="
+  "resolved" "https://registry.npmjs.org/dooboolab-welcome/-/dooboolab-welcome-1.3.2.tgz"
+  "version" "1.3.2"
+
 "ee-first@1.1.1":
   "integrity" "sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow=="
   "resolved" "https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz"
@@ -8044,6 +8049,13 @@
   "integrity" "sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w=="
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   "version" "17.0.2"
+
+"react-native-audio-recorder-player@^3.5.1":
+  "integrity" "sha512-CRodnMFbZ3y61/lQ1dFYYZAQHHj0FK2q/gbPj8OnEEfwYO3V9Z/nTFZxQBUn3NRVomK8Cd78y099yd43DK7KEw=="
+  "resolved" "https://registry.npmjs.org/react-native-audio-recorder-player/-/react-native-audio-recorder-player-3.5.1.tgz"
+  "version" "3.5.1"
+  dependencies:
+    "dooboolab-welcome" "^1.3.2"
 
 "react-native-codegen@^0.70.5":
   "integrity" "sha512-kdwIhH2hi+cFnG5Nb8Ji2JwmcCxnaOOo9440ov7XDzSvGfmUStnCzl+MCW8jLjqHcE4icT7N9y+xx4f50vfBTw=="

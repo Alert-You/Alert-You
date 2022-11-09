@@ -11,11 +11,15 @@ const ReportBtns = ({navigation}: any) => {
     navigation.navigate('GalleryScreen');
   }
 
+  const moveAudioScreen = () => {
+    navigation.navigate('AudioScreen');
+  }
+
   return (
     <HStack justifyContent="space-between">
       <ReportBtn name='camera' nameKr='현장 촬영' moveScreen={moveCameraScreen}/>
       <ReportBtn name='image-plus' nameKr='사진 업로드' moveScreen={moveGalleryScreen}/>
-      <ReportBtn name='microphone' nameKr='녹음 시작' moveScreen={moveCameraScreen}/>
+      <ReportBtn name='microphone' nameKr='녹음 시작' moveScreen={moveAudioScreen}/>
     </HStack>
   );
 };

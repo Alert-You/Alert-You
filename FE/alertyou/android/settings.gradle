@@ -12,4 +12,6 @@ if (settings.hasProperty("newArchEnabled") && settings.newArchEnabled == "true")
     project(":ReactAndroid:hermes-engine").projectDir = file('../node_modules/react-native/ReactAndroid/hermes-engine')
     include ':@react-native-camera-roll_camera-roll'
     project(':@react-native-camera-roll_camera-roll').projectDir = new File(rootProject.projectDir, 	'../node_modules/@react-native-camera-roll/camera-roll/android')
+    include ':react-native-audio-recorder-player'
+    project(':react-native-audio-recorder-player').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-audio-recorder-player/android')
 }
