@@ -1,15 +1,18 @@
 import { Text, View } from 'native-base'
 import React from 'react'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { Pressable } from 'react-native'
 
 import { proofType } from '@/types'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { MAIN, PURPLE, RED, WHITE } from '@/theme/colorVariants'
 import { FlatListItem } from '@/components'
-import { Pressable } from 'react-native'
+
+import { downloadProof } from '../apis'
+
 const ProofItem: React.FC<{ item: proofType }> = ({ item }) => {
   let title: string = "녹취 파일 "
   let rightContent = <View>
-    <Pressable>
+    <Pressable onPress={() => downloadProof(item.proofId)}>
       <MaterialCommunityIcons
         name="download"
         size={32}
