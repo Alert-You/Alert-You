@@ -1,8 +1,11 @@
 package com.ssafy.alertyou.bodyguard.service;
 
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssafy.alertyou.account.entity.User;
+import com.ssafy.alertyou.account.jwt.JwtProperties;
+import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
 import com.ssafy.alertyou.account.repository.UserRepository;
-import com.ssafy.alertyou.bodyguard.dto.BodyGuardReqDto;
 import com.ssafy.alertyou.bodyguard.dto.BodyGuardResDto;
 import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.entity.Opguard;
@@ -72,22 +75,23 @@ public class BodyGuardServiceImpl implements BodyGuardService {
     }
 
     //보디가드 등록 및 해제
-    public ResponseEntity<Map<String, Object>> addBodyGuard(BodyGuardReqDto bodyGuardReqDto) throws Exception{
+    public ResponseEntity<Map<String, Object>> addBodyGuard(String token, long id) throws Exception{
 
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
 
-        long enroll_id = bodyGuardReqDto.getEnrollId();
-        long guard_id = bodyGuardReqDto.getGuardId();
+        User user = findUserByPhone(decodeToken(token));
 
-        User user = findUser(enroll_id); // 분기를 위한 User 찾기
-        User guard = findUser(guard_id); // 저장할 가드 id
+        long enroll_id = user.getId();
 
-        Optional<Opguard> opguard = opGuardRepository.findByOpGuardAndUser(guard, user);
-        Optional<Coguard> coguard = coGuardRepository.findByCoGuardAndUser(guard, user);
+        User userRole = findUser(enroll_id); // 분기를 위한 User 찾기
+        User guard = findUser(id); // 저장할 가드 id
+
+        Optional<Opguard> opguard = opGuardRepository.findByOpGuardAndUser(guard, userRole);
+        Optional<Coguard> coguard = coGuardRepository.findByCoGuardAndUser(guard, userRole);
         try{
             // 학생이 등록하는 경우
-            if (user.getRole().equals("student")) {
+            if (userRole.getRole().equals("student")) {
                 // 있는 경우 등록 해제
                 if(opguard.isPresent()){
                     opGuardRepository.delete(opguard.get());
@@ -96,20 +100,20 @@ public class BodyGuardServiceImpl implements BodyGuardService {
                 else{
                     Opguard newOpguard = Opguard.builder()
                             .opGuard(guard)
-                            .user(user)
+                            .user(userRole)
                             .build();
                     opGuardRepository.save(newOpguard);
                 }
             }
 
-            else if(user.getRole().equals("teacher")) {
+            else if(userRole.getRole().equals("teacher")) {
                 if(coguard.isPresent()){
                     coGuardRepository.delete(coguard.get());
                 }
                 else{
                     Coguard newCoguard = Coguard.builder()
                             .coGuard(guard)
-                            .user(user)
+                            .user(userRole)
                             .build();
                     coGuardRepository.save(newCoguard);
                 }
@@ -124,5 +128,15 @@ public class BodyGuardServiceImpl implements BodyGuardService {
         }
 
         return new ResponseEntity<>(result, status);
+    }
+
+    public User findUserByPhone(String phone){
+        return userRepository.findByPhone(phone);
+    }
+
+    public String decodeToken(String token) throws Exception{
+        JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
+        DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
+        return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
     }
 }

@@ -1,6 +1,5 @@
 package com.ssafy.alertyou.bodyguard.controller;
 
-import com.ssafy.alertyou.bodyguard.dto.BodyGuardReqDto;
 import com.ssafy.alertyou.bodyguard.service.BodyGuardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +14,8 @@ public class BodyGuardController {
     private final BodyGuardService bodyGuardService;
 
     @PostMapping("")
-    public ResponseEntity<Map<String, Object>> BodyGuardSave(@RequestBody BodyGuardReqDto bodyGuardReqDto) throws Exception {
-        return bodyGuardService.addBodyGuard(bodyGuardReqDto);
+    public ResponseEntity<Map<String, Object>> BodyGuardSave(@RequestHeader(value = "Authorization") String token, @RequestParam("guardId") long id) throws Exception {
+        return bodyGuardService.addBodyGuard(token, id);
     }
 
     @GetMapping(value = "/list")
