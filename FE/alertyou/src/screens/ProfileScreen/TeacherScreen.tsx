@@ -13,7 +13,6 @@ import { getClasses, getStudents } from './apis';
 const TeacherScreen = () => {
   const [grade, setGrade] = useState<any>('')
   const [classRoom, setClassRoom] = useState<string>('')
-
   const [students, setStudents] = useState<studentsType[]>([])
 
   const isFocused = useIsFocused()
@@ -26,12 +25,17 @@ const TeacherScreen = () => {
       suspense: true,
     })
 
-  if (isFocused && grade && classRoom) {
-    getStudents(grade, classRoom)
-      .then((res) => {
-        setStudents(res)
-      })
-  }
+
+  useEffect(() => {
+    if (isFocused && grade && classRoom) {
+      getStudents(grade, classRoom)
+        .then((res) => {
+          setStudents(res)
+        })
+    }
+  }, [isFocused])
+
+
 
 
   return (

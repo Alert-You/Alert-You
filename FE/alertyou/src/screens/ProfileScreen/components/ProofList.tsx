@@ -16,6 +16,7 @@ const ProofList: React.FC<{ proofs: proofType[] | undefined }> = ({ proofs }) =>
         <FlatList
           data={proofs}
           renderItem={renderItem}
+          keyExtractor={item => item.url}
         />
       }
     </View>

@@ -16,6 +16,7 @@ const ReportList: React.FC<{ reports: repType[] | undefined }> = ({ reports }) =
         <FlatList
           data={reports}
           renderItem={renderItem}
+          keyExtractor={item => item.reportId + ''}
         />
       }
     </View>
