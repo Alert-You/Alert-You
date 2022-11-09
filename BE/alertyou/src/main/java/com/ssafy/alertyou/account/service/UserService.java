@@ -31,7 +31,7 @@ public class UserService {
                         .username(userRequestDto.getUsername())
                         .password(bCryptPasswordEncoder.encode(userRequestDto.getPassword()))
                         .school(schoolRepository.getById(userRequestDto.getSchoolId()))
-                        .role("student")
+                        .role("학생")
                         .active(true)
                         .build();
         userRepository.save(newUser);
@@ -74,8 +74,8 @@ public class UserService {
             role = "보디가드";
         }
         String schoolName = school.getName() + " " + String.valueOf(school.getGrade()) + "학년 " + String.valueOf(school.getClassRoom()) + "반";
-
-        return UserInfoResDto.result(200, "유저 정보 조회 완료", schoolName, user.getUsername(), role, phone);
+        long schoolId = school.getId();
+        return UserInfoResDto.result(200, "유저 정보 조회 완료", schoolId, schoolName, user.getUsername(), role, phone);
     }
 
     // 유저 삭제 로직(나중에 삭제)
