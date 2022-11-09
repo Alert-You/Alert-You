@@ -11,7 +11,7 @@ export interface noticeListType {
 }
 
 export interface reportType {
-  reportId: number | null | undefined,
+  reportId: number | undefined,
   noticeDateTime: string,
   content: string,
   isVictim: boolean | null,
