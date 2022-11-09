@@ -7,3 +7,15 @@ export interface profileResponseType {
   schoolName: string;
   statusCode: number;
 }
+
+export interface EditProfileActionType {
+  type: string;
+  payload: string;
+}
+
+export interface EditProfileState {
+  username: string;
+  phone: string;
+  password: string;
+  schoolId: null | number;
+}

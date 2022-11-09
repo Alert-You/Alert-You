@@ -9,6 +9,9 @@ export const styles = StyleSheet.create({
   formList: {
     flex: 1,
     marginHorizontal: 16,
-    marginVertical: 16
-  }
+    marginVertical: 16,
+  },
+  phoneContainer: {
+    flexDirection: 'row',
+  },
 });
