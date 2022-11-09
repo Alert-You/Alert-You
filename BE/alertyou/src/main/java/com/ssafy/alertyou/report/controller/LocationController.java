@@ -36,7 +36,7 @@ public class LocationController {
         String zipCode = locationAddress[0];
         String roadAddress = locationAddress[1];
         String address = locationAddress[2];
-        return ResponseEntity.status(200).body(LocationResDto.result(200, "위치 정보 조회 성공", zipCode, roadAddress, address));
+        return ResponseEntity.status(200).body(LocationResDto.result(200, "위치 정보 조회 성공", zipCode, zipCode + " " + roadAddress, address));
     }
 
 }
