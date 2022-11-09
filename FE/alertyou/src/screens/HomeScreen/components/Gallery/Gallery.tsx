@@ -57,7 +57,6 @@ class Gallery extends Component<AppProps, AppState> {
   }
 
   selectImage(item: any) {
-    console.log(item.node.image);
     this.state.navigation.navigate('CameraCheckScreen', {uri: item.node.image.uri});
   }
 

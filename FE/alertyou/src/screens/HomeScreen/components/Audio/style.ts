@@ -1,33 +1,51 @@
 import {Dimensions, StyleSheet} from 'react-native';
 
+const W = Dimensions.get('window').width;
+const H = Dimensions.get('window').height;
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#455A64',
-    flexDirection: 'column',
+  },
+  innerContainer: {
+    flex: 1,
+    width: W,
+    justifyContent: 'center',
     alignItems: 'center',
+    padding: 16,
+    paddingTop: H * 0.1,
   },
   titleTxt: {
-    marginTop: 100,
     color: 'white',
-    fontSize: 28,
+    fontSize: 50,
+    paddingTop: H * 0.1,
   },
   viewRecorder: {
     marginTop: 40,
-    width: '100%',
+    justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
-  recordBtnWrapper: {
+  btnWrapper: {
     flexDirection: 'row',
+    paddingTop: H * 0.1,
   },
+  counterTxt: {
+    textAlign: 'center',
+    fontSize: 80,
+    width: '100%',
+    color: 'white',
+    paddingTop: 80,
+  },
+
   viewPlayer: {
     marginTop: 60,
     alignSelf: 'stretch',
     alignItems: 'center',
   },
   viewBarWrapper: {
-    marginTop: 28,
     marginHorizontal: 28,
+    marginBottom: 40,
     alignSelf: 'stretch',
   },
   viewBar: {
@@ -43,38 +61,5 @@ export const styles = StyleSheet.create({
   playStatusTxt: {
     marginTop: 8,
     color: '#ccc',
-  },
-  playBtnWrapper: {
-    flexDirection: 'row',
-    marginTop: 40,
-  },
-  btn: {
-    borderColor: 'white',
-    borderWidth: 1,
-    margin: 6,
-  },
-  txt: {
-    color: 'white',
-    fontSize: 14,
-    marginHorizontal: 8,
-    marginVertical: 4,
-  },
-  txtRecordCounter: {
-    marginTop: 32,
-    color: 'white',
-    fontSize: 20,
-    textAlignVertical: 'center',
-    fontWeight: '200',
-    fontFamily: 'Helvetica Neue',
-    letterSpacing: 3,
-  },
-  txtCounter: {
-    marginTop: 12,
-    color: 'white',
-    fontSize: 20,
-    textAlignVertical: 'center',
-    fontWeight: '200',
-    fontFamily: 'Helvetica Neue',
-    letterSpacing: 3,
   },
 });
