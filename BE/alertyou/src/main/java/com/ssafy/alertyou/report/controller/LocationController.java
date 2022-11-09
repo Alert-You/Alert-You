@@ -29,11 +29,14 @@ public class LocationController {
             @ApiResponse(code = 404, message = "위치를 찾을 수 없음")
     })
     public ResponseEntity<? extends BaseResponseBody> location(@PathVariable("longitude") double longitude, @PathVariable("latitude") double latitude) {
-        String locationAddress = locationService.reverseGeo(longitude, latitude);
+        String[] locationAddress = locationService.reverseGeo(longitude, latitude);
         if (locationAddress == null) {
             return ResponseEntity.status(404).body(BaseResponseBody.result(404, "위치 정보를 찾을 수 없습니다."));
         }
-        return ResponseEntity.status(200).body(LocationResDto.result(200, "위치 정보 조회 성공", locationAddress));
+        String zipCode = locationAddress[0];
+        String roadAddress = locationAddress[1];
+        String address = locationAddress[2];
+        return ResponseEntity.status(200).body(LocationResDto.result(200, "위치 정보 조회 성공", zipCode, roadAddress, address));
     }
 
 }
