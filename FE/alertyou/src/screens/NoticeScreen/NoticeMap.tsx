@@ -1,11 +1,10 @@
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { Center, Pressable, Text, View, Circle, Button, Modal } from 'native-base'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import NaverMapView, { Marker, Path } from "react-native-nmap"
 
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { NoticeParamList } from '@/navigations/NoticeNavigation/NoticeNavigation'
-import { reportType } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
 import { styles } from './style';
@@ -30,7 +29,8 @@ const NoticeMap = ({ navigation }: Props) => {
         console.log(e);
       }
     })
-
+  const writeDay = new Date(data?.noticeDateTime + '')
+  const convertDay = writeDay.getFullYear() + '년 ' + (writeDay.getMonth() + 1) + '월 ' + writeDay.getDate() + '일 ' + writeDay.getHours() + '시 ' + writeDay.getMinutes() + '분'
   // 차후에 내 위치 정보, 신고자 위치 정보로 갈아끼워야 함
   const start = { latitude: 36.35523, longitude: 127.29809 }
   const end = { latitude: 36.35599, longitude: 127.29983 }
@@ -76,7 +76,7 @@ const NoticeMap = ({ navigation }: Props) => {
                       size={24}
                       color='black' />
                     <Text style={styles.reportTitle}>신고 일시</Text>
-                    <Text>{data?.noticeDateTime}</Text>
+                    <Text>{convertDay}</Text>
                   </View>
                   <View style={styles.reportBox}>
                     <MaterialCommunityIcons
@@ -84,7 +84,7 @@ const NoticeMap = ({ navigation }: Props) => {
                       size={24}
                       color='black' />
                     <Text style={styles.reportTitle}>신고 위치</Text>
-                    <Text>{data?.location}</Text>
+                    <Text style={styles.reportContent}>{data?.location}</Text>
                   </View>
                   {!data?.isVictim && data?.content &&
                     <View style={styles.reportBox}>

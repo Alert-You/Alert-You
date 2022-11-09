@@ -1,5 +1,5 @@
 import { View, Text, Pressable } from 'react-native'
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense } from 'react'
 import { ScrollView } from 'native-base';
 
 import { useIsFocused } from '@react-navigation/native';
@@ -18,9 +18,6 @@ const NoticeScreen = ({ navigation }: Props) => {
   const { data, refetch } = useQuery(["getNoticeList"], getNoticeList, { suspense: true, enabled: isFocused })
 
   const checkMutation = useMutation(checkNoticeAll, {
-    onError: (error) => {
-      console.log(error)
-    },
     onSuccess: () => {
       refetch();
     },
@@ -31,14 +28,16 @@ const NoticeScreen = ({ navigation }: Props) => {
   }
   return (
     <View style={styles.container}>
-      <Pressable onPress={readAllNotive}>
-        <Text style={styles.readContainer}>모두 읽기</Text>
-      </Pressable>
+      {data &&
+        <Pressable onPress={readAllNotive}>
+          <Text style={styles.readContainer}>모두 읽기</Text>
+        </Pressable>
+      }
       <Suspense >
-        <View style={{ flex: 1 }}>
+        <ScrollView>
           <NoticeList noticeList={data?.unRead} read={false} />
           <NoticeList noticeList={data?.read} read={true} />
-        </View>
+        </ScrollView>
       </Suspense>
     </View>
   )
