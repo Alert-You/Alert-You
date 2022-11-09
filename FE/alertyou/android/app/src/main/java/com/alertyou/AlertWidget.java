@@ -1,42 +1,27 @@
 package com.alertyou;
 
-import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProvider;
-import android.content.Context;
-import android.widget.RemoteViews;
-import android.content.SharedPreferences;
-import android.widget.Toast;
+import com.facebook.react.bridge.NativeModule;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
+import java.util.Map;
+import java.util.HashMap;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-/**
- * Implementation of App Widget functionality.
- */
-public class AlertWidget extends AppWidgetProvider {
-
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
-
-            RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.alert_widget);
-            appWidgetManager.updateAppWidget(appWidgetId, views);
+public class AlertWidget extends ReactContextBaseJavaModule {
+    AlertWidget(ReactApplicationContext context) {
+        super(context);
     }
-
+   
     @Override
-    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
-        }
+    public String getName() {
+       return "alertyou";
     }
 
-    @Override
-    public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
+    public void showToast(String message) {
+        
     }
 
-    @Override
-    public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
-    }
+    
+    
 }
-

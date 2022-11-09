@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken } from '@/utils/auth';
+import { getAccessToken } from '@/utils/auth';
 
 const AxiosInstance = axios.create({
   baseURL: 'https://k7b109.p.ssafy.io/api/',
@@ -8,7 +8,7 @@ const AxiosInstance = axios.create({
 
 AxiosInstance.interceptors.request.use(
   async (config: any) => {
-    const token = await getToken();
+    const token = await getAccessToken();
     config.headers['Authorization'] = `Bearer ${token}`;
     return config;
   },

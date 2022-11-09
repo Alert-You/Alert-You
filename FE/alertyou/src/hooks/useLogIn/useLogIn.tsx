@@ -2,7 +2,7 @@ import React from 'react';
 import {useSetRecoilState} from 'recoil';
 import {isLoggedInState, tokenState} from '@/store';
 import {useMutation} from '@tanstack/react-query';
-import {saveToken} from '@/utils/auth';
+import {saveAccessToken, saveToken} from '@/utils/auth';
 import {onFailHandler} from '@/screens/LoginScreen/functions';
 import {AxiosError} from 'axios';
 
@@ -19,6 +19,7 @@ const useLogIn = () => {
       onSuccess: successData => {
         //로그인 성공 => access토큰은 atom, refresh토큰은 EncryptedStorage
         setToken(successData.accessToken);
+        saveAccessToken(successData.accessToken);
         setIsLoggedIn(true);
         saveToken(successData.refreshToken);
       },

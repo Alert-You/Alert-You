@@ -25,3 +25,29 @@ export const removeToken = async () => {
     console.log(e)
   }
 }
+
+export const saveAccessToken = async (token: string) => {
+  try {
+    await EncryptedStorage.setItem('@accessToken', token);
+  } catch(e) {
+    console.log(e);
+  }
+};
+
+export const getAccessToken = async () => {
+    try {
+      const token = await EncryptedStorage.getItem('@accessToken');
+      console.log(token);
+      return token
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+export const removeAccessToken = async () => {
+  try {
+    await EncryptedStorage.removeItem('@accessToken');
+  } catch (e) {
+    console.log(e)
+  }
+}

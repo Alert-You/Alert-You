@@ -48,6 +48,13 @@ export const styles = StyleSheet.create({
     marginBottom: 5,
     fontWeight: FONT_WEIGHT.Medium,
   },
+  accountText: {
+    fontSize: 16,
+    marginTop: 16,
+    marginLeft: 3,
+    marginBottom: 5,
+    fontWeight: FONT_WEIGHT.Medium,
+  },
   selectBoxGroup: {
     display: 'flex',
     flexDirection: 'row',

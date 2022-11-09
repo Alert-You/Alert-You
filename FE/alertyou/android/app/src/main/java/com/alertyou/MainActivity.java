@@ -2,6 +2,7 @@ package com.alertyou;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.react.ReactActivity;
@@ -9,6 +10,9 @@ import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 import org.devio.rn.splashscreen.SplashScreen;
 public class MainActivity extends ReactActivity {
+
+  ImageView imageview;
+  
   @Override
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen.show(this);  // here

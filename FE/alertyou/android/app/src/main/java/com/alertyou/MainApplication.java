@@ -31,7 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
           new SplashScreenReactPackage();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new CameraRollPackage());
-            packages.add(new SharedStoragePackager());
+            packages.add(new AlertWidgetPackager());
           return packages;
         }
 
