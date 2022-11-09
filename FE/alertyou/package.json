@@ -30,6 +30,7 @@
     "react-native-audio-recorder-player": "^3.5.1",
     "react-native-encrypted-storage": "^4.0.3",
     "react-native-error-boundary": "^1.1.16",
+    "react-native-geolocation-service": "^5.3.1",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-nmap": "^0.0.66",
     "react-native-safe-area-context": "^3.3.2",
