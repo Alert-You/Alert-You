@@ -19,8 +19,8 @@ public class ProofController {
     private final S3Util s3Util;
 
     @PostMapping(value = "/upload")
-    public ResponseEntity<Map<String, Object>> ProofUpload(@RequestHeader(value = "Authorization") String token, @RequestPart("file") MultipartFile multipartFile) throws Exception {
-        return proofService.uploadProof(token, multipartFile);
+    public ResponseEntity<Map<String, Object>> ProofUpload(@RequestHeader(value = "Authorization") String token, @RequestBody MultipartFile file) throws Exception {
+        return proofService.uploadProof(token, file);
     }
 
     @GetMapping(value = "/download")
