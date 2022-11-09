@@ -5,6 +5,7 @@ import {
   CameraCheckScreen,
   HomeScreen,
   GalleryScreen,
+  AudioScreen,
 } from '@/screens';
 
 export type HomeParamList = {
@@ -12,6 +13,7 @@ export type HomeParamList = {
   CameraScreen: undefined;
   CameraCheckScreen: {uri: string};
   GalleryScreen: undefined;
+  AudioScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<HomeParamList>();
@@ -37,6 +39,11 @@ const HomeNavigation = () => {
       <Stack.Screen
         name="GalleryScreen"
         component={GalleryScreen}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="AudioScreen"
+        component={AudioScreen}
         options={{headerShown: false}}
       />
     </Stack.Navigator>

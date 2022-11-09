@@ -8,7 +8,12 @@ export {
   ReportList,
   ProofList,
 } from './ProfileScreen';
-export {CameraScreen, CameraCheckScreen, GalleryScreen} from './HomeScreen';
+export {
+  CameraScreen,
+  CameraCheckScreen,
+  GalleryScreen,
+  AudioScreen,
+} from './HomeScreen';
 export {NoticeScreen} from './NoticeScreen';
 export {SignUpSubScreen} from './SignUpSubScreen';
 export {PhoneAuthScreen} from './PhoneAuthScreen';

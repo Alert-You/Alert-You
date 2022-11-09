@@ -12,6 +12,7 @@ import com.facebook.react.config.ReactFeatureFlags;
 import com.facebook.soloader.SoLoader;
 import com.alertyou.newarchitecture.MainApplicationReactNativeHost;
 import com.reactnativecommunity.cameraroll.CameraRollPackage;
+import com.dooboolab.audiorecorderplayer.RNAudioRecorderPlayerPackage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           new SplashScreenReactPackage();
+          new RNAudioRecorderPlayerPackage();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new CameraRollPackage());
             packages.add(new AlertWidgetPackager());
