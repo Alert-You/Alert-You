@@ -11,7 +11,7 @@ public class ReportResDto {
     private String content;
     private Boolean isVictim;
     private double latitude;
-    private double longtitude;
+    private double longitude;
     private String location;
     private String place;
 
@@ -21,7 +21,7 @@ public class ReportResDto {
         this.content = entity.getContent();
         this.isVictim = entity.getIsVictim();
         this.latitude = entity.getLatitude();
-        this.longtitude = entity.getLongtitude();
+        this.longitude = entity.getLongitude();
         this.location = entity.getLocation();
         this.place = entity.getPlace();
     }

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @ApiModel("WitnessRequestDTO")
 public class ReportWitnessReqDto {
     private double latitude;
-    private double longtitude;
+    private double longitude;
     private String content;
     private String place;
 
