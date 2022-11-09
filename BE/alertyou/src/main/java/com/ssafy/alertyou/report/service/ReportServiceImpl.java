@@ -94,9 +94,9 @@ public class ReportServiceImpl implements ReportService {
         User user = findUser(findUserByPhone(decodeToken(token)).getId());
 
         double latitude = reportVictimReqDto.getLatitude();
-        double longtitude = reportVictimReqDto.getLongtitude();
+        double longitude = reportVictimReqDto.getLongitude();
         String nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString();
-        String[] location = LocationService.reverseGeo(longtitude, latitude);
+        String[] location = LocationService.reverseGeo(longitude, latitude);
 
         try{
             Report newReport = Report.builder()
@@ -104,7 +104,7 @@ public class ReportServiceImpl implements ReportService {
                     .isVictim(true)
                     .noticeDateTime(nowTime)
                     .latitude(latitude)
-                    .longtitude(longtitude)
+                    .longitude(longitude)
                     .location(location[1])
                     .build();
 
@@ -132,11 +132,11 @@ public class ReportServiceImpl implements ReportService {
         User user = findUser(findUserByPhone(decodeToken(token)).getId());
 
         double latitude = reportWitnessReqDto.getLatitude();
-        double longtitude = reportWitnessReqDto.getLongtitude();
+        double longitude = reportWitnessReqDto.getLongitude();
         String nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString();
         String content = reportWitnessReqDto.getContent();
         String place  = reportWitnessReqDto.getPlace();
-        String[] location = LocationService.reverseGeo(longtitude, latitude);
+        String[] location = LocationService.reverseGeo(longitude, latitude);
 
         try{
             Report newReport = Report.builder()
@@ -144,7 +144,7 @@ public class ReportServiceImpl implements ReportService {
                     .isVictim(false)
                     .noticeDateTime(nowTime)
                     .latitude(latitude)
-                    .longtitude(longtitude)
+                    .longitude(longitude)
                     .content(content)
                     .place(place)
                     .location(location[1])

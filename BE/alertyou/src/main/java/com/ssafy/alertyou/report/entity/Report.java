@@ -40,7 +40,7 @@ public class Report {
     private String noticeDateTime;
     private String content;
     private double latitude;
-    private double longtitude;
+    private double longitude;
 
     private String location;
     private String place;
