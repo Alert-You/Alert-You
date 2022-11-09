@@ -86,12 +86,12 @@ public class ReportServiceImpl implements ReportService {
 
     }
 
-    public ResponseEntity<Map<String, Object>> addReportVictim(ReportVictimReqDto reportVictimReqDto) throws Exception{
+    public ResponseEntity<Map<String, Object>> addReportVictim(String token, ReportVictimReqDto reportVictimReqDto) throws Exception{
 
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
 
-        User user = findUser(reportVictimReqDto.getUserId()); // 이거로 가드 id 찾기
+        User user = findUser(findUserByPhone(decodeToken(token)).getId());
 
         double latitude = reportVictimReqDto.getLatitude();
         double longtitude = reportVictimReqDto.getLongtitude();
@@ -125,11 +125,11 @@ public class ReportServiceImpl implements ReportService {
         return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String, Object>> addReportWitness(ReportWitnessReqDto reportWitnessReqDto) throws Exception{
+    public ResponseEntity<Map<String, Object>> addReportWitness(String token, ReportWitnessReqDto reportWitnessReqDto) throws Exception{
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
 
-        User user = findUser(reportWitnessReqDto.getUserId());
+        User user = findUser(findUserByPhone(decodeToken(token)).getId());
 
         double latitude = reportWitnessReqDto.getLatitude();
         double longtitude = reportWitnessReqDto.getLongtitude();
@@ -227,4 +227,8 @@ public class ReportServiceImpl implements ReportService {
             }
         }
     }
+
+
+
+
 }

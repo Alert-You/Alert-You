@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @ApiModel("VictimRequestDTO")
 public class ReportVictimReqDto {
-    private long userId;
     private double latitude;
     private double longtitude;
 

@@ -27,12 +27,12 @@ public class ReportController {
     }
 
     @PostMapping("/victim")
-    public ResponseEntity<Map<String, Object>> ReportVictimAdd(@RequestBody ReportVictimReqDto reportVictimReqDto) throws Exception {
-        return reportService.addReportVictim(reportVictimReqDto);
+    public ResponseEntity<Map<String, Object>> ReportVictimAdd(@RequestHeader(value = "Authorization") String token, @RequestBody ReportVictimReqDto reportVictimReqDto) throws Exception {
+        return reportService.addReportVictim(token, reportVictimReqDto);
     }
 
     @PostMapping("/witness")
-    public ResponseEntity<Map<String, Object>> ReportWitnessAdd(@RequestBody ReportWitnessReqDto reportWitnessReqDto) throws Exception {
-        return reportService.addReportWitness(reportWitnessReqDto);
+    public ResponseEntity<Map<String, Object>> ReportWitnessAdd(@RequestHeader(value = "Authorization") String token, @RequestBody ReportWitnessReqDto reportWitnessReqDto) throws Exception {
+        return reportService.addReportWitness(token, reportWitnessReqDto);
     }
 }
