@@ -8,6 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserInfoResDto extends BaseResponseBody {
+    @ApiModelProperty(name="학교 아이디", example = "1")
+    private long schoolId;
+
     @ApiModelProperty(name="학교", example = "싸피 고등학교")
     private String schoolName;
 
@@ -20,7 +23,7 @@ public class UserInfoResDto extends BaseResponseBody {
     @ApiModelProperty(name="휴대전화 번호", example = "01012345678")
     private String phone;
 
-    public static UserInfoResDto result(Integer statusCode, String message, String schoolName, String name, String role, String phone) {
+    public static UserInfoResDto result(Integer statusCode, String message, long schoolId, String schoolName, String name, String role, String phone) {
         UserInfoResDto ret = new UserInfoResDto();
         ret.setStatusCode(statusCode);
         ret.setName(name);
@@ -28,6 +31,7 @@ public class UserInfoResDto extends BaseResponseBody {
         ret.setSchoolName(schoolName);
         ret.setMessage(message);
         ret.setPhone(phone);
+        ret.setSchoolId(schoolId);
         return ret;
     }
 }
