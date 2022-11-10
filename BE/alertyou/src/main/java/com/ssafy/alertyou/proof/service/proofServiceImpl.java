@@ -103,7 +103,9 @@ public class proofServiceImpl implements ProofService {
         System.out.println("제발7");
         String[] seperate = file.split(";");
         System.out.println("제발8");
-        String endPoint = seperate[0];
+        String point = seperate[0];
+        String endPoint = point.substring(point.lastIndexOf('"')+1);
+        String S3Point = endPoint.substring(endPoint.lastIndexOf("/")+1);
         System.out.println("제발9");
         String bFile = seperate[1];
         System.out.println("제발10");
@@ -121,7 +123,7 @@ public class proofServiceImpl implements ProofService {
             System.out.println("제발14");
         }
         System.out.println("제발15");
-        String url = s3UtilByBase64.upload(newFile,type+"/"+uId);
+        String url = s3UtilByBase64.upload(newFile,S3Point,type+"/"+uId);
         System.out.println("제발16");
         try {
             System.out.println("제발17");
