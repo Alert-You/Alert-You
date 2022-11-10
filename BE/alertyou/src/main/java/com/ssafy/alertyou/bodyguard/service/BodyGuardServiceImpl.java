@@ -38,7 +38,7 @@ public class BodyGuardServiceImpl implements BodyGuardService {
         User user = findUser(id); // 분기를 위한 User 찾기
 
         try{
-            if (user.getRole().equals("student")) {
+            if (user.getRole().equals("학생")) {
 
                 List<Opguard> guardlist = opGuardRepository.findAllByUser(user);
 
@@ -47,7 +47,7 @@ public class BodyGuardServiceImpl implements BodyGuardService {
                 }
             }
 
-            else if(user.getRole().equals("teacher")) {
+            else if(user.getRole().equals("교사")) {
 
                 List<Coguard> guardlist = coGuardRepository.findAllByUser(user);
 
@@ -84,7 +84,7 @@ public class BodyGuardServiceImpl implements BodyGuardService {
         Optional<Coguard> coguard = coGuardRepository.findByCoGuardAndUser(guard, userRole);
         try{
             // 학생이 등록하는 경우
-            if (userRole.getRole().equals("student")) {
+            if (userRole.getRole().equals("학생")) {
                 // 있는 경우 등록 해제
                 if(opguard.isPresent()){
                     opGuardRepository.delete(opguard.get());
@@ -99,7 +99,7 @@ public class BodyGuardServiceImpl implements BodyGuardService {
                 }
             }
 
-            else if(userRole.getRole().equals("teacher")) {
+            else if(userRole.getRole().equals("교사")) {
                 if(coguard.isPresent()){
                     coGuardRepository.delete(coguard.get());
                 }

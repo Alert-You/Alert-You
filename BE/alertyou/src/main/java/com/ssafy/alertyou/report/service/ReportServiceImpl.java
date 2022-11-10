@@ -2,16 +2,22 @@ package com.ssafy.alertyou.report.service;
 
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.google.firebase.messaging.BatchResponse;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.MulticastMessage;
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.jwt.JwtProperties;
 import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.alert.entity.Alert;
 import com.ssafy.alertyou.alert.repository.AlertRepository;
+import com.ssafy.alertyou.bodyguard.dto.BodyGuardResDto;
 import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.entity.Opguard;
 import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.bodyguard.repository.OpGuardRepository;
+import com.ssafy.alertyou.bodyguard.service.BodyGuardService;
+import com.ssafy.alertyou.bodyguard.service.BodyGuardServiceImpl;
 import com.ssafy.alertyou.report.dto.*;
 import com.ssafy.alertyou.report.repository.ReportRepository;
 import com.ssafy.alertyou.report.entity.Report;
@@ -195,11 +201,37 @@ public class ReportServiceImpl implements ReportService {
         return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String, Object>> sendFCM() throws Exception {
-        // 유저의 보디가드 리스트에서 유저 아이디를 찾아옴
-        // 각 유저의 FCM 토큰을 가져와서 리스트로 만듦
-        // 해당 토큰 리스트로 FCM을 쏴줌
-        MulticastMessage
+    public ResponseEntity<Map<String, Object>> sendFCM(String token) throws Exception {
+        HttpStatus status = null;
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            User user = findUserByPhone(decodeToken(token)); // 사용자를 찾음
+            List<Coguard> guardlist = coGuardRepository.findAllByUser(user);
+            List<String> registrationTokens = new ArrayList<>();
+
+            // 각 유저의 FCM 토큰을 가져와서 리스트로 만듦
+            for(Coguard coguard : guardlist){
+                String guardPhone = coguard.getCoGuard().getPhone();
+                User guardUser = userRepository.findByPhone(guardPhone);
+                registrationTokens.add(guardUser.getFcmToken());
+            }
+
+            // 해당 토큰 리스트로 FCM을 쏴줌
+            MulticastMessage message = MulticastMessage.builder()
+                    .putData("data", "test")
+                    .putData("data2", "test2")
+                    .addAllTokens(registrationTokens)
+                    .build();
+            BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
+            System.out.println(response.getSuccessCount() + " messages were sent successfully");
+            result.put("msg", SUCCESS);
+            status = HttpStatus.OK;
+        } catch (Exception e) {
+            result.put("msg", FAIL);
+            status = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<>(result, status);
     }
 
     public User findUser(long id){
@@ -253,7 +285,7 @@ public class ReportServiceImpl implements ReportService {
         // 알람 등록: 선생님이 등록한 가드
         School userSchool = user.getSchool(); // 신고 내역에 있는 유저의 학교 ID
 
-        User userTeacher = userRepository.findBySchoolAndRole(userSchool, "teacher"); // 선생님 ID 찾기
+        User userTeacher = userRepository.findBySchoolAndRole(userSchool, "교사"); // 선생님 ID 찾기
 
         List<Coguard> CoUserList = coGuardRepository.findAllByUser(userTeacher);
 
