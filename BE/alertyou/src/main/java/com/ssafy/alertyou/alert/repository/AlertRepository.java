@@ -13,5 +13,6 @@ public interface AlertRepository extends JpaRepository<Alert, Long> {
     Optional<Alert> findByUserAndReport(User user, Report report);
     List<Alert> findAllByUserAndChecked(User user, Boolean checked);
     List<Alert> findAllByUser(User user);
+    List<Alert> findAllByReport(Report report);
 
 }

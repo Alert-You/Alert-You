@@ -7,9 +7,9 @@ import com.ssafy.alertyou.account.jwt.JwtProperties;
 import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.alert.dto.AlertResDto;
-import com.ssafy.alertyou.alert.dto.FCMReqDto;
 import com.ssafy.alertyou.alert.entity.Alert;
 import com.ssafy.alertyou.alert.repository.AlertRepository;
+import com.ssafy.alertyou.report.dto.LocationReqDto;
 import com.ssafy.alertyou.report.entity.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -125,32 +125,6 @@ public class AlertServiceImpl implements AlertService{
 
     }
 
-    public ResponseEntity<Map<String, Object>> addFCMToken(String token, FCMReqDto fcmResDto) throws Exception {
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
-
-        try{
-            User user = findUserByPhone(decodeToken(token)); // 사용자를 가지고 사용자 id를 찾기
-            String fcmtoken = fcmResDto.getFcmToken();
-            user.updateFCM(fcmtoken);
-            userRepository.save(user);
-
-            result.put("msg",SUCCESS);
-            status = HttpStatus.OK;
-
-
-        } catch (Exception e) {
-            result.put("msg", FAIL);
-            status = HttpStatus.BAD_REQUEST;
-        }
-
-        return new ResponseEntity<>(result, status);
-    }
-
-    public User findUser(long id){
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
-    }
 
     public Alert findAlert(long id){
         return alertRepository.findById(id)

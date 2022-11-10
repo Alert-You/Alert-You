@@ -1,5 +1,7 @@
 package com.ssafy.alertyou.report.controller;
 
+import com.ssafy.alertyou.report.dto.FCMReqDto;
+import com.ssafy.alertyou.report.dto.LocationReqDto;
 import com.ssafy.alertyou.report.dto.ReportVictimReqDto;
 import com.ssafy.alertyou.report.dto.ReportWitnessReqDto;
 import com.ssafy.alertyou.report.service.ReportService;
@@ -34,5 +36,10 @@ public class ReportController {
     @PostMapping("/witness")
     public ResponseEntity<Map<String, Object>> ReportWitnessAdd(@RequestHeader(value = "Authorization") String token, @RequestBody ReportWitnessReqDto reportWitnessReqDto) throws Exception {
         return reportService.addReportWitness(token, reportWitnessReqDto);
+    }
+
+    @PutMapping(value = "/fcmtoken")
+    public ResponseEntity<Map<String, Object>> FCMTokenAdd(@RequestHeader(value = "Authorization") String token, @RequestBody FCMReqDto fcmReqDto) throws Exception{
+        return reportService.addFCMToken(token, fcmReqDto);
     }
 }

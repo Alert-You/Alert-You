@@ -12,11 +12,8 @@ import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.entity.Opguard;
 import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.bodyguard.repository.OpGuardRepository;
-import com.ssafy.alertyou.report.dto.ReportListResDto;
+import com.ssafy.alertyou.report.dto.*;
 import com.ssafy.alertyou.report.repository.ReportRepository;
-import com.ssafy.alertyou.report.dto.ReportResDto;
-import com.ssafy.alertyou.report.dto.ReportVictimReqDto;
-import com.ssafy.alertyou.report.dto.ReportWitnessReqDto;
 import com.ssafy.alertyou.report.entity.Report;
 import com.ssafy.alertyou.school.entity.School;
 import lombok.RequiredArgsConstructor;
@@ -85,7 +82,8 @@ public class ReportServiceImpl implements ReportService {
         return new ResponseEntity<>(result, status);
 
     }
-
+    
+    // 당사자 신고
     public ResponseEntity<Map<String, Object>> addReportVictim(String token, ReportVictimReqDto reportVictimReqDto) throws Exception{
 
         HttpStatus status = null;
@@ -112,6 +110,18 @@ public class ReportServiceImpl implements ReportService {
             long alertReportId = reportRepository.save(newReport).getId(); // 등록할 신고 ID
 
             addAlert(alertReportId, user);
+
+            // fcm 토큰 처리
+            List<String> guardToken = new ArrayList<>();
+            Report report = findReport(alertReportId);
+
+            List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
+
+            for(Alert alert : alertList){
+                User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
+                guardToken.add(findUser(guardUser.getId()).getFcmToken());
+            }
+
 
             result.put("msg",SUCCESS);
             status = HttpStatus.OK;
@@ -164,6 +174,28 @@ public class ReportServiceImpl implements ReportService {
         return new ResponseEntity<>(result, status);
     }
 
+    public ResponseEntity<Map<String, Object>> addFCMToken(String token, FCMReqDto fcmResDto) throws Exception {
+        HttpStatus status = null;
+        Map<String, Object> result = new HashMap<>();
+
+        try{
+            User user = findUserByPhone(decodeToken(token)); // 사용자를 가지고 사용자 id를 찾기
+            String fcmtoken = fcmResDto.getFcmToken();
+            user.updateFCM(fcmtoken);
+            userRepository.save(user);
+
+            result.put("msg",SUCCESS);
+            status = HttpStatus.OK;
+
+
+        } catch (Exception e) {
+            result.put("msg", FAIL);
+            status = HttpStatus.BAD_REQUEST;
+        }
+
+        return new ResponseEntity<>(result, status);
+    }
+
     public User findUser(long id){
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
@@ -186,6 +218,10 @@ public class ReportServiceImpl implements ReportService {
         JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
         DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
         return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
+    }
+
+    public List<Alert> findAlertUser(Report report){
+        return alertRepository.findAllByReport(report);
     }
 
 
