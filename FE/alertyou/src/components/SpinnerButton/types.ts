@@ -6,4 +6,5 @@ export interface Props {
   height?: number;
   fontSize?: number;
   isLoading?: boolean;
+  isDisabled?: boolean;
 }

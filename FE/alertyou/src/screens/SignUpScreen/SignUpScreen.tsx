@@ -32,7 +32,7 @@ const SignUpScreen = ({navigation}: any) => {
   const formIsFilled =
     schoolValue.address && schoolValue.name && grade && classroom;
 
-  const {refetch} = useQuery(['schoolIdKey'], () => requestSchoolId(schoolValue.name, grade, classroom), {
+  const {refetch} = useQuery(['schoolIdKey'], () => requestSchoolId(schoolValue.name, grade, classroom, schoolValue.address), {
     suspense: true,
     enabled: false,
     cacheTime: 0,

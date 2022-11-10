@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">alertyou</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="alert_success">긴급 신고를 요청했습니다.</string>
+    <string name="alert_fail">긴급 신고 요청에 실패했습니다.</string>
 </resources>

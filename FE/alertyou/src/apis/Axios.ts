@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { getToken } from '@/utils/auth';
-import { BASE_URL } from './urls';
+import { getAccessToken } from '@/utils/auth';
+import {BASE_URL} from './urls';
 
 const AxiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -11,7 +11,7 @@ const AxiosInstance = axios.create({
 
 AxiosInstance.interceptors.request.use(
   async (config: any) => {
-    const token = await getToken();
+    const token = await getAccessToken();
     config.headers['Authorization'] = `Bearer ${token}`;
     return config;
   },

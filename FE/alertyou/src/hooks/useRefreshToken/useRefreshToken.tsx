@@ -4,7 +4,7 @@ import {AxiosError} from 'axios';
 import { useSetRecoilState } from 'recoil';
 
 import { isLoggedInState, tokenState } from '@/store';
-import { removeToken, saveToken } from '@/utils/auth';
+import { removeAccessToken, removeToken, saveAccessToken, saveToken } from '@/utils/auth';
 import { splashState } from '@/store/splashState';
 
 import {requestRefreshToken} from './apis';
@@ -24,6 +24,7 @@ const useRefreshToken = () => {
       onSuccess: (res) => {
         console.log("성공했어")
         setToken(res.accessToken);
+        saveAccessToken(res.accessToken);
         setIsLoggedIn(true);
         saveToken(res.refreshToken);
         setTimeout(() => {
@@ -32,7 +33,8 @@ const useRefreshToken = () => {
       },
       onError: () => {
         console.log('실패했어');
-        setToken('')
+        setToken('');
+        removeAccessToken();
         setIsLoggedIn(false);
         removeToken();
         setTimeout(() => {

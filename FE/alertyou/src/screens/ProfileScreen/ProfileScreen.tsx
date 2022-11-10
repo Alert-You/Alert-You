@@ -1,13 +1,11 @@
-import {View, Text, Button, Pressable, Alert} from 'react-native';
-import React, {Suspense} from 'react';
+import {View, Text, Alert} from 'react-native';
+import React, {Suspense, useMemo} from 'react';
 import {Box, Spinner} from 'native-base';
 import {useQuery} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 
 import {redProfileGradientStyle} from '@/theme/gradient';
 import {ProfileBox, SpinnerButton} from '@/components';
-import {getToken} from '@/utils/auth';
-import {useLogout} from '@/hooks';
 
 import {styles} from './style';
 import {requestUserProfile} from './apis';
@@ -22,29 +20,26 @@ const ProfileScreen = ({navigation}: any) => {
     requestUserProfile,
     {suspense: true},
   );
-  const {mutate} = useLogout();
 
   //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
-  const logoutHandler = (): void => {
-    getToken().then(res => {
-      if (res) {
-        mutate(res);
-      }
-    });
-  };
+  const isTeacher = useMemo(() => data?.role === "교사", [data?.role])
 
-  const confirmLogout = (): void => {
-    Alert.alert('로그아웃', '정말로 로그아웃 하시겠습니까?', [
-      {
-        text: '취소',
-      },
-      {
-        text: '로그아웃',
-        style: 'cancel',
-        onPress: () => logoutHandler()
-      },
-    ]);
-  };
+  const moveToTeacherScreen = (): void => {
+    if (isTeacher) {
+      navigation.navigate('TeacherScreen');
+    } else {
+      Alert.alert('실패', '접근 권한이 없습니다.', [
+        {
+          text: '확인',
+        }
+      ]);
+    }
+  }
+
+  const moveToSettingScreen = (): void => {
+    navigation.navigate('SettingScreen')
+  }
+
 
   return (
     <>
@@ -72,19 +67,20 @@ const ProfileScreen = ({navigation}: any) => {
           <View style={styles.studentListButton}>
             <Text style={styles.buttonText}>학생 관리</Text>
             <SpinnerButton
-              onPress={() => {
-                navigation.navigate('TeacherScreen');
-              }}
+              onPress={moveToTeacherScreen}
               height={55}
               fontSize={20}>
               학생 목록 조회
             </SpinnerButton>
+            <Text style={styles.accountText}>계정 관리</Text>
+            <SpinnerButton
+              onPress={moveToSettingScreen}
+              height={55}
+              fontSize={20}>
+              계정 설정
+            </SpinnerButton>
           </View>
         </Box>
-        <Pressable style={styles.logoutButton} onPress={confirmLogout}>
-          <Text style={styles.logoutText}>로그아웃</Text>
-        </Pressable>
-        {/* <Button title="로그아웃" onPress={logoutHandler} /> */}
       </View>
     </>
   );
