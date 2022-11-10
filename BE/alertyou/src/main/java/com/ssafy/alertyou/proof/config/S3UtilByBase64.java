@@ -31,9 +31,9 @@ public class S3UtilByBase64 {
     public String bucket;  // S3 버킷
 
     // S3 파일 업로드
-    public String upload(byte[] file, String dirName) throws IOException {
+    public String upload(byte[] file, String endPoint, String dirName) throws IOException {
 //      MultipartFile to File
-        File convertFile = convert(file)
+        File convertFile = convert(file,endPoint)
                 .orElseThrow(() -> new IllegalArgumentException("file convert error")); // 파일을 변환할 수 없으면 에러
 
 //      S3에 저장할 파일명
@@ -55,8 +55,8 @@ public class S3UtilByBase64 {
 
     // 파일 convert 후 로컬에 업로드
     // S3에 업로드 할 때, 로컬에 저장되어 있지 않으면 오류가 나기 때문에 일시적으로 로컬에 저장 후 업로드 -> 이후 로컬 파일 삭제 로직으로 진행
-    private Optional<File> convert(byte[] file) throws IOException {
-        File convertFile = new File(System.getProperty("user.dir") + "/" + UUID.randomUUID());
+    private Optional<File> convert(byte[] file, String endPoint) throws IOException {
+        File convertFile = new File(System.getProperty("user.dir") + "/" + UUID.randomUUID() + "." + endPoint);
         if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                 fos.write(file);
