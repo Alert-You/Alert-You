@@ -2,6 +2,7 @@ package com.ssafy.alertyou.proof.controller;
 
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.proof.config.S3Util;
+import com.ssafy.alertyou.proof.dto.ProofUploadReqDto;
 import com.ssafy.alertyou.proof.service.ProofService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class ProofController {
     }
 
     @PostMapping(value = "/upload/test")
-    public ResponseEntity<Map<String, Object>> ProofUploadToBase64(@RequestHeader(value = "Authorization") String token, @RequestBody String file) throws Exception {
+    public ResponseEntity<Map<String, Object>> ProofUploadToBase64(@RequestHeader(value = "Authorization") String token, @RequestBody ProofUploadReqDto file) throws Exception {
         System.out.println("base64");
         return proofService.uploadProofByBase64(token, file);
     }
