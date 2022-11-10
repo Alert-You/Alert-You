@@ -9,7 +9,7 @@ import {
   Select,
   Stack,
 } from 'native-base';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {useRecoilValue, useSetRecoilState} from 'recoil';
 import {useQuery} from '@tanstack/react-query';
 
 import {LogoImage, SpinnerButton} from '@/components';
@@ -18,7 +18,7 @@ import {classListState, schoolIdState, schoolState} from '@/store/signUpState';
 
 import {styles} from './style';
 import {failedFetchSchoolId, formIsNotFilled} from './functions';
-import { requestSchoolId } from './apis';
+import {requestSchoolId} from './apis';
 
 const SignUpScreen = ({navigation}: any) => {
   const [grade, setGrade] = useState<string>('');
@@ -28,22 +28,30 @@ const SignUpScreen = ({navigation}: any) => {
   const setSchoolId = useSetRecoilState(schoolIdState);
 
   const hasChosenSchool = useMemo(() => classList.length !== 0, [classList]);
-  const hasChosenGrade = useMemo(() => !!classList[parseInt(grade)], [grade]);
+  const hasChosenGrade = useMemo(
+    () => grade && !!classList[parseInt(grade)],
+    [grade],
+  );
   const formIsFilled =
     schoolValue.address && schoolValue.name && grade && classroom;
 
-  const {refetch} = useQuery(['schoolIdKey'], () => requestSchoolId(schoolValue.name, grade, classroom, schoolValue.address), {
-    suspense: true,
-    enabled: false,
-    cacheTime: 0,
-    onSuccess: (schoolIdData) => {
-      setSchoolId(schoolIdData.schoolId);
-      moveToNextForm();
+  const {refetch} = useQuery(
+    ['schoolIdKey'],
+    () =>
+      requestSchoolId(schoolValue.name, grade, classroom, schoolValue.address),
+    {
+      suspense: true,
+      enabled: false,
+      cacheTime: 0,
+      onSuccess: schoolIdData => {
+        setSchoolId(schoolIdData.schoolId);
+        moveToNextForm();
+      },
+      onError: () => {
+        failedFetchSchoolId();
+      },
     },
-    onError: () => {
-      failedFetchSchoolId();
-    },
-  });
+  );
 
   const moveToSearchSchool = (): void => {
     navigation.navigate('SignUp', {
@@ -67,7 +75,7 @@ const SignUpScreen = ({navigation}: any) => {
 
   const moveToNextPage = (): void => {
     if (formIsFilled) {
-      refetch()
+      refetch();
     } else {
       formIsNotFilled();
     }

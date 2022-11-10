@@ -1,18 +1,20 @@
 import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ProfileEditScreen, ProfileScreen, SettingScreen, TeacherScreen } from "@/screens"
+import { EditClassScreen, EditSchoolScreen, ProfileEditScreen, ProfileScreen, SettingScreen, TeacherScreen } from "@/screens"
 import { StudentDetail } from '@/screens/ProfileScreen';
 import { RED } from '@/theme/colorVariants';
 
 
 export type ProfileParamList = {
-  ProfileScreen: undefined,
-  TeacherScreen: undefined,
-  StudentDetail: { studentId: number },
-  SettingScreen: undefined,
-  ProfileEditScreen: undefined
-}
+  ProfileScreen: undefined;
+  TeacherScreen: undefined;
+  StudentDetail: {studentId: number};
+  SettingScreen: undefined;
+  ProfileEditScreen: undefined;
+  EditSchoolScreen: undefined;
+  EditClassScreen: undefined;
+};
 const Stack = createNativeStackNavigator<ProfileParamList>();
 
 const ProfileNavigation = () => {
@@ -64,6 +66,30 @@ const ProfileNavigation = () => {
         component={ProfileEditScreen}
         options={{
           title: '회원정보수정',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: '700',
+            fontSize: 20,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="EditSchoolScreen"
+        component={EditSchoolScreen}
+        options={{
+          title: '학교 검색',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: '700',
+            fontSize: 20,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="EditClassScreen"
+        component={EditClassScreen}
+        options={{
+          title: '학급 선택',
           headerTitleAlign: 'center',
           headerTitleStyle: {
             fontWeight: '700',

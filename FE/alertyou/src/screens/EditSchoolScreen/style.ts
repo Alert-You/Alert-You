@@ -6,15 +6,17 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: WHITE.white,
   },
-  formList: {
+  searchContainer: {
+    marginHorizontal: 16,
+    marginTop: 16,
+  },
+  schoolListContainer: {
     flex: 1,
     marginHorizontal: 16,
     marginVertical: 16,
+    justifyContent: 'center'
   },
-  phoneContainer: {
-    flexDirection: 'row',
-  },
-  spinnerButtonStyle: {
-    marginTop: 16,
-  },
+  scrollViewContainer: {
+    flex: 1
+  }
 });

@@ -1,0 +1,1 @@
+export {EditSchoolInfo} from './EditSchoolInfo';

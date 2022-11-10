@@ -19,3 +19,13 @@ export interface EditProfileState {
   password: string;
   schoolId: null | number;
 }
+
+export interface verifyResponseType {
+  certNumber: string;
+  message: string;
+  statusCode: number;
+}
+export interface editResponseType {
+  message: string;
+  statusCode: number;
+}
