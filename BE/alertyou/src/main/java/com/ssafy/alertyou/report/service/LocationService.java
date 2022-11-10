@@ -35,6 +35,10 @@ public class LocationService {
                 JsonNode bodyJson = mapper.readTree(body);
                 String[] locationAddress = new String[3];
 
+                if (bodyJson.get("results").size() == 0) {
+                    return null;
+                }
+
                 String zipCode = "00000"; // 우편 번호
                 if (bodyJson.get("results").path(0).get("land").get("addition1").get("value") != null) {
                     zipCode = "(" + bodyJson.get("results").path(0).get("land").get("addition1").get("value").asText() + ")"; // (우편번호)
