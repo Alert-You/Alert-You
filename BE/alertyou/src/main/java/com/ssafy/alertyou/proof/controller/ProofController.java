@@ -21,7 +21,7 @@ public class ProofController {
     @PostMapping(value = "/upload")
     public ResponseEntity<Map<String, Object>> ProofUpload(@RequestHeader(value = "Authorization") String token, @RequestBody MultipartFile file) throws Exception {
         System.out.println("test");
-        System.out.println(file.getOriginalFilename());
+        System.out.println(file);
         return proofService.uploadProof(token, file);
     }
 
