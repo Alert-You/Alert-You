@@ -22,15 +22,6 @@ type Props = {
 const NoticeMap = ({ navigation }: Props) => {
   const reportId = useRoute<RouteProp<NoticeParamList>>().params?.reportId
   const [showModal, setShowModal] = useState(true);
-  const [myPosition, setMyPosition] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
-  const [reportPosition, setReportPositon] = useState<{
-    latitude: number;
-    longitude: number;
-  } | null>(null);
-
 
   const { location } = useCurrentLocation();
   const { data } = useQuery(['getNoticeItem'], () => getNoticeItem(reportId),
