@@ -38,6 +38,8 @@ public class TeacherServiceImpl implements TeacherService{
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
     private final String ROLE = "student";
+//    private final String ROLE = "학생";
+
     private final String GUARD = "보디가드";
     private final String STUDENT = "학급원";
 
@@ -97,7 +99,7 @@ public class TeacherServiceImpl implements TeacherService{
             School school = user.getSchool();
             String role = new String();
 //        2. 만약 CoGuard에서 선생님이 지정한 보디가드 일 때, 있다면 role = GUARD & 없다면 role = STUDENT
-            if (findGuard(user)==true){
+            if (findGuard(user) == true){
                 role = GUARD;
             }else {
                 role = STUDENT;

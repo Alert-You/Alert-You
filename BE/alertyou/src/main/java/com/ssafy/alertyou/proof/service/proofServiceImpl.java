@@ -45,31 +45,54 @@ public class proofServiceImpl implements ProofService {
     private final ProofRepository proofRepository;
     private final UserRepository userRepository;
     public ResponseEntity<Map<String, Object>> uploadProof(String token, MultipartFile file) throws Exception{
+        System.out.println("이건가1");
         Map<String, Object> result = new HashMap<>();
+        System.out.println("이건가2");
         HttpStatus status;
+        System.out.println("이건가3");
         String type = new String();
+        System.out.println("이건가4");
         Boolean ctype = null;
+        System.out.println("이건가5");
         String endPoint = file.getContentType();
+        System.out.println("이건가6");
         User user = findUserByPhone(decodeToken(token));
+        System.out.println("이건가7");
         String uId = String.valueOf(user.getId());
+        System.out.println("이건가8");
         if (file.getContentType().contains("image")){
+            System.out.println("이건가9");
              type = IMAGE;
+            System.out.println("이건가10");
              ctype = true;
+            System.out.println("이건가11");
         }else if (file.getContentType().contains("audio")){
-             type = AUDIO;
+            System.out.println("이건가12");
+            type = AUDIO;
+            System.out.println("이건가13");
              ctype = false;
         }
+        System.out.println("이건가14");
         String url = s3Util.upload(file,type+"/"+uId);
+        System.out.println("이건가15");
         try {
+            System.out.println("이건가16");
             Long res = proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
+            System.out.println("이건가17");
             result.put("msg",SUCCESS);
+            System.out.println("이건가18");
             status = HttpStatus.CREATED;
+            System.out.println("이건가19");
         } catch (Exception e){
+            System.out.println("이건가20");
             result.put("msg",FAIL);
+            System.out.println("이건가21");
             result.put("error",e.getStackTrace());
+            System.out.println("이건가22");
             status = HttpStatus.BAD_REQUEST;
+            System.out.println("이건가23");
         }
-
+        System.out.println("이건가24");
         return new ResponseEntity<>(result, status);
     }
 
