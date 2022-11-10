@@ -35,6 +35,7 @@
     "react-native-nmap": "^0.0.66",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.18.2",
+    "react-native-shared-group-preferences": "^1.1.23",
     "react-native-splash-screen": "^3.3.0",
     "react-native-svg": "^12.1.1",
     "react-native-toast-message": "^2.1.5",
@@ -42,6 +43,7 @@
     "react-native-vision-camera": "^2.15.2",
     "react-native-web": "^0.17.1",
     "recoil": "^0.7.6",
+    "rn-fetch-blob": "^0.12.0",
     "styled-components": "^5.3.6"
   },
   "devDependencies": {

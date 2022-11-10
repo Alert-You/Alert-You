@@ -14,13 +14,16 @@ const SpinnerButton = (props: Props) => {
     height = 45,
     fontSize = 16,
     isLoading = false,
+    isDisabled = false
   } = props;
 
   return (
     <TouchableOpacity
       style={[styles.loginButton, {height}]}
       activeOpacity={0.8}
-      onPress={onPress}>
+      onPress={onPress}
+      disabled={isDisabled}
+      >
       <Suspense fallback={<Spinner color={WHITE.white} />}>
         {!isLoading ? (
           <Text style={[styles.loginButtonText, {fontSize}]}>{children}</Text>

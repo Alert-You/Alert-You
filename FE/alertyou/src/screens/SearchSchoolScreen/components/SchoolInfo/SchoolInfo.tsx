@@ -25,7 +25,7 @@ const SchoolInfo = ({address, name, idx}: Props) => {
   const setPickSchool = useSetRecoilState(schoolState);
   const {refetch} = useQuery<gradeClassType, AxiosError>(
     ['classGrade', idx],
-    () => requestGradeClass(name),
+    () => requestGradeClass(name, address),
     {
       suspense: true,
       enabled: false,

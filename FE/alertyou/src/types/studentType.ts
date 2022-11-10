@@ -1,13 +1,13 @@
 export interface studentsType {
-  studentId: number,
+  studentId: number | null,
   name: string,
   phone: string,
-  isGuard: Boolean
+  isGuard: Boolean | null
 }
 
 export interface studentType {
-  school: string,
-  name: string,
-  role: string,
-  phone: string
+  school: string | undefined,
+  name: string | undefined,
+  role: string | undefined,
+  phone: string | undefined
 }

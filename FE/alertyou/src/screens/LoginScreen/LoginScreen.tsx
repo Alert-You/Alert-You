@@ -1,4 +1,4 @@
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, NativeModules, TextInput} from 'react-native';
 import {
   CloseIcon,
   FormControl,
@@ -8,7 +8,7 @@ import {
   Spinner,
   Stack,
 } from 'native-base';
-import React, {useReducer} from 'react';
+import React, {useReducer, useState} from 'react';
 import ErrorBoundary from 'react-native-error-boundary';
 
 import {MAIN} from '@/theme/colorVariants';
