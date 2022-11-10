@@ -184,9 +184,8 @@ public class ReportServiceImpl implements ReportService {
             user.updateFCM(fcmtoken);
             userRepository.save(user);
 
-            result.put("msg",SUCCESS);
+            result.put("msg", SUCCESS);
             status = HttpStatus.OK;
-
 
         } catch (Exception e) {
             result.put("msg", FAIL);
@@ -194,6 +193,13 @@ public class ReportServiceImpl implements ReportService {
         }
 
         return new ResponseEntity<>(result, status);
+    }
+
+    public ResponseEntity<Map<String, Object>> sendFCM() throws Exception {
+        // 유저의 보디가드 리스트에서 유저 아이디를 찾아옴
+        // 각 유저의 FCM 토큰을 가져와서 리스트로 만듦
+        // 해당 토큰 리스트로 FCM을 쏴줌
+        MulticastMessage
     }
 
     public User findUser(long id){
