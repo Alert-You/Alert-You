@@ -26,7 +26,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), userService))
                 .authorizeRequests()
-                .antMatchers("/api/auth/test").authenticated()
+                .antMatchers("/api/auth/signout", "/api/auth/profile", "/api/auth/update", "/api/auth/logout")
+                .authenticated()
+                .antMatchers("/api/bodyguard/**", "/api/location/**", "/api/report/**", "/api/alert/**")
+                .authenticated()
+                .antMatchers("/api/teacher/**")
+                .access("hasRole('교사')")
                 .anyRequest().permitAll();
     }
 
