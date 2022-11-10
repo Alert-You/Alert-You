@@ -14,6 +14,7 @@ import Toast from 'react-native-toast-message';
 import {styles} from './style';
 import {AudioBtn} from '../AudioBtn';
 import {nonEmergencyBgStyle} from '@/theme/Home/gradient';
+import { reportFile } from '../../api';
 
 interface AudioProps {
   navigation: any;
@@ -270,9 +271,10 @@ class Audio extends Component<AudioProps, AudioState> {
   };
 
   private onReportAudio = async () => {
-    // console.log('이 파일을 보낼 것이다.', this.state.uri);
+    console.log('이 파일을 보낼 것이다.', this.state.uri);
     if (this.state.uri) {
       // 서버로 uri 보내는 await 로직
+      reportFile(this.state.uri)
       Toast.show({
         type: 'info',
         text1: '현장 녹음 접수 완료',
