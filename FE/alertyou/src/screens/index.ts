@@ -21,3 +21,6 @@ export {TeacherScreen} from './ProfileScreen';
 export {SplashScreen} from './SplashScreen';
 export {SettingScreen} from './SettingScreen';
 export {ProfileEditScreen} from './ProfileEditScreen';
+export {EditSchoolScreen} from './EditSchoolScreen';
+export {EditClassScreen} from './EditClassScreen';
+

@@ -1,22 +1,22 @@
-import {Pressable, View, Keyboard} from 'react-native';
+import {View, Keyboard, Pressable, ScrollView} from 'react-native';
 import React, {Suspense, useState} from 'react';
-import {Divider, Input, ScrollView, SearchIcon, Spinner} from 'native-base';
 import {useQuery} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
+import {Divider, Input, SearchIcon, Spinner} from 'native-base';
 import ErrorBoundary from 'react-native-error-boundary';
 
 import {MAIN} from '@/theme/colorVariants';
 
-import {styles} from './style';
-import {SchoolInfo} from './components';
 import {requestSchoolData} from './apis';
 import {schoolResponseType} from './types';
+import {styles} from './style';
+import { EditSchoolInfo } from './components';
 
-const SearchSchoolScreen = () => {
+const EditSchoolScreen = () => {
   const [school, setSchool] = useState<string>('');
   //리턴값, 에러, data에 담길 데이터, 쿼리 키 타입
   const {data, refetch, fetchStatus} = useQuery<schoolResponseType, AxiosError>(
-    ['schoolList'],
+    ['editSchoolList'],
     () => requestSchoolData(school),
     {
       suspense: true,
@@ -61,10 +61,10 @@ const SearchSchoolScreen = () => {
           <View style={styles.schoolListContainer}>
             {fetchStatus === 'idle' || fetchStatus !== 'fetching' ? (
               <ScrollView style={styles.scrollViewContainer}>
-                <Divider mb="3" />
+                <Divider mb="3"/>
                 {data?.schools.map((item, idx) => {
                   return (
-                    <SchoolInfo
+                    <EditSchoolInfo
                       address={item.address}
                       name={item.name}
                       key={`schoolKey ${idx}`}
@@ -83,4 +83,4 @@ const SearchSchoolScreen = () => {
   );
 };
 
-export default SearchSchoolScreen;
+export default EditSchoolScreen;

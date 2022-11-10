@@ -16,13 +16,13 @@ export const styles = StyleSheet.create({
     color: MAIN.mainFont,
     fontWeight: 'bold',
   },
-  selectButton: {
-    flex: 1,
-  },
   schoolAddress: {
     fontSize: 12,
     marginLeft: 4,
     color: MAIN.mainFont,
     fontWeight: 'bold',
+  },
+  selectButton: {
+    flex: 1,
   },
 });

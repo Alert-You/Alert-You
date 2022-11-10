@@ -14,4 +14,7 @@ export const styles = StyleSheet.create({
   phoneContainer: {
     flexDirection: 'row',
   },
+  spinnerButtonStyle: {
+    marginTop: 16,
+  },
 });
