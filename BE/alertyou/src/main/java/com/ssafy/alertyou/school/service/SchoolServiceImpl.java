@@ -38,17 +38,21 @@ public class SchoolServiceImpl implements SchoolService {
                 }
 
             }
-            List<SchoolSearchResDto> ress = new ArrayList<>();
-            if (res.size() >= 100){
-                ress = new ArrayList<>(res).subList(0,100);
+            List<SchoolSearchResDto> beforeRes = new ArrayList<>(res);
+            beforeRes.sort(Comparator.naturalOrder());
+
+            List<SchoolSearchResDto> afterRes = new ArrayList<>();
+
+            if (beforeRes.size() >= 100){
+                afterRes = new ArrayList<>(res).subList(0,100);
             }else {
-                ress = new ArrayList<>(res);
+                afterRes = new ArrayList<>(res);
             }
-            System.out.println(ress.size());
-            ress.sort(Comparator.naturalOrder());
-            Collections.sort(ress);
+
+            afterRes.sort(Comparator.naturalOrder());
+
             result.put("msg", SUCCESS);
-            result.put("schools", ress);
+            result.put("schools", afterRes);
             status = HttpStatus.OK;
         } catch (Exception e) {
             result.put("msg", FAIL);
