@@ -1,6 +1,8 @@
 package com.ssafy.alertyou.alert.controller;
 
+import com.ssafy.alertyou.alert.dto.FCMReqDto;
 import com.ssafy.alertyou.alert.service.AlertService;
+import com.ssafy.alertyou.report.dto.ReportVictimReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,5 +29,10 @@ public class AlertController {
     @PutMapping(value = "/allcheck")
     public ResponseEntity<Map<String, Object>> AlertListModify(@RequestHeader(value = "Authorization") String token) throws Exception{
         return alertService.modifyAlertList(token);
+    }
+
+    @PutMapping(value = "/fcmtoken")
+    public ResponseEntity<Map<String, Object>> FCMTokenAdd(@RequestHeader(value = "Authorization") String token, @RequestBody FCMReqDto fcmReqDto) throws Exception{
+        return alertService.addFCMToken(token, fcmReqDto);
     }
 }

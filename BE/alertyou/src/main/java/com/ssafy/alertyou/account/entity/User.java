@@ -70,6 +70,8 @@ public class User {
 
     private boolean active;
 
+    private String fcmToken;
+
 
     public void updateAccount(UserSignupReqDto userSignupReqDto, School school, String newPassword) { // 회원 수정 메서드(setter 사용을 피하기 위함)
         this.phone = userSignupReqDto.getPhone();
@@ -78,6 +80,10 @@ public class User {
         this.role = "student";
         this.username = userSignupReqDto.getUsername();
         this.password = newPassword;
+    }
+
+    public void updateFCM(String token){
+        this.fcmToken = token;
     }
 
     public void deleteSchool(User user, School school) { // 회원 수정 메서드(setter 사용을 피하기 위함)

@@ -67,13 +67,6 @@ public class BodyGuardServiceImpl implements BodyGuardService {
         return new ResponseEntity<>(result, status);
     }
 
-
-
-    public User findUser(long id){
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
-    }
-
     //보디가드 등록 및 해제
     public ResponseEntity<Map<String, Object>> addBodyGuard(String token, long id) throws Exception{
 
@@ -128,6 +121,11 @@ public class BodyGuardServiceImpl implements BodyGuardService {
         }
 
         return new ResponseEntity<>(result, status);
+    }
+
+    public User findUser(long id){
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
     }
 
     public User findUserByPhone(String phone){
