@@ -12,6 +12,5 @@ export const reportVictim = async (
   const result = await AxiosInstance.post('report/victim', location)
     .then(response => response)
     .catch(err => err);
-  console.log('result: ', result);
-  return result['data'];
+  return result.data;
 };

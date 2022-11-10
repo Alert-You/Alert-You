@@ -33,10 +33,8 @@ const MainBtn = ({isEmergency}: props) => {
 
   const {location} = useCurrentLocation();
   const showEmergencyToast = async () => {
-    console.log('location: ', location);
     if (location) {
       const response = await reportVictim(location);
-      console.log('response: ', response);
       if (response.msg === 'SUCCESS') {
         Toast.show(emergencyToastProps);
       } else {
