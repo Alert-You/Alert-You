@@ -67,7 +67,7 @@ public class UserService {
     // 유저 정보 조회
     public UserInfoResDto getUserInfo(String phone) {
         User user = userRepository.findByPhone(phone);
-        boolean ret = coGuardRepository.findByCoGuard(user).isPresent(); // 보디가드 역할인지 확인
+        boolean ret = coGuardRepository.findAllByCoGuard(user).isEmpty(); // 보디가드 역할인지 확인
         String role = user.getRole();
         School school = user.getSchool();
         if (ret) { // 보디가드 역할을 부여 받았으면 보디가드를 부여

@@ -147,17 +147,13 @@ public class TeacherServiceImpl implements TeacherService{
                 .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
     }
 
-    public List<School> findSchoolAndGrade(String name, int grade){
-        return schoolRepository.findAllByNameAndGrade(name,grade);
-    }
-
     public School findSchoolById(long id){
         return schoolRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
     }
 
     public Boolean findGuard(User user){
-        if (!coGuardRepository.findByCoGuard(user).isPresent()){
+        if (coGuardRepository.findAllByCoGuard(user).isEmpty()){
             return false;
         }else {
             return true;
