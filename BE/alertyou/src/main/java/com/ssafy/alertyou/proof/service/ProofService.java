@@ -16,4 +16,6 @@ public interface ProofService {
     public ResponseEntity<byte[]> downloadProof(Long id) throws IOException;
 
     public ResponseEntity<Map<String, Object>> getProof(String token, long id) throws Exception;
+    public ResponseEntity<Map<String, Object>> uploadProofByBase64(String token, String file) throws Exception;
+
 }

@@ -1,10 +1,5 @@
 package com.ssafy.alertyou.proof.service;
 
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
-import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssafy.alertyou.account.entity.User;
@@ -12,32 +7,28 @@ import com.ssafy.alertyou.account.jwt.JwtProperties;
 import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.proof.config.S3Util;
+import com.ssafy.alertyou.proof.config.S3UtilByBase64;
 import com.ssafy.alertyou.proof.dto.ProofListResDto;
 import com.ssafy.alertyou.proof.entity.Proof;
 import com.ssafy.alertyou.proof.repository.ProofRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class proofServiceImpl implements ProofService {
     private final S3Util s3Util;
+    private final S3UtilByBase64 s3UtilByBase64;
     private final String IMAGE = "image";
     private final String AUDIO = "audio";
     private final String SUCCESS = "SUCCESS";
@@ -95,6 +86,58 @@ public class proofServiceImpl implements ProofService {
         System.out.println("이건가24");
         return new ResponseEntity<>(result, status);
     }
+
+    public ResponseEntity<Map<String, Object>> uploadProofByBase64(String token, String file) throws Exception{
+        System.out.println("제발1");
+        Map<String, Object> result = new HashMap<>();
+        System.out.println("제발2");
+        HttpStatus status;
+        System.out.println("제발3");
+        String type = new String();
+        System.out.println("제발4");
+        Boolean ctype = null;
+        System.out.println("제발5");
+        User user = findUserByPhone(decodeToken(token));
+        System.out.println("제발6");
+        String uId = String.valueOf(user.getId());
+        System.out.println("제발7");
+        String[] seperate = file.split(";");
+        System.out.println("제발8");
+        String endPoint = seperate[0];
+        System.out.println("제발9");
+        String bFile = seperate[1];
+        System.out.println("제발10");
+        System.out.println(bFile.length());
+        System.out.println("제발11");
+        byte[] newFile = Base64.getMimeDecoder().decode(bFile);
+        System.out.println("제발12");
+        if (endPoint.contains("image")){
+            type = IMAGE;
+            ctype = true;
+            System.out.println("제발13");
+        }else if (endPoint.contains("audio")){
+            type = AUDIO;
+            ctype = false;
+            System.out.println("제발14");
+        }
+        System.out.println("제발15");
+        String url = s3UtilByBase64.upload(newFile,type+"/"+uId);
+        System.out.println("제발16");
+        try {
+            System.out.println("제발17");
+            Long res = proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
+            result.put("msg",SUCCESS);
+            status = HttpStatus.CREATED;
+        } catch (Exception e){
+            System.out.println("제발18");
+            result.put("msg",FAIL);
+            result.put("error",e.getStackTrace());
+            status = HttpStatus.BAD_REQUEST;
+        }
+        System.out.println("제발19");
+        return new ResponseEntity<>(result, status);
+    }
+
 
     public ResponseEntity<byte[]> downloadProof(Long id) throws IOException {
         Proof proof = findProof(id);
