@@ -9,6 +9,7 @@ import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.proof.config.S3Util;
 import com.ssafy.alertyou.proof.config.S3UtilByBase64;
 import com.ssafy.alertyou.proof.dto.ProofListResDto;
+import com.ssafy.alertyou.proof.dto.ProofUploadReqDto;
 import com.ssafy.alertyou.proof.entity.Proof;
 import com.ssafy.alertyou.proof.repository.ProofRepository;
 import lombok.RequiredArgsConstructor;
@@ -87,7 +88,7 @@ public class proofServiceImpl implements ProofService {
         return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String, Object>> uploadProofByBase64(String token, String file) throws Exception{
+    public ResponseEntity<Map<String, Object>> uploadProofByBase64(String token, ProofUploadReqDto file) throws Exception{
         System.out.println("제발1");
         Map<String, Object> result = new HashMap<>();
         System.out.println("제발2");
@@ -101,17 +102,18 @@ public class proofServiceImpl implements ProofService {
         System.out.println("제발6");
         String uId = String.valueOf(user.getId());
         System.out.println("제발7");
-        String[] seperate = file.split(";");
+        String orgFile = file.getFile();
+        String[] seperateFile = orgFile.split(";");
         System.out.println("제발8");
-        String point = seperate[0];
+        String point = seperateFile[0];
         String endPoint = point.substring(point.lastIndexOf('"')+1);
         String S3Point = endPoint.substring(endPoint.lastIndexOf("/")+1);
         System.out.println("제발9");
-        String bFile = seperate[1];
+        String baseFile = seperateFile[1];
         System.out.println("제발10");
-        System.out.println(bFile.length());
+        System.out.println(baseFile.length());
         System.out.println("제발11");
-        byte[] newFile = Base64.getMimeDecoder().decode(bFile);
+        byte[] newFile = Base64.getMimeDecoder().decode(baseFile);
         System.out.println("제발12");
         if (endPoint.contains("image")){
             type = IMAGE;
