@@ -1,16 +1,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Widget.Alertyou.AppWidget.Container"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:theme="@style/AppTheme.AppWidgetContainer">
 
-    <ImageView
-        android:id="@+id/alertButton"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_margin="0dp"
-        android:padding="0dp"
-        android:src="@drawable/alert" />
-
+    <TextView
+        android:id="@+id/appwidget_text"
+        style="@style/Widget.Alertyou.AppWidget.InnerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/appwidget_text"
+        android:text="@string/appwidget_text"
+        android:textSize="24sp"
+        android:textStyle="bold|italic" />
 </RelativeLayout>
