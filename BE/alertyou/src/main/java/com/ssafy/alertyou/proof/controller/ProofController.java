@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -25,6 +26,11 @@ public class ProofController {
         return proofService.uploadProof(token, file);
     }
 
+    @PostMapping(value = "/upload/test")
+    public ResponseEntity<Map<String, Object>> ProofUploadToBase64(@RequestHeader(value = "Authorization") String token, @RequestBody String file) throws Exception {
+        System.out.println("base64");
+        return proofService.uploadProofByBase64(token, file);
+    }
     @GetMapping(value = "/download")
     public ResponseEntity<byte[]> ProofDownload(@RequestParam("proofId") Long id ) throws IOException {
         return proofService.downloadProof(id);
