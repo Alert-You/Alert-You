@@ -1,6 +1,6 @@
 import {View, Text, Pressable} from 'react-native';
 import React from 'react';
-import {Flex, Badge} from 'native-base';
+import {Flex, Badge, ChevronRightIcon, Divider} from 'native-base';
 import {useSetRecoilState} from 'recoil';
 import {AxiosError} from 'axios';
 import {useQuery} from '@tanstack/react-query';
@@ -50,17 +50,20 @@ const SchoolInfo = ({address, name, idx}: Props) => {
     <>
       <Pressable onPress={getGradeAndClass}>
         <View style={styles.container}>
-          <Flex w="100%" direction="row" alignItems="center">
-            <Badge variant="solid" colorScheme="warning">
-              학교
-            </Badge>
-            <Text style={styles.schoolText}>{name}</Text>
-          </Flex>
-          <Flex w="100%" direction="row" alignItems="center">
-            <Badge colorScheme="warning">주소</Badge>
-            <Text style={styles.schoolText}>{address}</Text>
-          </Flex>
+          <View>
+            <Flex w="100%" direction="row" alignItems="center">
+              <Text style={styles.schoolText}>{name}</Text>
+            </Flex>
+            <Flex w="100%" direction="row" alignItems="center" mt={2}>
+              <Badge colorScheme="warning" ml={1}>
+                주소
+              </Badge>
+              <Text style={styles.schoolAddress}>{address}</Text>
+            </Flex>
+          </View>
+          <ChevronRightIcon mr="3" size="md" />
         </View>
+        <Divider mt="3" mb="3" />
       </Pressable>
     </>
   );

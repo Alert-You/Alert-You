@@ -1,6 +1,6 @@
 import {Pressable, View, Keyboard} from 'react-native';
 import React, {Suspense, useState} from 'react';
-import {Input, ScrollView, SearchIcon, Spinner} from 'native-base';
+import {Divider, Input, ScrollView, SearchIcon, Spinner} from 'native-base';
 import {useQuery} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 import ErrorBoundary from 'react-native-error-boundary';
@@ -59,25 +59,28 @@ const SearchSchoolScreen = () => {
       <Suspense>
         <ErrorBoundary>
           <View style={styles.schoolListContainer}>
-          {fetchStatus === 'idle' || fetchStatus !== 'fetching' ? 
-            <ScrollView style={styles.scrollViewContainer}>
-              {data?.schools.map((item, idx) => {
-                return (
-                  <SchoolInfo
-                  address={item.address}
-                    name={item.name}
-                    key={`schoolKey ${idx}`}
-                    idx={idx}
-                  />
+            {fetchStatus === 'idle' || fetchStatus !== 'fetching' ? (
+              <ScrollView style={styles.scrollViewContainer}>
+                <Divider mb="3" />
+                {data?.schools.map((item, idx) => {
+                  return (
+                    <SchoolInfo
+                      address={item.address}
+                      name={item.name}
+                      key={`schoolKey ${idx}`}
+                      idx={idx}
+                    />
                   );
-              })}
-            </ScrollView>
-            : <Spinner color={MAIN.red} size="lg"/>}
+                })}
+              </ScrollView>
+            ) : (
+              <Spinner color={MAIN.red} size="lg" />
+            )}
           </View>
         </ErrorBoundary>
       </Suspense>
-      </View>
-      );
+    </View>
+  );
 };
 
 export default SearchSchoolScreen;

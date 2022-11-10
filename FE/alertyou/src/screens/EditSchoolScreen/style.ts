@@ -12,7 +12,6 @@ export const styles = StyleSheet.create({
   },
   schoolListContainer: {
     flex: 1,
-    marginHorizontal: 16,
     marginVertical: 16,
     justifyContent: 'center'
   },

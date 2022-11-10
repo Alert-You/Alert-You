@@ -2,7 +2,7 @@ import {View, Keyboard, Pressable, ScrollView} from 'react-native';
 import React, {Suspense, useState} from 'react';
 import {useQuery} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
-import {Input, SearchIcon, Spinner} from 'native-base';
+import {Divider, Input, SearchIcon, Spinner} from 'native-base';
 import ErrorBoundary from 'react-native-error-boundary';
 
 import {MAIN} from '@/theme/colorVariants';
@@ -61,6 +61,7 @@ const EditSchoolScreen = () => {
           <View style={styles.schoolListContainer}>
             {fetchStatus === 'idle' || fetchStatus !== 'fetching' ? (
               <ScrollView style={styles.scrollViewContainer}>
+                <Divider mb="3"/>
                 {data?.schools.map((item, idx) => {
                   return (
                     <EditSchoolInfo
