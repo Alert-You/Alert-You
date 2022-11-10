@@ -1,22 +1,38 @@
 import React, { Suspense, useState } from 'react'
-import { Center, Pressable, Text, View, Circle, Button, Modal } from 'native-base'
+import { Center, Pressable, Text, View, Circle, Button, Modal, Spinner } from 'native-base'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import NaverMapView, { Marker, Path } from "react-native-nmap"
 
 import { useRoute, RouteProp } from '@react-navigation/native'
 import { NoticeParamList } from '@/navigations/NoticeNavigation/NoticeNavigation'
 import { useQuery } from '@tanstack/react-query';
+import { useCurrentLocation } from '@/hooks/useCurrentLocation';
+
 
 import { styles } from './style';
 import { getNoticeItem } from './api';
+import { Dimensions } from 'react-native';
 
 type Props = {
   navigation: any
 }
 
+
+
 const NoticeMap = ({ navigation }: Props) => {
   const reportId = useRoute<RouteProp<NoticeParamList>>().params?.reportId
   const [showModal, setShowModal] = useState(true);
+  const [myPosition, setMyPosition] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+  const [reportPosition, setReportPositon] = useState<{
+    latitude: number;
+    longitude: number;
+  } | null>(null);
+
+
+  const { location } = useCurrentLocation();
   const { data } = useQuery(['getNoticeItem'], () => getNoticeItem(reportId),
     {
       suspense: true,
@@ -29,12 +45,22 @@ const NoticeMap = ({ navigation }: Props) => {
         console.log(e);
       }
     })
+  console.log(location, data)
   const writeDay = new Date(data?.noticeDateTime + '')
   const convertDay = writeDay.getFullYear() + '년 ' + (writeDay.getMonth() + 1) + '월 ' + writeDay.getDate() + '일 ' + writeDay.getHours() + '시 ' + writeDay.getMinutes() + '분'
   // 차후에 내 위치 정보, 신고자 위치 정보로 갈아끼워야 함
-  const start = { latitude: 36.35523, longitude: 127.29809 }
-  const end = { latitude: 36.35599, longitude: 127.29983 }
+
+  if (!location || !data) {
+    return (
+      <Center justifyContent="center" flex={1}>
+        <Spinner size="lg" />
+      </Center>
+    )
+  }
+
   return (
+
+
     <Suspense>
       <View style={{ flex: 1 }}>
         <View style={styles.headerBox}>
@@ -110,42 +136,45 @@ const NoticeMap = ({ navigation }: Props) => {
 
           {/* 네이버 지도 들어가는 부분 */}
           <NaverMapView
-            style={{ width: '100%', height: '100%' }}
+            style={{
+              width: Dimensions.get('window').width,
+              height: Dimensions.get('window').height - 110
+            }}
             // 내 위치 찾기 버튼
             showsMyLocationButton={true}
             // + - 버튼으로 줌 컨드롤 하는 기능
-            zoomControl={false}
+            zoomControl={true}
             center={{
-              zoom: 16,
+              zoom: 15,
               tilt: 0,
-              latitude: (start.latitude + end.latitude) / 2,
-              longitude: (start.longitude + end.longitude) / 2,
+              latitude: (location.latitude + data.latitude) / 2,
+              longitude: (location.longitude + data.longitude) / 2,
             }}>
             <Marker
               coordinate={{
-                latitude: start.latitude,
-                longitude: start.longitude,
+                latitude: location.latitude,
+                longitude: location.longitude,
               }}
               pinColor="blue"
               caption={{
                 text: '지금 내 위치',
-                color: 'black'
+                color: 'black',
               }}
             />
             <Path
               color='blue'
               coordinates={[
                 {
-                  latitude: start.latitude,
-                  longitude: start.longitude,
+                  latitude: location.latitude,
+                  longitude: location.longitude,
                 },
-                { latitude: end.latitude, longitude: end.longitude },
+                { latitude: data.latitude, longitude: data.longitude },
               ]}
             />
             <Marker
               coordinate={{
-                latitude: end.latitude,
-                longitude: end.longitude
+                latitude: data.latitude,
+                longitude: data.longitude
               }}
               pinColor="red"
               caption={{
