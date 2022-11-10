@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Widget.Alertyou.AppWidget.Container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:theme="@style/AppTheme.AppWidgetContainer">
 
     <TextView
@@ -16,4 +16,11 @@
         android:text="@string/appwidget_text"
         android:textSize="24sp"
         android:textStyle="bold|italic" />
+
+    <Button
+        android:id="@+id/appwidget_button"
+        android:layout_width="wrap_content"
+        android:background="@android:color/holo_red_dark"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true" />
 </RelativeLayout>
