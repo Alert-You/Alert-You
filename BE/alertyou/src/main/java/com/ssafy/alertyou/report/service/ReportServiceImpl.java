@@ -230,7 +230,9 @@ public class ReportServiceImpl implements ReportService {
             status = HttpStatus.OK;
         } catch (Exception e) {
             result.put("msg", FAIL);
-            status = HttpStatus.BAD_REQUEST;
+            result.put("why", e.getMessage());
+            result.put("why2", e.getStackTrace());
+;            status = HttpStatus.BAD_REQUEST;
         }
         return new ResponseEntity<>(result, status);
     }
