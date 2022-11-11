@@ -128,6 +128,7 @@ public class ReportServiceImpl implements ReportService {
                 guardToken.add(findUser(guardUser.getId()).getFcmToken());
             }
 
+            System.out.println(guardToken);
             System.out.println("================= 체크 1 =======================");
 
             MulticastMessage message = MulticastMessage.builder()
@@ -136,15 +137,15 @@ public class ReportServiceImpl implements ReportService {
                     .addAllTokens(guardToken)
                     .build();
 
-            System.out.println("================= 체크 1 =======================");
+            System.out.println("================= 체크 2 =======================");
 
             BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
 
-            System.out.println("================= 체크 1 =======================");
+            System.out.println("================= 체크 3 =======================");
 
             System.out.println(response.getSuccessCount() + " messages were sent successfully");
 
-            System.out.println("================= 체크 1 =======================");
+            System.out.println("================= 체크 4 =======================");
 
             result.put("msg", SUCCESS);
             status = HttpStatus.OK;
