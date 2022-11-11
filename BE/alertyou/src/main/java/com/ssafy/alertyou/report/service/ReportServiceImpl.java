@@ -128,13 +128,23 @@ public class ReportServiceImpl implements ReportService {
                 guardToken.add(findUser(guardUser.getId()).getFcmToken());
             }
 
+            System.out.println("================= 체크 1 =======================");
+
             MulticastMessage message = MulticastMessage.builder()
                     .putData("data", "test")
                     .putData("data2", "test2")
                     .addAllTokens(guardToken)
                     .build();
+
+            System.out.println("================= 체크 1 =======================");
+
             BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
+
+            System.out.println("================= 체크 1 =======================");
+
             System.out.println(response.getSuccessCount() + " messages were sent successfully");
+
+            System.out.println("================= 체크 1 =======================");
 
             result.put("msg", SUCCESS);
             status = HttpStatus.OK;
