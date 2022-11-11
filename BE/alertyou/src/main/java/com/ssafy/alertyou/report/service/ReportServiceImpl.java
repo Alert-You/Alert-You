@@ -225,6 +225,7 @@ public class ReportServiceImpl implements ReportService {
                     .build();
             BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
             System.out.println(response.getSuccessCount() + " messages were sent successfully");
+
             result.put("msg", SUCCESS);
             status = HttpStatus.OK;
         } catch (Exception e) {
