@@ -15,7 +15,7 @@ interface PropsType {
 const CameraCheckScreen = ({navigation}: PropsType) => {
   const uri = useRoute<RouteProp<HomeParamList>>().params?.uri;
   const reportImage = (imgURI: string|undefined) => {
-    const fileURI = `file://${imgURI}`;
+    const fileURI = `${imgURI}`;
     console.log('fileURI: ', fileURI);
     reportFile(fileURI)
     Toast.show({

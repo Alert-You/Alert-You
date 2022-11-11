@@ -46,41 +46,60 @@ export const reportFile = async (file: any) => {
   console.log('file:', typeof file, file);
   const extension = findExtension(file) === 'mp4' ? 'mp4' : 'jpg';
   const fileType = extension === 'mp4' ? 'audio' : 'image';
+  // let fileData = {
+  //   uri: file,
+  //   type: 'image/jpg',
+  //   name: `${new Date().getTime()}.${extension}`,
+  // };
+  // console.log('아니뭔데 안나와')
+  // const response = await fetch(file);
+  // const blob = await response.blob();
   let fileData = {
     uri: file,
-    type: 'image/jpg',
+    type: `${fileType}/${extension}`,
     name: `${new Date().getTime()}.${extension}`,
   };
   const fileFormData = new FormData();
-  console.log('fileFormData: ', typeof fileFormData, fileFormData);
-  fileFormData.append(fileType, fileData);
-  console.log('fileFormData: ', typeof fileFormData, fileFormData);
+  fileFormData.append('file', fileData);
   try {
     const token = await getAccessToken();
-    const result = await axios.post<fileType>(
-      `${BASE_URL}proof/upload`,
-      fileFormData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          // 'Content-Type': 'multipart/form-data',
-        },
+    const result = await fetch(`${BASE_URL}proof/upload`, {
+      method: 'POST',
+      body: fileFormData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
-    );
+    });
+    // const result = await axios.post<fileType>(
+    //   `${BASE_URL}proof/upload`,
+    //   {file: fileFormData},
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //       'Content-Type':
+    //         'multipart/form-data; boundary=someArbitraryUniqueString',
+    //     },
+    //     transformRequest: (data, headers) => {
+    //       return data;
+    //     },
+    //   },
+    // );
     console.log('result : ', result);
-    return result.data;
+    return result;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.log('error.request: ', error.request);
-      console.log('error.response: ', error.response);
-      console.log('error.config: ', error.config);
-      console.log('error message: ', error.message);
-      // 👇️ error: AxiosError<any, any>
-      return error.message;
-    } else {
-      console.log('unexpected error: ', error);
-      return 'An unexpected error occurred';
-    }
+    console.log(error);
+    // if (axios.isAxiosError(error)) {
+    //   console.log('error.request: ', error.request);
+    //   console.log('error.response: ', error.response);
+    //   console.log('error.config: ', error.config);
+    //   console.log('error message: ', error.message);
+    //   // 👇️ error: AxiosError<any, any>
+    //   return error.message;
+    // } else {
+    //   console.log('unexpected error: ', error);
+    //   return 'An unexpected error occurred';
+    // }
   }
 };
 
