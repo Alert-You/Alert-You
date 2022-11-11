@@ -1,10 +1,8 @@
 package com.ssafy.alertyou.report.controller;
 
 import com.ssafy.alertyou.report.dto.FCMReqDto;
-import com.ssafy.alertyou.report.dto.LocationReqDto;
 import com.ssafy.alertyou.report.dto.ReportVictimReqDto;
 import com.ssafy.alertyou.report.dto.ReportWitnessReqDto;
-import com.ssafy.alertyou.report.service.FCMessageService;
 import com.ssafy.alertyou.report.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import java.util.Map;
 public class ReportController {
 
     private final ReportService reportService;
-    private final FCMessageService fcMessageService;
 
     @GetMapping(value = "/list")
     public ResponseEntity<Map<String, Object>> ReportList(@RequestParam("userId") long id) throws Exception{
@@ -32,7 +29,6 @@ public class ReportController {
 
     @PostMapping("/victim")
     public ResponseEntity<Map<String, Object>> ReportVictimAdd(@RequestHeader(value = "Authorization") String token, @RequestBody ReportVictimReqDto reportVictimReqDto) throws Exception {
-        fcMessageService.sendMessage2();
         return reportService.addReportVictim(token, reportVictimReqDto);
     }
 
@@ -46,11 +42,11 @@ public class ReportController {
         return reportService.addFCMToken(token, fcmReqDto);
     }
 
-    @PostMapping(value="/test")
-    public ResponseEntity<Map<String, Object>> FCMTokenSend(@RequestHeader(value = "Authorization") String token) throws Exception{
-        System.out.println("work?1");
-        fcMessageService.sendMessage2();
-        System.out.println("work?2");
-        return null;
-    }
+//    @PostMapping(value="/test")
+//    public ResponseEntity<Map<String, Object>> FCMTokenSend(@RequestHeader(value = "Authorization") String token) throws Exception{
+//        System.out.println("work?1");
+//        fcMessageService.sendMessage2();
+//        System.out.println("work?2");
+//        return null;
+//    }
 }
