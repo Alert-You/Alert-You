@@ -14,6 +14,7 @@ import ErrorBoundary from 'react-native-error-boundary';
 import {MAIN} from '@/theme/colorVariants';
 import {LogoImage, SpinnerButton} from '@/components';
 import {useLogIn} from '@/hooks';
+import SharedGroupPreferences from 'react-native-shared-group-preferences';
 
 import {styles} from './style';
 import {
@@ -23,6 +24,8 @@ import {
   onFailHandler,
   phoneValidation,
 } from './functions';
+
+const SharedStorage = NativeModules.SharedStorage;
 
 const LoginScreen = ({navigation}: any) => {
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
@@ -59,6 +62,11 @@ const LoginScreen = ({navigation}: any) => {
 
   const moveToSignUp = () => {
     navigation.navigate('SignUp');
+  };
+
+  const [text, setText] = useState('');
+  const handleSubmit = async () => {
+    SharedStorage.set(JSON.stringify({text}));
   };
 
   return (
@@ -130,6 +138,13 @@ const LoginScreen = ({navigation}: any) => {
             onPress={() =>
               loginMutate({phone: '01012345678', password: 'asd123'})
             }
+          />
+          <TextInput
+            onChangeText={newText => setText(newText)}
+            value={text}
+            returnKeyType="send"
+            onEndEditing={handleSubmit}
+            placeholder="Enter the text to display on the Widget"
           />
         </View>
       </KeyboardAvoidingView>
