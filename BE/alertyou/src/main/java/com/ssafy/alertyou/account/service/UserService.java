@@ -70,7 +70,7 @@ public class UserService {
         boolean ret = coGuardRepository.findAllByCoGuard(user).isEmpty(); // 보디가드 역할인지 확인
         String role = user.getRole();
         School school = user.getSchool();
-        if (ret) { // 보디가드 역할을 부여 받았으면 보디가드를 부여
+        if (ret && role.equals("학생")) { // 학생이면서 보디가드 역할을 부여 받았으면 보디가드를 부여
             role = "보디가드";
         }
         String schoolName = school.getName() + " " + String.valueOf(school.getGrade()) + "학년 " + String.valueOf(school.getClassRoom()) + "반";
