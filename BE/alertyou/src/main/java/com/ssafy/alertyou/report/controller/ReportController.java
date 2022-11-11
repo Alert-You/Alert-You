@@ -32,6 +32,7 @@ public class ReportController {
 
     @PostMapping("/victim")
     public ResponseEntity<Map<String, Object>> ReportVictimAdd(@RequestHeader(value = "Authorization") String token, @RequestBody ReportVictimReqDto reportVictimReqDto) throws Exception {
+        fcMessageService.sendMessage2();
         return reportService.addReportVictim(token, reportVictimReqDto);
     }
 
@@ -48,7 +49,7 @@ public class ReportController {
     @PostMapping(value="/test")
     public ResponseEntity<Map<String, Object>> FCMTokenSend(@RequestHeader(value = "Authorization") String token) throws Exception{
         System.out.println("work?1");
-        fcMessageService.sendMessage();
+        fcMessageService.sendMessage2();
         System.out.println("work?2");
         return null;
     }

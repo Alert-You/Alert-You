@@ -1,5 +1,7 @@
 package com.ssafy.alertyou.report.service;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.Message;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,14 +37,13 @@ public class FCMessageService {
         // 모바일기기에서 얻음
         String _token = "cO92x2HsT0-A0ll01iUeDd:APA91bG77LkusG2eEkXM3Kd9hjrtlnHBdhgP2L394kLaJ8kvBx6qLz7qvltSbw7ixsWy2WXlekAQRpEdN0DeLLg9eTPIDogN7Jvpxn5n1bDdq5dwiIk9oJXT3y5HpE-vuPqYBT4e2NWH"; // 개인
 
-
         final String apiKey = AUTH_KEY_FCM;
         URL url = new URL(API_URL_FCM);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/json");
-        conn.setRequestProperty("Authorization", "key=" + apiKey);
+//        conn.setRequestProperty("Authorization", "key=" + apiKey);
 
         conn.setDoOutput(true);
 
@@ -79,5 +80,17 @@ public class FCMessageService {
         in.close();
         // print result
         System.out.println(response.toString());
+    }
+
+    public void sendMessage2() {
+        String token = "cO92x2HsT0-A0ll01iUeDd:APA91bG77LkusG2eEkXM3Kd9hjrtlnHBdhgP2L394kLaJ8kvBx6qLz7qvltSbw7ixsWy2WXlekAQRpEdN0DeLLg9eTPIDogN7Jvpxn5n1bDdq5dwiIk9oJXT3y5HpE-vuPqYBT4e2NWH"; // 개인
+
+        Message message = Message.builder()
+                .putData("title", "판매 완료 알림")
+                .putData("content", "등록하신 판매 입찰이 낙찰되었습니다.")
+                .setToken(token)
+                .build();
+        FirebaseMessaging.getInstance().sendAsync(message);
+//        send(message);
     }
 }
