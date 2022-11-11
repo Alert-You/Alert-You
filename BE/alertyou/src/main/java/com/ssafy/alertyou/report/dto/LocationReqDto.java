@@ -14,11 +14,4 @@ public class LocationReqDto {
 
     @ApiModelProperty(name="위도", example = "36.35599")
     private double latitude; // 위도(latitude): 가로선(y축)
-
-    @Getter
-    public static class FCMReqDto {
-
-        private String fcmToken;
-
-    }
 }
