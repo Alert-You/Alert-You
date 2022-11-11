@@ -15,6 +15,6 @@ public interface ReportService {
     public ResponseEntity<Map<String, Object>> addReportVictim(String token, ReportVictimReqDto reportVictimReqDto) throws Exception;
     public ResponseEntity<Map<String, Object>> addReportWitness(String token, ReportWitnessReqDto reportWitnessReqDto) throws Exception;
     public ResponseEntity<Map<String, Object>> addFCMToken(String token, FCMReqDto fcmResDto) throws Exception;
-    public ResponseEntity<Map<String, Object>> sendFCM(String token) throws Exception;
+//    public ResponseEntity<Map<String, Object>> sendFCM(String token) throws Exception;
 
 }

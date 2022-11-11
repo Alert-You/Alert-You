@@ -43,8 +43,8 @@ public class ReportController {
         return reportService.addFCMToken(token, fcmReqDto);
     }
 
-    @PostMapping(value="/sendfcmtoken")
-    public ResponseEntity<Map<String, Object>> FCMTokenSend(@RequestHeader(value = "Authorization") String token) throws Exception{
-        return reportService.sendFCM(token);
-    }
+//    @PostMapping(value="/sendfcmtoken")
+//    public ResponseEntity<Map<String, Object>> FCMTokenSend(@RequestHeader(value = "Authorization") String token) throws Exception{
+//        return reportService.sendFCM(token);
+//    }
 }
