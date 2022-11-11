@@ -11,13 +11,10 @@ import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.alert.entity.Alert;
 import com.ssafy.alertyou.alert.repository.AlertRepository;
-import com.ssafy.alertyou.bodyguard.dto.BodyGuardResDto;
 import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.entity.Opguard;
 import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.bodyguard.repository.OpGuardRepository;
-import com.ssafy.alertyou.bodyguard.service.BodyGuardService;
-import com.ssafy.alertyou.bodyguard.service.BodyGuardServiceImpl;
 import com.ssafy.alertyou.report.dto.*;
 import com.ssafy.alertyou.report.repository.ReportRepository;
 import com.ssafy.alertyou.report.entity.Report;
@@ -118,34 +115,36 @@ public class ReportServiceImpl implements ReportService {
             addAlert(alertReportId, user);
 
             // fcm 토큰 처리
-            List<String> guardToken = new ArrayList<>();
+//            List<String> guardToken = new ArrayList<>();
             Report report = findReport(alertReportId);
 
             List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
 
-            for(Alert alert : alertList){
+            for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
-                guardToken.add(findUser(guardUser.getId()).getFcmToken());
+                String fcmToken = findUser(guardUser.getId()).getFcmToken();
+                FCMService.sendFCMMessage(fcmToken); // fcm메세지를 보냄
+//                guardToken.add(findUser(guardUser.getId()).getFcmToken());
             }
 
-            System.out.println(guardToken);
-            System.out.println("================= 체크 1 =======================");
-
-            MulticastMessage message = MulticastMessage.builder()
-                    .putData("data", "test")
-                    .putData("data2", "test2")
-                    .addAllTokens(guardToken)
-                    .build();
-
-            System.out.println("================= 체크 2 =======================");
-
-            BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
-
-            System.out.println("================= 체크 3 =======================");
-
-            System.out.println(response.getSuccessCount() + " messages were sent successfully");
-
-            System.out.println("================= 체크 4 =======================");
+//            System.out.println(guardToken);
+//            System.out.println("================= 체크 1 =======================");
+//
+//            MulticastMessage message = MulticastMessage.builder()
+//                    .putData("data", "test")
+//                    .putData("data2", "test2")
+//                    .addAllTokens(guardToken)
+//                    .build();
+//
+//            System.out.println("================= 체크 2 =======================");
+//
+//            BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
+//
+//            System.out.println("================= 체크 3 =======================");
+//
+//            System.out.println(response.getSuccessCount() + " messages were sent successfully");
+//
+//            System.out.println("================= 체크 4 =======================");
 
             result.put("msg", SUCCESS);
             status = HttpStatus.OK;
@@ -322,8 +321,5 @@ public class ReportServiceImpl implements ReportService {
             }
         }
     }
-
-
-
 
 }
