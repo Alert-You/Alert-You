@@ -185,6 +185,9 @@ class Audio extends Component<AudioProps, AudioState> {
   private onStopRecord = async () => {
     const result = await this.audioRecorderPlayer.stopRecorder();
     this.audioRecorderPlayer.removeRecordBackListener();
+    if (this.props.isEmergency) {
+      this.onReportAudio();
+    }
     this.setState({
       recordSecs: 0,
     });
