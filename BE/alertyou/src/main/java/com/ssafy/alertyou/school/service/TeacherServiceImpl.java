@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.ssafy.alertyou.util.Util.decodeToken;
+
 @Service
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService{
@@ -37,11 +39,8 @@ public class TeacherServiceImpl implements TeacherService{
 
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
-    private final String ROLE = "student";
-//    private final String ROLE = "학생";
-
     private final String GUARD = "보디가드";
-    private final String STUDENT = "학급원";
+    private final String STUDENT = "학생";
 
     public ResponseEntity<Map<String, Object>> getClasses(String token,Integer grade, String classRoom) throws Exception{
         HttpStatus status = null;
@@ -61,7 +60,7 @@ public class TeacherServiceImpl implements TeacherService{
                 school = findSchool(user.getSchool().getAddress(), grade, classRoom);
             }
             if (list.isEmpty()){
-                List<User> userList = userRepository.findAllBySchoolAndRole(school,ROLE);
+                List<User> userList = userRepository.findAllBySchoolAndRole(school,STUDENT);
                 for (User student : userList){
                     // user 객체로 기본 정보를 주고, 선생님이 선택한 보디가드인지 확인하는 로직 필요
                     // 보디가드 확인하는 로직 : findCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
@@ -171,9 +170,4 @@ public class TeacherServiceImpl implements TeacherService{
         return userRepository.findByPhone(phone);
     }
 
-    public String decodeToken(String token) throws Exception{
-        JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
-        DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
-        return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
-    }
 }
