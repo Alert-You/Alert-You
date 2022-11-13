@@ -14,12 +14,22 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
 @Service
 public class VerificationService {
+
+    @Value("${naver.cloud.sms.accesskey}")
+    private String accessKey; // 네이버 클라우드 플랫폼 회원에게 발급되는 개인 인증키 // Access Key : https://www.ncloud.com/mypage/manage/info > 인증키 관리 > Access Key ID
+
+    @Value("${naver.cloud.sms.secretkey}")
+    private String secretKey; // 개인 인증키 옆에 [보기]를 통해 얻을 수 있는 Secret Key: https://www.ncloud.com/mypage/manage/info > 인증키 관리 > Secret Key
+
+    @Value("${naver.cloud.sms.serviceid}")
+    private String serviceId; // 프로젝트에 할당된 SMS 서비스 ID // service ID : https://console.ncloud.com/sens/project > Simple & ... > Project > 서비스 ID
 
     // 랜덤 인증번호를 생성함
     public String getRandomVerificationNumber() {
@@ -92,9 +102,6 @@ public class VerificationService {
         String hostNameUrl = "https://sens.apigw.ntruss.com"; // 호스트 URL
         String requestUrl= "/sms/v2/services/"; // 요청 URL
         String requestUrlType = "/messages"; // 요청 URL
-        String accessKey = "psVncsmmkl7kNWRzIbM3"; // 네이버 클라우드 플랫폼 회원에게 발급되는 개인 인증키 // Access Key : https://www.ncloud.com/mypage/manage/info > 인증키 관리 > Access Key ID
-        String secretKey = "QBrWaPVpjKYzexR4ZNMC5UDNYZHezCDvDK9F347q"; // 개인 인증키 옆에 [보기]를 통해 얻을 수 있는 Secret Key: https://www.ncloud.com/mypage/manage/info > 인증키 관리 > Secret Key
-        String serviceId = "ncp:sms:kr:295174015969:alert-you"; // 프로젝트에 할당된 SMS 서비스 ID // service ID : https://console.ncloud.com/sens/project > Simple & ... > Project > 서비스 ID
         String method = "POST"; // 요청 method
         String timestamp = Long.toString(System.currentTimeMillis()); // current timestamp (epoch)
         requestUrl += serviceId + requestUrlType;
@@ -119,8 +126,6 @@ public class VerificationService {
 
         String body = bodyJson.toJSONString(); // String body = bodyJson.toString();
 
-        System.out.println(body);
-
         try {
             URL url = new URL(apiUrl);
 
@@ -142,7 +147,6 @@ public class VerificationService {
 
             int responseCode = con.getResponseCode();
             BufferedReader br;
-            System.out.println("responseCode" +" " + responseCode);
             if(responseCode == 202) { // 정상 호출
                 br = new BufferedReader(new InputStreamReader(con.getInputStream()));
             } else { // 에러 발생
@@ -155,8 +159,6 @@ public class VerificationService {
                 response.append(inputLine);
             }
             br.close();
-
-            System.out.println(response.toString());
 
         } catch (Exception e) {
             System.out.println(e);
