@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.ssafy.alertyou.util.Util.decodeToken;
+
 @Service
 @RequiredArgsConstructor
 public class SchoolServiceImpl implements SchoolService {
@@ -186,11 +188,6 @@ public class SchoolServiceImpl implements SchoolService {
         return userRepository.findByPhone(phone);
     }
 
-    public String decodeToken(String token) throws Exception{
-        JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
-        DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
-        return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
-    }
 
 }
 

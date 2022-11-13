@@ -25,6 +25,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.ssafy.alertyou.util.Util.decodeToken;
+
 @Service
 @RequiredArgsConstructor
 public class proofServiceImpl implements ProofService {
@@ -37,108 +39,108 @@ public class proofServiceImpl implements ProofService {
     private final ProofRepository proofRepository;
     private final UserRepository userRepository;
     public ResponseEntity<Map<String, Object>> uploadProof(String token, MultipartFile file) throws Exception{
-        System.out.println("이건가1");
+//        System.out.println("이건가1");
         Map<String, Object> result = new HashMap<>();
-        System.out.println("이건가2");
+//        System.out.println("이건가2");
         HttpStatus status;
-        System.out.println("이건가3");
+//        System.out.println("이건가3");
         String type = new String();
-        System.out.println("이건가4");
+//        System.out.println("이건가4");
         Boolean ctype = null;
-        System.out.println("이건가5");
+//        System.out.println("이건가5");
         String endPoint = file.getContentType();
-        System.out.println("이건가6");
+//        System.out.println("이건가6");
         User user = findUserByPhone(decodeToken(token));
-        System.out.println("이건가7");
+//        System.out.println("이건가7");
         String uId = String.valueOf(user.getId());
-        System.out.println("이건가8");
+//        System.out.println("이건가8");
         if (file.getContentType().contains("image")){
-            System.out.println("이건가9");
+//            System.out.println("이건가9");
              type = IMAGE;
-            System.out.println("이건가10");
+//            System.out.println("이건가10");
              ctype = true;
-            System.out.println("이건가11");
+//            System.out.println("이건가11");
         }else if (file.getContentType().contains("audio")){
-            System.out.println("이건가12");
+//            System.out.println("이건가12");
             type = AUDIO;
-            System.out.println("이건가13");
+//            System.out.println("이건가13");
              ctype = false;
         }
-        System.out.println("이건가14");
+//        System.out.println("이건가14");
         String url = s3Util.upload(file,type+"/"+uId);
-        System.out.println("이건가15");
+//        System.out.println("이건가15");
         try {
-            System.out.println("이건가16");
+//            System.out.println("이건가16");
             Long res = proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
-            System.out.println("이건가17");
+//            System.out.println("이건가17");
             result.put("msg",SUCCESS);
-            System.out.println("이건가18");
+//            System.out.println("이건가18");
             status = HttpStatus.CREATED;
-            System.out.println("이건가19");
+//            System.out.println("이건가19");
         } catch (Exception e){
-            System.out.println("이건가20");
+//            System.out.println("이건가20");
             result.put("msg",FAIL);
-            System.out.println("이건가21");
+//            System.out.println("이건가21");
             result.put("error",e.getStackTrace());
-            System.out.println("이건가22");
+//            System.out.println("이건가22");
             status = HttpStatus.BAD_REQUEST;
-            System.out.println("이건가23");
+//            System.out.println("이건가23");
         }
-        System.out.println("이건가24");
+//        System.out.println("이건가24");
         return new ResponseEntity<>(result, status);
     }
 
     public ResponseEntity<Map<String, Object>> uploadProofByBase64(String token, ProofUploadReqDto file) throws Exception{
-        System.out.println("제발1");
+//        System.out.println("제발1");
         Map<String, Object> result = new HashMap<>();
-        System.out.println("제발2");
+//        System.out.println("제발2");
         HttpStatus status;
-        System.out.println("제발3");
+//        System.out.println("제발3");
         String type = new String();
-        System.out.println("제발4");
+//        System.out.println("제발4");
         Boolean ctype = null;
-        System.out.println("제발5");
+//        System.out.println("제발5");
         User user = findUserByPhone(decodeToken(token));
-        System.out.println("제발6");
+//        System.out.println("제발6");
         String uId = String.valueOf(user.getId());
-        System.out.println("제발7");
+//        System.out.println("제발7");
         String orgFile = file.getFile();
         String[] seperateFile = orgFile.split(";");
-        System.out.println("제발8");
+//        System.out.println("제발8");
         String point = seperateFile[0];
         String endPoint = point.substring(point.lastIndexOf('"')+1);
         String S3Point = endPoint.substring(endPoint.lastIndexOf("/")+1);
-        System.out.println("제발9");
+//        System.out.println("제발9");
         String baseFile = seperateFile[1];
-        System.out.println("제발10");
+//        System.out.println("제발10");
         System.out.println(baseFile.length());
-        System.out.println("제발11");
+//        System.out.println("제발11");
         byte[] newFile = Base64.getMimeDecoder().decode(baseFile);
-        System.out.println("제발12");
+//        System.out.println("제발12");
         if (endPoint.contains("image")){
             type = IMAGE;
             ctype = true;
-            System.out.println("제발13");
+//            System.out.println("제발13");
         }else if (endPoint.contains("audio")){
             type = AUDIO;
             ctype = false;
-            System.out.println("제발14");
+//            System.out.println("제발14");
         }
-        System.out.println("제발15");
+//        System.out.println("제발15");
         String url = s3UtilByBase64.upload(newFile,S3Point,type+"/"+uId);
-        System.out.println("제발16");
+//        System.out.println("제발16");
         try {
-            System.out.println("제발17");
+//            System.out.println("제발17");
             Long res = proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
             result.put("msg",SUCCESS);
             status = HttpStatus.CREATED;
         } catch (Exception e){
-            System.out.println("제발18");
+//            System.out.println("제발18");
             result.put("msg",FAIL);
             result.put("error",e.getStackTrace());
             status = HttpStatus.BAD_REQUEST;
         }
-        System.out.println("제발19");
+//        System.out.println("제발19");
         return new ResponseEntity<>(result, status);
     }
 
@@ -206,10 +208,5 @@ public class proofServiceImpl implements ProofService {
         return userRepository.findByPhone(phone);
     }
 
-    public String decodeToken(String token) throws Exception{
-        JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
-        DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
-        return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
-    }
 
 }
