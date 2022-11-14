@@ -9,6 +9,7 @@ import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.school.dto.SchoolSearchResDto;
 import com.ssafy.alertyou.school.entity.School;
 import com.ssafy.alertyou.school.repository.SchoolRepository;
+import com.ssafy.alertyou.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class SchoolServiceImpl implements SchoolService {
 
     private final SchoolRepository schoolRepository;
     private final UserRepository userRepository;
+    private final Util util;
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
 
@@ -76,7 +78,7 @@ public class SchoolServiceImpl implements SchoolService {
             String schoolName = new String();
             System.out.println(token);
             if (token != null){
-                School school = findUserByPhone(decodeToken(token)).getSchool();
+                School school = util.findUserByPhone(decodeToken(token)).getSchool();
                 schools = schoolRepository.findAllByNameAndAddress(school.getName(), school.getAddress());
                 schoolName = school.getName();
             }else {
@@ -184,9 +186,6 @@ public class SchoolServiceImpl implements SchoolService {
                 .orElseThrow(() -> new IllegalArgumentException("School Not Found"));
     }
 
-    public User findUserByPhone(String phone){
-        return userRepository.findByPhone(phone);
-    }
 
 
 }

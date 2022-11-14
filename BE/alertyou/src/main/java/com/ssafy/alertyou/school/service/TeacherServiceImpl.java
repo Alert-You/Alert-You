@@ -15,6 +15,7 @@ import com.ssafy.alertyou.school.dto.StudentDetailResDto;
 import com.ssafy.alertyou.school.dto.StudentListResDto;
 import com.ssafy.alertyou.school.entity.School;
 import com.ssafy.alertyou.school.repository.SchoolRepository;
+import com.ssafy.alertyou.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,7 @@ import static com.ssafy.alertyou.util.Util.decodeToken;
 public class TeacherServiceImpl implements TeacherService{
     private final SchoolRepository schoolRepository;
     private final UserRepository userRepository;
+    private final Util util;
 
     private final CoGuardRepository coGuardRepository;
 
@@ -49,7 +51,7 @@ public class TeacherServiceImpl implements TeacherService{
         try {
             School school = new School();
             List<StudentListResDto> list = new ArrayList<>();
-            User user = findUserByPhone(decodeToken(token));
+            User user = util.findUserByPhone(decodeToken(token));
             //1. 만약 아무것도 들어오지 않는다면(학교이름, 학년, 반 값이 없을 경우), default로 선생님의 반 학생들을 보여줍니다 (token을 활용)
             //1-1 만약 유저가 active true이고, role이 선생님일 때에만 로직이 돌아가게 추후 설정 예정
             //2. else 분기 처리를 좀 더 자세하게 할 지 고민입니당. ex) 학년만 검색했을 때, 학년 전체의 아이들이 나와야하는가? 아니면 반도 입력해달라고 할 것인가?
@@ -94,7 +96,7 @@ public class TeacherServiceImpl implements TeacherService{
         Map<String, Object> result = new HashMap<>();
         try {
 //        1. id로 findUser 찾기
-            User user = findUser(id);
+            User user = util.findUser(id);
             School school = user.getSchool();
             String role = new String();
 //        2. 만약 CoGuard에서 선생님이 지정한 보디가드 일 때, 있다면 role = GUARD & 없다면 role = STUDENT
@@ -125,7 +127,7 @@ public class TeacherServiceImpl implements TeacherService{
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
         try {
-            User user = findUser(id);
+            User user = util.findUser(id);
             School school = findSchoolById(133683);
             user.deleteSchool(user,school);
             userRepository.save(user);
@@ -161,13 +163,5 @@ public class TeacherServiceImpl implements TeacherService{
         }
     }
 
-    public User findUser(long id){
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
-    }
-
-    public User findUserByPhone(String phone){
-        return userRepository.findByPhone(phone);
-    }
 
 }

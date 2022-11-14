@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 public class Util {
 
     private final UserRepository userRepository;
-//    public static UserRepository getRepository;
 
     public static String decodeToken(String token) throws Exception {
         JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
