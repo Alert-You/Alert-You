@@ -98,7 +98,7 @@ public class ReportServiceImpl implements ReportService {
         double longitude = reportVictimReqDto.getLongitude();
         String nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")).toString();
         String[] location = LocationService.reverseGeo(longitude, latitude);
-
+        String address = (location != null) ? location[1] : null;
         try{
             Report newReport = Report.builder()
                     .reUser(user)
@@ -106,7 +106,7 @@ public class ReportServiceImpl implements ReportService {
                     .noticeDateTime(nowTime)
                     .latitude(latitude)
                     .longitude(longitude)
-                    .location(location[1])
+                    .location(address)
                     .build();
 
             // 알람 등록: 내가 등록한 가드
@@ -138,7 +138,7 @@ public class ReportServiceImpl implements ReportService {
         String content = reportWitnessReqDto.getContent();
         String place  = reportWitnessReqDto.getPlace();
         String[] location = LocationService.reverseGeo(longitude, latitude);
-
+        String address = (location != null) ? location[1] : null;
         try{
             Report newReport = Report.builder()
                     .reUser(user)
@@ -148,12 +148,21 @@ public class ReportServiceImpl implements ReportService {
                     .longitude(longitude)
                     .content(content)
                     .place(place)
-                    .location(location[1])
+                    .location(address)
                     .build();
 
             long alertReportId = reportRepository.save(newReport).getId();
 
             addAlert(alertReportId, user);
+
+            Report report = findReport(alertReportId);
+
+            List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
+            for (Alert alert : alertList) {
+                User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
+                String fcmToken = findUser(guardUser.getId()).getFcmToken();
+                FCMService.sendFCMMessage(fcmToken); // fcm메세지를 보냄
+            }
 
             result.put("msg",SUCCESS);
             status = HttpStatus.OK;

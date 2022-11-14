@@ -12,6 +12,7 @@ import com.ssafy.alertyou.proof.dto.ProofListResDto;
 import com.ssafy.alertyou.proof.dto.ProofUploadReqDto;
 import com.ssafy.alertyou.proof.entity.Proof;
 import com.ssafy.alertyou.proof.repository.ProofRepository;
+import com.ssafy.alertyou.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,117 +31,74 @@ import static com.ssafy.alertyou.util.Util.decodeToken;
 @Service
 @RequiredArgsConstructor
 public class proofServiceImpl implements ProofService {
+    private final ProofRepository proofRepository;
+    private final Util util;
     private final S3Util s3Util;
     private final S3UtilByBase64 s3UtilByBase64;
     private final String IMAGE = "image";
     private final String AUDIO = "audio";
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
-    private final ProofRepository proofRepository;
-    private final UserRepository userRepository;
     public ResponseEntity<Map<String, Object>> uploadProof(String token, MultipartFile file) throws Exception{
-//        System.out.println("이건가1");
         Map<String, Object> result = new HashMap<>();
-//        System.out.println("이건가2");
         HttpStatus status;
-//        System.out.println("이건가3");
         String type = new String();
-//        System.out.println("이건가4");
         Boolean ctype = null;
-//        System.out.println("이건가5");
         String endPoint = file.getContentType();
-//        System.out.println("이건가6");
-        User user = findUserByPhone(decodeToken(token));
-//        System.out.println("이건가7");
+        User user = util.findUserByPhone(decodeToken(token));
         String uId = String.valueOf(user.getId());
-//        System.out.println("이건가8");
         if (file.getContentType().contains("image")){
-//            System.out.println("이건가9");
              type = IMAGE;
-//            System.out.println("이건가10");
              ctype = true;
-//            System.out.println("이건가11");
         }else if (file.getContentType().contains("audio")){
-//            System.out.println("이건가12");
             type = AUDIO;
-//            System.out.println("이건가13");
              ctype = false;
         }
-//        System.out.println("이건가14");
         String url = s3Util.upload(file,type+"/"+uId);
-//        System.out.println("이건가15");
         try {
-//            System.out.println("이건가16");
             Long res = proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
-//            System.out.println("이건가17");
             result.put("msg",SUCCESS);
-//            System.out.println("이건가18");
             status = HttpStatus.CREATED;
-//            System.out.println("이건가19");
         } catch (Exception e){
-//            System.out.println("이건가20");
             result.put("msg",FAIL);
-//            System.out.println("이건가21");
             result.put("error",e.getStackTrace());
-//            System.out.println("이건가22");
             status = HttpStatus.BAD_REQUEST;
-//            System.out.println("이건가23");
         }
-//        System.out.println("이건가24");
         return new ResponseEntity<>(result, status);
     }
 
     public ResponseEntity<Map<String, Object>> uploadProofByBase64(String token, ProofUploadReqDto file) throws Exception{
-//        System.out.println("제발1");
         Map<String, Object> result = new HashMap<>();
-//        System.out.println("제발2");
         HttpStatus status;
-//        System.out.println("제발3");
         String type = new String();
-//        System.out.println("제발4");
         Boolean ctype = null;
-//        System.out.println("제발5");
-        User user = findUserByPhone(decodeToken(token));
-//        System.out.println("제발6");
+        User user = util.findUserByPhone(decodeToken(token));
         String uId = String.valueOf(user.getId());
-//        System.out.println("제발7");
         String orgFile = file.getFile();
         String[] seperateFile = orgFile.split(";");
-//        System.out.println("제발8");
         String point = seperateFile[0];
         String endPoint = point.substring(point.lastIndexOf('"')+1);
         String S3Point = endPoint.substring(endPoint.lastIndexOf("/")+1);
-//        System.out.println("제발9");
         String baseFile = seperateFile[1];
-//        System.out.println("제발10");
         System.out.println(baseFile.length());
-//        System.out.println("제발11");
         byte[] newFile = Base64.getMimeDecoder().decode(baseFile);
-//        System.out.println("제발12");
         if (endPoint.contains("image")){
             type = IMAGE;
             ctype = true;
-//            System.out.println("제발13");
         }else if (endPoint.contains("audio")){
             type = AUDIO;
             ctype = false;
-//            System.out.println("제발14");
         }
-//        System.out.println("제발15");
         String url = s3UtilByBase64.upload(newFile,S3Point,type+"/"+uId);
-//        System.out.println("제발16");
         try {
-//            System.out.println("제발17");
             Long res = proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
             result.put("msg",SUCCESS);
             status = HttpStatus.CREATED;
         } catch (Exception e){
-//            System.out.println("제발18");
             result.put("msg",FAIL);
             result.put("error",e.getStackTrace());
             status = HttpStatus.BAD_REQUEST;
         }
-//        System.out.println("제발19");
         return new ResponseEntity<>(result, status);
     }
 
@@ -159,12 +117,12 @@ public class proofServiceImpl implements ProofService {
 
     public ResponseEntity<Map<String, Object>> getProof(String token, long id) throws Exception{
 
-        User teacher = findUserByPhone(decodeToken(token));
+        User teacher = util.findUserByPhone(decodeToken(token));
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
-        if (teacher.isActive() == true && teacher.getRole().equals("teacher")){
+        if (teacher.isActive() == true && teacher.getRole().equals("교사")){
             try {
-                List<Proof> entityList = proofRepository.findAllByUserOrderByCreatedAtDesc(findUser(id));
+                List<Proof> entityList = proofRepository.findAllByUserOrderByCreatedAtDesc(util.findUser(id));
                 List<ProofListResDto> list = new ArrayList<>();
                 for (Proof proof : entityList){
                     list.add(new ProofListResDto(proof));
@@ -199,14 +157,6 @@ public class proofServiceImpl implements ProofService {
                 .orElseThrow(() -> new IllegalArgumentException("Proof Not Found"));
     }
 
-    public User findUser(long id){
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
-    }
-
-    public User findUserByPhone(String phone){
-        return userRepository.findByPhone(phone);
-    }
 
 
 }

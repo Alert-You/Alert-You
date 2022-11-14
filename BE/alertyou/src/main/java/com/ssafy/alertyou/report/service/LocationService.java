@@ -8,19 +8,27 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LocationService {
+
+//    @Value("${naver.cloud.geo.clientid}")
+//    private static String clientId; // 클라이언트 ID
+//
+//    @Value("${naver.cloud.geo.clientsecret}")
+//    private static String clientSecret; // 클라이언트 키
+
     // 역지오 서비스
     public static String[] reverseGeo(double longitude, double latitude) { // 경도(longitude): 세로선(x축), 위도(latitude): 가로선(y축)
         try {
-            String clientId = "co4w5k4lo3"; // 클라이언트 ID
-            String clientSecret = "vLrvWalrYx895ya4jmC3XGmWqf3E11ViQJnhppLV"; // 클라이언트 키
             String coords = longitude + "," + latitude;
             // orders 옵션: legalcode: 좌표 to 법정동, admcode: 좌표 to 행정동, addr: 좌표 to 지번 주소, roadaddr: 좌표 to 도로명 주소(새주소)
             // sourcecrs 옵션: 좌표 체계(EPSG:4326)
             // coords 옵션: 입력좌표("경도값,위도값")
+            String clientId = "co4w5k4lo3";
+            String clientSecret = "vLrvWalrYx895ya4jmC3XGmWqf3E11ViQJnhppLV";
             String basicUrl = String.format("https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?request=coordsToaddr&coords=%s&sourcecrs=epsg:4326&output=json&orders=roadaddr,addr", coords); // orders=legalcode,admcode,roadaddr
             HttpGet getRequest = new HttpGet(basicUrl);
             getRequest.setHeader("X-NCP-APIGW-API-KEY-ID", clientId);
