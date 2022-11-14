@@ -10,13 +10,15 @@ import {
   ToggleBtn,
 } from '@/screens/HomeScreen/components';
 import {emergencyBgStyle, nonEmergencyBgStyle} from '@/theme/Home/gradient';
+import {useRecoilState} from 'recoil';
+import {isEmergencyState} from '@/store/isEmergencyState';
 
 type Props = {
   navigation: any;
 };
 
 const HomeScreen = ({navigation}: Props) => {
-  let [isEmergency, setIsEmergency] = useState(true);
+  const [isEmergency, setIsEmergency] = useRecoilState(isEmergencyState);
 
   const toggleIsEmergency = () => {
     setIsEmergency((emergency: boolean) => !emergency);
@@ -26,8 +28,7 @@ const HomeScreen = ({navigation}: Props) => {
     <ScrollView style={styles.container}>
       <Box
         bg={isEmergency ? emergencyBgStyle : nonEmergencyBgStyle}
-        style={styles.innerContainer}
-        >
+        style={styles.innerContainer}>
         <HomeTitle
           content={isEmergency ? '긴급 도움 요청' : '현장 목격 신고'}
         />
@@ -36,7 +37,7 @@ const HomeScreen = ({navigation}: Props) => {
           toggleIsEmergency={toggleIsEmergency}
           isEmergency={isEmergency}
         />
-        {isEmergency ? <HelpText /> : <ReportBtns navigation={navigation}/>}
+        {isEmergency ? <HelpText /> : <ReportBtns navigation={navigation} />}
       </Box>
     </ScrollView>
   );
