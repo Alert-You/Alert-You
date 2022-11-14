@@ -159,6 +159,9 @@ class Audio extends Component<AudioProps, AudioState> {
           Math.floor(e.currentPosition),
         ),
       });
+      if (this.state.recordSecs > 180000) {
+        this.onStopRecord();
+      }
     });
   };
 
