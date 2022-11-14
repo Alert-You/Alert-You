@@ -1,5 +1,5 @@
 import {Box, Button, Pressable, Text, View, VStack} from 'native-base';
-import React, {Component, useState} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
@@ -13,11 +13,12 @@ import {Platform, PermissionsAndroid, Dimensions} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {styles} from './style';
 import {AudioBtn} from '../AudioBtn';
-import {nonEmergencyBgStyle} from '@/theme/Home/gradient';
+import {emergencyBgStyle, nonEmergencyBgStyle} from '@/theme/Home/gradient';
 import { reportFile } from '../../api';
 
 interface AudioProps {
   navigation: any;
+  isEmergency: boolean;
 }
 
 interface AudioState {
@@ -76,6 +77,9 @@ class Audio extends Component<AudioProps, AudioState> {
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.11);
+    if (this.props.isEmergency) {
+      this.onStartRecord();
+    }
   }
 
   private onStatusPress = (e: any) => {
@@ -182,6 +186,9 @@ class Audio extends Component<AudioProps, AudioState> {
   private onStopRecord = async () => {
     const result = await this.audioRecorderPlayer.stopRecorder();
     this.audioRecorderPlayer.removeRecordBackListener();
+    if (this.props.isEmergency) {
+      this.onReportAudio();
+    }
     this.setState({
       recordSecs: 0,
     });
@@ -355,9 +362,13 @@ class Audio extends Component<AudioProps, AudioState> {
       isShow: true,
     };
 
+    // if(this.props.isEmergency) {
+    //   this.onStartRecord();
+    // }
+
     return (
       <View style={styles.container}>
-        <VStack bg={nonEmergencyBgStyle} style={styles.innerContainer}>
+        <VStack bg={this.props.isEmergency ? emergencyBgStyle : nonEmergencyBgStyle} style={styles.innerContainer}>
           {/* <Text style={styles.titleTxt}>
             {!this.state.page ? '녹음' : '녹음 확인'}
           </Text> */}

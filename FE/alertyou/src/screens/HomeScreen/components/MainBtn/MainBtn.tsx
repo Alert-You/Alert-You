@@ -7,6 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {ReportModal} from '@/screens/HomeScreen/components/ReportModal';
 import {reportVictim} from '@/screens/HomeScreen/api';
 import {useCurrentLocation} from '@/hooks/useCurrentLocation';
+import {useNavigation} from '@react-navigation/native';
 import {
   emergencyToastProps,
   errorToastProps,
@@ -18,12 +19,14 @@ interface props {
 }
 
 const MainBtn = ({isEmergency}: props) => {
+  const navigation = useNavigation<any>();
   const {location} = useCurrentLocation();
   const showEmergencyToast = async () => {
     if (location) {
       const response = await reportVictim(location);
       if (response.msg === 'SUCCESS') {
         Toast.show(emergencyToastProps);
+        navigation.navigate('AudioScreen')
       } else {
         Toast.show(errorToastProps);
       }
