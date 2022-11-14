@@ -1,3 +1,4 @@
+import { reportAudioFailureToastProps, reportAudioSuccessToastProps } from '@/constants/toastProps';
 import { emergencyBgStyle, nonEmergencyBgStyle } from '@/theme/Home/gradient';
 import { AudioBtn } from '@/screens/HomeScreen/components/AudioBtn';
 import { reportFile } from '@/screens/HomeScreen/api';
@@ -289,19 +290,11 @@ class Audio extends Component<AudioProps, AudioState> {
     if (this.state.uri) {
       const responseStatus = await reportFile(this.state.uri);
       if (responseStatus === 201) {
-        Toast.show({
-          type: 'info',
-          text1: '현장 녹음 접수 완료',
-          text2: '현장 녹음 접수가 완료되었습니다!',
-        });
+        Toast.show(reportAudioSuccessToastProps);
         this.state.navigation.navigate('HomeScreen');
       }
     } else {
-      Toast.show({
-        type: 'error',
-        text1: '오류',
-        text2: '녹취 파일 접수에 실패했습니다.',
-      });
+      Toast.show(reportAudioFailureToastProps);
     }
   };
 
