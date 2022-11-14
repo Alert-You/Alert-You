@@ -119,7 +119,7 @@ public class ReportServiceImpl implements ReportService {
             Report report = findReport(alertReportId);
 
             List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
-
+            System.out.println("================= 체크 1 =======================");
             for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
                 String fcmToken = findUser(guardUser.getId()).getFcmToken();
@@ -128,7 +128,7 @@ public class ReportServiceImpl implements ReportService {
                 System.out.println("메시지를 보냈습니다.");
 //                guardToken.add(findUser(guardUser.getId()).getFcmToken());
             }
-
+            System.out.println("================= 체크 2 =======================");
 //            System.out.println(guardToken);
 //            System.out.println("================= 체크 1 =======================");
 //
@@ -151,6 +151,7 @@ public class ReportServiceImpl implements ReportService {
             result.put("msg", SUCCESS);
             status = HttpStatus.OK;
         } catch (Exception e) {
+            System.out.println("================= 체크 3 =======================")
             result.put("msg", FAIL);
             result.put("why", e.getMessage());
             result.put("why2", e.getStackTrace());
