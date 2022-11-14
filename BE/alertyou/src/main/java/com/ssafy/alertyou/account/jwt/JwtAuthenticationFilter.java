@@ -33,15 +33,12 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
     // jwt 토큰 헤더 인증 필터
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-//        System.out.println("필터 동작하니?");
         String header = request.getHeader(JwtProperties.HEADER_STRING); // Authorization--
         // 헤더가 null이거나, Bearer로 시작하지 않으면
         if (header == null || !header.startsWith(JwtProperties.TOKEN_PREFIX)) {
             chain.doFilter(request, response);
-//            System.out.println("위에 if절 통과했니?");
             return;
         }
-//        System.out.println("어 통과했음!");
         try {
             Authentication authentication = getAuthentication(request);
             SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContextHolder에 인증 정보를 저장
