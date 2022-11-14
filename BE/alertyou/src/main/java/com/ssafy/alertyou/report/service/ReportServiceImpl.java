@@ -123,7 +123,9 @@ public class ReportServiceImpl implements ReportService {
             for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
                 String fcmToken = findUser(guardUser.getId()).getFcmToken();
+                System.out.println("fcm 토큰 이름: " + fcmToken);
                 FCMService.sendFCMMessage(fcmToken); // fcm메세지를 보냄
+                System.out.println("메시지를 보냈습니다.");
 //                guardToken.add(findUser(guardUser.getId()).getFcmToken());
             }
 
