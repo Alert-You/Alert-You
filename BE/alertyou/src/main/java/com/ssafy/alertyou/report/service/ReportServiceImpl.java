@@ -119,16 +119,12 @@ public class ReportServiceImpl implements ReportService {
             Report report = findReport(alertReportId);
 
             List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
-            System.out.println("================= 체크 1 =======================");
             for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
                 String fcmToken = findUser(guardUser.getId()).getFcmToken();
-                System.out.println("fcm 토큰 이름: " + fcmToken);
                 FCMService.sendFCMMessage(fcmToken); // fcm메세지를 보냄
-                System.out.println("메시지를 보냈습니다.");
 //                guardToken.add(findUser(guardUser.getId()).getFcmToken());
             }
-            System.out.println("================= 체크 2 =======================");
 //            System.out.println(guardToken);
 //            System.out.println("================= 체크 1 =======================");
 //
@@ -151,7 +147,6 @@ public class ReportServiceImpl implements ReportService {
             result.put("msg", SUCCESS);
             status = HttpStatus.OK;
         } catch (Exception e) {
-            System.out.println("================= 체크 3 =======================");
             result.put("msg", FAIL);
             result.put("why", e.getMessage());
             result.put("why2", e.getStackTrace());
@@ -189,6 +184,15 @@ public class ReportServiceImpl implements ReportService {
             long alertReportId = reportRepository.save(newReport).getId();
 
             addAlert(alertReportId, user);
+
+            Report report = findReport(alertReportId);
+
+            List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
+            for (Alert alert : alertList) {
+                User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
+                String fcmToken = findUser(guardUser.getId()).getFcmToken();
+                FCMService.sendFCMMessage(fcmToken); // fcm메세지를 보냄
+            }
 
             result.put("msg",SUCCESS);
             status = HttpStatus.OK;
