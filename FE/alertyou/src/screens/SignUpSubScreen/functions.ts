@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 export const passwordValidation = (password: string): boolean => {
   //영문 대소문자, 숫자, 특수문자, 길이(4~20)
   if (
-    /^[A-Za-z0-9`~!@#\$%\^&\*\(\)\{\}\[\]\-_=\+\\|;:'"<>,\./\?]{4,20}$/.test(
+    /^[A-Za-z0-9`~!@#\$%\^&\*\(\)\{\}\[\]\-_=\+\\|;:'"<>,\./\?]{3,20}$/.test(
       password,
     )
   ) {

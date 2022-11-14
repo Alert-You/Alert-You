@@ -12,3 +12,4 @@ export const SCHOOL = `${BASE_URL}school`;
 export const SCHOOL_ID = `${BASE_URL}school/search`;
 
 export const PROFILE = `auth/profile`;
+export const EDIT = `auth/update`;

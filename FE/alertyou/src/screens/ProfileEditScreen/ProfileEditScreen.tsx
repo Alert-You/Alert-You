@@ -1,4 +1,4 @@
-import {Pressable, View} from 'react-native';
+import {Keyboard, Pressable, View} from 'react-native';
 import React, {useReducer, useState} from 'react';
 import {
   Stack,
@@ -7,64 +7,114 @@ import {
   SearchIcon,
   WarningOutlineIcon,
   CloseIcon,
+  useToast,
+  CheckIcon,
 } from 'native-base';
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 
 import {MAIN} from '@/theme/colorVariants';
 
 import {styles} from './style';
-import {requestAccountInfo} from './apis';
-import {profileResponseType} from './types';
-import {useRecoilState} from 'recoil';
+import {fetchAuthKey, requestAccountInfo, requestEdit} from './apis';
+import {
+  editResponseType,
+  profileResponseType,
+  verifyResponseType,
+} from './types';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {schoolState} from '@/store/signUpState';
 import AuthSpinnerButton from '../PhoneAuthScreen/components/AuthSpinnerButton/AuthSpinnerButton';
 import {
+  editPasswordConfirmState,
   editPasswordState,
   editPhoneState,
   editSchoolIdState,
   editSchoolNameState,
   editUsernameState,
   profileFormState,
+  profileFormType,
 } from '@/store/profileState';
+import {ToastView} from '../PhoneAuthScreen/components';
+import {
+  failEdit,
+  onFailHandler,
+  onVerifyFail,
+  onVerifySuccess,
+  passwordValidation,
+  passwordWrong,
+  phoneValidation,
+  SuccessEdit,
+} from './functions';
+import {SpinnerButton} from '@/components';
 
-const ProfileEditScreen = () => {
-  const [schoolName, setSchoolName] = useRecoilState(editSchoolNameState);
+const ProfileEditScreen = ({navigation}: any) => {
+  const schoolName = useRecoilValue(editSchoolNameState);
+  const schoolId = useRecoilValue(editSchoolIdState);
+  const [openInput, setOpenInput] = useState<boolean>(false);
   const [username, setUsername] = useRecoilState(editUsernameState);
   const [phone, setPhone] = useRecoilState(editPhoneState);
-  const [schoolId, setSchoolId] = useRecoilState(editSchoolIdState);
   const [password, setPassword] = useRecoilState(editPasswordState);
-  const [profileForm, setProfileForm] = useRecoilState(profileFormState);
-  const userQuery = useQuery<profileResponseType, AxiosError>(
-    ['accountInfo'],
-    requestAccountInfo,
+  const [password2, setPassword2] = useRecoilState(editPasswordConfirmState);
+  const [authNumber, setAuthNumber] = useState<string>('');
+  const [allowSignUp, setAllowSignUp] = useState<boolean>(false);
+  const [isValid, setIsValid] = useState<boolean>(false);
+  const [isValid2, setIsValid2] = useState<boolean>(false);
+  const editProfileCredentials = useRecoilValue(profileFormState);
+  const toast = useToast();
+  const editMutate = useMutation<editResponseType, AxiosError, profileFormType>(
+    state => requestEdit(state),
     {
-      suspense: true,
-      onSuccess: res => {
-        console.log(res);
-        setProfileForm({
-          username: res.name,
-          phone: res.phone,
-          schoolId: res.schoolId === parseInt(schoolId) ? res.schoolId : parseInt(schoolId),
-          password: '',
-        });
-        setSchoolName(state => {
-          if(res.schoolName !== state) {
-            return state
-          } else {
-            return res.schoolName
-          }
-        });
+      onSuccess: () => {
+        SuccessEdit();
+        navigation.navigate('Profile', {screen: 'ProfileScreen'})
+      },
+      onError: (err) => {
+        failEdit()
+      }
+    },
+  );
+  const verifyMutate = useMutation<verifyResponseType, AxiosError, string>(
+    state => fetchAuthKey(state),
+    {
+      onSuccess: () => {
+        onSuccessToast();
+        setOpenInput(true);
       },
     },
   );
+
+  const onSuccessToast = (): void => {
+    toast.show({
+      render: () => {
+        return <ToastView />;
+      },
+      duration: 2000,
+    });
+  };
 
   const changeUsername = (e: string): void => {
     setUsername(e);
   };
 
   const changePassword = (e: string): void => {
+    if (passwordValidation(password)) {
+      setIsValid(false);
+    } else {
+      setIsValid(true);
+    }
+
     setPassword(e);
+  };
+
+  const changePassword2 = (e: string): void => {
+    if (passwordValidation(password2)) {
+      setIsValid2(false);
+    } else {
+      setIsValid2(true);
+    }
+
+    setPassword2(e);
   };
 
   const changePhone = (e: string): void => {
@@ -79,20 +129,64 @@ const ProfileEditScreen = () => {
     setPassword('');
   };
 
+  const deletePassword2 = (): void => {
+    setPassword2('');
+  };
+
+  const changeAuthNumber = (e: string): void => {
+    setAuthNumber(e.trim());
+  };
+
   const deletePhone = (): void => {
     setPhone('');
   };
 
-  // const sendAuthMessage = (): void => {
-  //   if (phoneValidation(.phone)) {
-  //     //인증 요청
-  //     verifyMutate.mutate(phone.phone);
-  //     Keyboard.dismiss();
-  //   } else {
-  //     onFailHandler();
-  //     deletePhoneNumber();
-  //   }
-  // };
+  const deleteAuthNumber = (): void => {
+    setAuthNumber('');
+  };
+
+  const moveToEditSchool = (): void => {
+    navigation.navigate('Profile', {screen: 'EditSchoolScreen'});
+  };
+
+  const sendAuthMessage = (): void => {
+    if (phoneValidation(phone)) {
+      //인증 요청
+      verifyMutate.mutate(phone);
+      Keyboard.dismiss();
+    } else {
+      onFailHandler();
+      deletePhone();
+    }
+  };
+
+  const checkAuthValid = (): void => {
+    if (authNumber === verifyMutate?.data?.certNumber) {
+      setAllowSignUp(true);
+      onVerifySuccess();
+    } else {
+      setAllowSignUp(false);
+      onVerifyFail();
+    }
+  };
+
+  let EDIT_PERMISSION =
+    password === password2 &&
+    schoolName &&
+    phone &&
+    username &&
+    password &&
+    password2 &&
+    schoolId &&
+    ((openInput && allowSignUp) || !openInput);
+
+  const submitProfileForm = (): void => {
+    if (EDIT_PERMISSION) {
+      editMutate.mutate(editProfileCredentials)
+    } else if (password !== password2) {
+      passwordWrong();
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -100,7 +194,7 @@ const ProfileEditScreen = () => {
         <Stack space={4}>
           <FormControl>
             <FormControl.Label>학교 검색</FormControl.Label>
-            <Pressable onPress={() => {}}>
+            <Pressable onPress={moveToEditSchool}>
               <Input
                 type="text"
                 variant="underlined"
@@ -111,7 +205,7 @@ const ProfileEditScreen = () => {
                 color={MAIN.mainFont}
                 focusOutlineColor={MAIN.red}
                 InputRightElement={
-                  <Pressable onPress={() => {}}>
+                  <Pressable onPress={moveToEditSchool}>
                     <SearchIcon size="md" />
                   </Pressable>
                 }
@@ -140,8 +234,7 @@ const ProfileEditScreen = () => {
               value={username}
             />
           </FormControl>
-          {/* <FormControl isInvalid={isValid}> */}
-          <FormControl>
+          <FormControl isInvalid={isValid}>
             <FormControl.Label>새 비밀번호</FormControl.Label>
             <Input
               type="password"
@@ -159,6 +252,30 @@ const ProfileEditScreen = () => {
               onChangeText={changePassword}
               autoCorrect={false}
               value={password}
+            />
+            <FormControl.ErrorMessage
+              leftIcon={<WarningOutlineIcon size="sm" />}>
+              4~20자, 영문 대소문자, 숫자, 특수문자를 포함하세요.
+            </FormControl.ErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={isValid2}>
+            <FormControl.Label>비밀번호 확인</FormControl.Label>
+            <Input
+              type="password"
+              variant="underlined"
+              placeholder="숫자, 영어 소문자, 대문자, 특수문자를 포함한 비밀번호"
+              size="md"
+              h="9"
+              color={MAIN.mainFont}
+              focusOutlineColor={MAIN.red}
+              InputRightElement={
+                <Pressable onPress={deletePassword2}>
+                  {password2 ? <CloseIcon color={MAIN.red} /> : null}
+                </Pressable>
+              }
+              onChangeText={changePassword2}
+              autoCorrect={false}
+              value={password2}
             />
             <FormControl.ErrorMessage
               leftIcon={<WarningOutlineIcon size="sm" />}>
@@ -186,13 +303,13 @@ const ProfileEditScreen = () => {
                 autoCorrect={false}
                 value={phone}
               />
-              {/* <AuthSpinnerButton
+              <AuthSpinnerButton
                 onPress={verifyMutate.isLoading ? () => {} : sendAuthMessage}>
                 인증 요청
-              </AuthSpinnerButton> */}
+              </AuthSpinnerButton>
             </View>
           </FormControl>
-          {/* {openInput ? (
+          {openInput ? (
             <FormControl isRequired>
               <View style={styles.phoneContainer}>
                 <Input
@@ -221,7 +338,10 @@ const ProfileEditScreen = () => {
                 </AuthSpinnerButton>
               </View>
             </FormControl>
-          ) : null} */}
+          ) : null}
+          <View style={styles.spinnerButtonStyle}>
+            <SpinnerButton onPress={submitProfileForm}>수정 완료</SpinnerButton>
+          </View>
         </Stack>
       </View>
     </View>

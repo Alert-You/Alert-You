@@ -1,11 +1,23 @@
 import { atom, DefaultValue, selector } from 'recoil';
 
-interface profileFormType {
+export interface profileFormType {
   username: string;
   password: string;
   schoolId: number;
   phone: string;
 }
+
+export const editClassListState = atom<string[][]>({
+  key: 'editClassListState',
+  default: [],
+});
+
+export const editSchoolAddressState = atom<string>({
+  key: 'editSchoolAddressState',
+  default: ''
+})
+
+
 export const editUsernameState = atom<string>({
   key: 'editUsernameState',
   default: ''
@@ -18,6 +30,11 @@ export const editPhoneState = atom<string>({
 
 export const editPasswordState = atom<string>({
   key: 'editPasswordState',
+  default: ''
+});
+
+export const editPasswordConfirmState = atom<string>({
+  key: 'editPasswordConfirmState',
   default: ''
 });
 

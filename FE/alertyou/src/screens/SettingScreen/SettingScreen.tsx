@@ -2,39 +2,67 @@ import {View, Text, TouchableOpacity, Alert, ScrollView} from 'react-native';
 import React from 'react';
 import {ChevronRightIcon, Divider, Center} from 'native-base';
 
-import { getToken } from '@/utils/auth';
-import { useLogout } from '@/hooks';
+import {getToken} from '@/utils/auth';
+import {useLogout} from '@/hooks';
 
 import {styles} from './style';
+import {editPasswordConfirmState, editSchoolNameState, profileFormState} from '@/store/profileState';
+import {useSetRecoilState} from 'recoil';
+import {useQuery} from '@tanstack/react-query';
+import {profileResponseType} from './types';
+import {AxiosError} from 'axios';
+import {requestAccountInfo} from './apis';
 
 const SettingScreen = ({navigation}: any) => {
-    const {mutate} = useLogout();
+  const setProfileForm = useSetRecoilState(profileFormState);
+  const setSchoolName = useSetRecoilState(editSchoolNameState);
+  const setPassword2 = useSetRecoilState(editPasswordConfirmState);
+  const userQuery = useQuery<profileResponseType, AxiosError>(
+    ['accountInfo'],
+    requestAccountInfo,
+    {
+      suspense: true,
+      onSuccess: res => {
+        console.log(res);
+        setProfileForm({
+          username: res.name,
+          phone: res.phone,
+          schoolId: res.schoolId,
+          password: '',
+        });
+        setPassword2('');
+        setSchoolName(res.schoolName);
+      },
+      refetchOnMount: true
+    },
+  );
+  const {mutate} = useLogout();
 
-    //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
-    const logoutHandler = (): void => {
-      getToken().then(res => {
-        if (res) {
-          mutate(res);
-        }
-      });
-    };
+  //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
+  const logoutHandler = (): void => {
+    getToken().then(res => {
+      if (res) {
+        mutate(res);
+      }
+    });
+  };
 
-    const confirmLogout = (): void => {
-      Alert.alert('로그아웃', '정말로 로그아웃 하시겠습니까?', [
-        {
-          text: '취소',
-        },
-        {
-          text: '로그아웃',
-          style: 'cancel',
-          onPress: () => logoutHandler(),
-        },
-      ]);
-    };
+  const confirmLogout = (): void => {
+    Alert.alert('로그아웃', '정말로 로그아웃 하시겠습니까?', [
+      {
+        text: '취소',
+      },
+      {
+        text: '로그아웃',
+        style: 'cancel',
+        onPress: () => logoutHandler(),
+      },
+    ]);
+  };
 
-    const moveToProfileEdit = (): void => {
-      navigation.navigate("ProfileEditScreen");
-    }
+  const moveToProfileEdit = (): void => {
+    navigation.navigate('ProfileEditScreen');
+  };
 
   return (
     <View style={styles.container}>
