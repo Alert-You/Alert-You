@@ -31,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/bodyguard/**", "/api/location/**", "/api/report/**", "/api/alert/**", "/api/proof/**")
                 .authenticated()
                 .antMatchers("/api/teacher/**")
-                .hasAuthority("교사")
+                .hasRole("교사")
                 .anyRequest().permitAll();
     }
 
