@@ -1,3 +1,4 @@
+import messaging from '@react-native-firebase/messaging';
 import { emergencyBgStyle, nonEmergencyBgStyle } from '@/theme/Home/gradient';
 import { isEmergencyState } from '@/store/isEmergencyState';
 import {
@@ -9,6 +10,8 @@ import {
 
 import { Box, ScrollView, Text } from 'native-base';
 import { useRecoilState } from 'recoil';
+import { useEffect } from 'react';
+import { saveToken } from './api';
 import { styles } from './style';
 
 type Props = {
@@ -20,6 +23,27 @@ const HomeScreen = ({ navigation }: Props) => {
 
   const toggleIsEmergency = () => {
     setIsEmergency((emergency: boolean) => !emergency);
+  };
+
+  useEffect(() => {
+    requestUserPermission();
+  }, []);
+
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+    const enabled = authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      return getToken();
+    }
+  };
+
+  const getToken = async () => {
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      saveToken(fcmToken)
+    }
   };
 
   return (
