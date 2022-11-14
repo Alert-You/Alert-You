@@ -246,6 +246,7 @@ class Audio extends Component<AudioProps, AudioState> {
     await this.audioRecorderPlayer.resumePlayer();
     this.setState({
       isShowResumePlay: false,
+      isShowPausePlay: true,
       isShowStartPlay: true,
     });
   };
