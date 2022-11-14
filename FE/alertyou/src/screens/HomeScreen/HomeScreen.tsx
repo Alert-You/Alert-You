@@ -1,23 +1,21 @@
-import {useState} from 'react';
-import {Box, ScrollView} from 'native-base';
-import {styles} from './style';
-
+import { emergencyBgStyle, nonEmergencyBgStyle } from '@/theme/Home/gradient';
+import { isEmergencyState } from '@/store/isEmergencyState';
 import {
-  HomeTitle,
   HelpText,
   MainBtn,
   ReportBtns,
   ToggleBtn,
 } from '@/screens/HomeScreen/components';
-import {emergencyBgStyle, nonEmergencyBgStyle} from '@/theme/Home/gradient';
-import {useRecoilState} from 'recoil';
-import {isEmergencyState} from '@/store/isEmergencyState';
+
+import { Box, ScrollView, Text } from 'native-base';
+import { useRecoilState } from 'recoil';
+import { styles } from './style';
 
 type Props = {
   navigation: any;
 };
 
-const HomeScreen = ({navigation}: Props) => {
+const HomeScreen = ({ navigation }: Props) => {
   const [isEmergency, setIsEmergency] = useRecoilState(isEmergencyState);
 
   const toggleIsEmergency = () => {
@@ -29,9 +27,7 @@ const HomeScreen = ({navigation}: Props) => {
       <Box
         bg={isEmergency ? emergencyBgStyle : nonEmergencyBgStyle}
         style={styles.innerContainer}>
-        <HomeTitle
-          content={isEmergency ? '긴급 도움 요청' : '현장 목격 신고'}
-        />
+        <Text style={styles.mainTitle}>{isEmergency ? '긴급 도움 요청' : '현장 목격 신고'}</Text>;
         <MainBtn isEmergency={isEmergency} />
         <ToggleBtn
           toggleIsEmergency={toggleIsEmergency}

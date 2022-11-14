@@ -1,32 +1,33 @@
-import {innerGradientStyle, outerGradientStyle} from '@/theme/gradient';
-import {AspectRatio, Center, Circle} from 'native-base';
-import React, {useState} from 'react';
-import {Pressable} from 'react-native';
+import { innerGradientStyle, outerGradientStyle } from '@/theme/gradient';
+import { AspectRatio, Center, Circle, View } from 'native-base';
+import React, { useState } from 'react';
+import { Pressable } from 'react-native';
 import Toast from 'react-native-toast-message';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {ReportModal} from '@/screens/HomeScreen/components/ReportModal';
-import {reportVictim} from '@/screens/HomeScreen/api';
-import {useCurrentLocation} from '@/hooks/useCurrentLocation';
-import {useNavigation} from '@react-navigation/native';
+import { ReportModal } from '@/screens/HomeScreen/components/ReportModal';
+import { reportVictim } from '@/screens/HomeScreen/api';
+import { useCurrentLocation } from '@/hooks/useCurrentLocation';
+import { useNavigation } from '@react-navigation/native';
 import {
   emergencyToastProps,
   errorToastProps,
   lostLocationToastProps,
 } from '@/constants/toastProps';
+import { styles } from './style';
 
 interface props {
   isEmergency: boolean;
 }
 
-const MainBtn = ({isEmergency}: props) => {
+const MainBtn = ({ isEmergency }: props) => {
   const navigation = useNavigation<any>();
-  const {location} = useCurrentLocation();
+  const { location } = useCurrentLocation();
   const showEmergencyToast = async () => {
     if (location) {
       const response = await reportVictim(location);
       if (response.msg === 'SUCCESS') {
         Toast.show(emergencyToastProps);
-        navigation.navigate('AudioScreen')
+        navigation.navigate('AudioScreen');
       } else {
         Toast.show(errorToastProps);
       }

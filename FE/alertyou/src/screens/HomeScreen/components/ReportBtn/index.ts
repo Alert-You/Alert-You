@@ -1,1 +1,1 @@
-export {default as ReportBtn} from './ReportBtn';
+export { default as ReportBtn } from './ReportBtn';

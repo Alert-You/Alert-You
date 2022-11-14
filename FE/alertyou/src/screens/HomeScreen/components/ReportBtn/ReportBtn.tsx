@@ -1,8 +1,9 @@
-import {innerGradientStyle, outerGradientStyle} from '@/theme/gradient';
-import {AspectRatio, Center, Pressable, VStack} from 'native-base';
-import React from 'react';
+import { innerGradientStyle, outerGradientStyle } from '@/theme/gradient';
+import { MAIN } from '@/theme/colorVariants';
+
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {MAIN} from '@/theme/colorVariants';
+import { AspectRatio, Center, Pressable, VStack } from 'native-base';
+
 
 interface propsType {
   name: string;
@@ -10,7 +11,7 @@ interface propsType {
   moveScreen: () => void;
 }
 
-const ReportBtn = ({name, nameKr, moveScreen}: propsType) => {
+const ReportBtn = ({ name, nameKr, moveScreen }: propsType) => {
   return (
     <VStack width="28%">
       <Pressable onPress={moveScreen}>
@@ -25,7 +26,7 @@ const ReportBtn = ({name, nameKr, moveScreen}: propsType) => {
             </Center>
           </Center>
         </AspectRatio>
-        <Center mt={2} _text={{color: 'white', fontSize: 'lg'}}>{nameKr}</Center>
+        <Center mt={2} _text={{ color: 'white', fontSize: 'lg' }}>{nameKr}</Center>
       </Pressable>
     </VStack>
   );

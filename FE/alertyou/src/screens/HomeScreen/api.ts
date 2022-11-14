@@ -1,9 +1,8 @@
-import {LocationType} from '@/types';
 import AxiosInstance from '@/apis/Axios';
-import {ReportModalDataType} from './components/ReportModal/types';
-import axios from 'axios';
-import {BASE_URL} from '@/apis/urls';
-import {getAccessToken} from '@/utils/auth';
+import { getAccessToken } from '@/utils/auth';
+import { LocationType } from '@/types';
+import { BASE_URL } from '@/apis/urls';
+import { ReportModalDataType } from './components/ReportModal/types';
 
 interface SimpleMsgType {
   msg: string;

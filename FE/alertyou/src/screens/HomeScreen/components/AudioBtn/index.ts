@@ -1,1 +1,1 @@
-export {default as AudioBtn} from './AudioBtn';
+export { default as AudioBtn } from './AudioBtn';

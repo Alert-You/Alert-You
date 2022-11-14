@@ -1,7 +1,6 @@
-
-import { WHITE } from '@/theme/colorVariants';
-import { FONT_WEIGHT } from '@/theme/fontWeightVariants';
-import { Dimensions, StyleSheet } from 'react-native';
+import {WHITE} from '@/theme/colorVariants';
+import {FONT_WEIGHT} from '@/theme/fontWeightVariants';
+import {Dimensions, StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -26,11 +25,11 @@ export const styles = StyleSheet.create({
     marginLeft: 7,
     fontSize: 20,
     fontWeight: FONT_WEIGHT.SemiBold,
-    marginBottom: 2
+    marginBottom: 2,
   },
   contentText: {
     marginLeft: 7,
     fontSize: 14,
-    fontWeight: FONT_WEIGHT.Medium
+    fontWeight: FONT_WEIGHT.Medium,
   },
 });

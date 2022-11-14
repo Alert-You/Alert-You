@@ -1,5 +1,9 @@
-import {Box, Button, Pressable, Text, View, VStack} from 'native-base';
-import React, {Component, useEffect, useState} from 'react';
+import { emergencyBgStyle, nonEmergencyBgStyle } from '@/theme/Home/gradient';
+
+import { Platform, PermissionsAndroid, Dimensions } from 'react-native';
+import { Pressable, Text, View, VStack } from 'native-base';
+import Toast from 'react-native-toast-message';
+import { Component } from 'react';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
@@ -9,12 +13,11 @@ import AudioRecorderPlayer, {
   PlayBackType,
   RecordBackType,
 } from 'react-native-audio-recorder-player';
-import {Platform, PermissionsAndroid, Dimensions} from 'react-native';
-import Toast from 'react-native-toast-message';
-import {styles} from './style';
-import {AudioBtn} from '../AudioBtn';
-import {emergencyBgStyle, nonEmergencyBgStyle} from '@/theme/Home/gradient';
+
+import { AudioBtn } from '../AudioBtn';
 import { reportFile } from '../../api';
+import { styles } from './style';
+
 
 interface AudioProps {
   navigation: any;
@@ -112,11 +115,11 @@ class Audio extends Component<AudioProps, AudioState> {
 
         if (
           grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
+          PermissionsAndroid.RESULTS.GRANTED &&
           grants['android.permission.READ_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
+          PermissionsAndroid.RESULTS.GRANTED &&
           grants['android.permission.RECORD_AUDIO'] ===
-            PermissionsAndroid.RESULTS.GRANTED
+          PermissionsAndroid.RESULTS.GRANTED
         ) {
           console.log('permissions granted');
         } else {
@@ -139,13 +142,13 @@ class Audio extends Component<AudioProps, AudioState> {
 
     const date = new Date().getTime();
     const path = `data/user/0/com.alertyou/cache/${date}.mp4`;
-    this.setState({path});
+    this.setState({ path });
 
     const uri = await this.audioRecorderPlayer.startRecorder(
       this.state.path,
       audioSet,
     );
-    this.setState({uri});
+    this.setState({ uri });
     this.setState({
       isShowStartRecord: false,
       isShowPauseRecord: true,
@@ -304,7 +307,7 @@ class Audio extends Component<AudioProps, AudioState> {
   public render() {
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
-      (screenWidth-32-56);
+      (screenWidth - 32 - 56);
 
     if (!playWidth) {
       playWidth = 0;
@@ -392,15 +395,15 @@ class Audio extends Component<AudioProps, AudioState> {
                 style={styles.viewBarWrapper}
                 onPress={this.onStatusPress}>
                 <View style={styles.viewBar}>
-                  <View style={[styles.viewBarPlay, {width: playWidth}]} />
+                  <View style={[styles.viewBarPlay, { width: playWidth }]} />
                 </View>
               </Pressable>
 
               <Text style={styles.counterTxt}>{this.state.playTime}</Text>
               <Text style={styles.counterTxt}>/ {this.state.duration}</Text>
-              
+
               <View style={styles.btnWrapper}>
-              <AudioBtn props={startPlayProps} />
+                <AudioBtn props={startPlayProps} />
                 <AudioBtn props={pausePlayProps} />
                 <AudioBtn props={resumePlayProps} />
                 <AudioBtn props={stopPlayProps} />
