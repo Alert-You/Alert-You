@@ -21,3 +21,27 @@ export const nonEmergencyToastProps = {
   text1: '현장 목격 신고 완료',
   text2: '교사와 보디가드에게 목격 신고가 접수되었습니다!',
 };
+
+export const reportImageSuccessToastProps = {
+  type: 'info',
+  text1: '현장 사진 접수 완료',
+  text2: '현장 사진 접수가 완료되었습니다!',
+};
+
+export const reportImageFailureToastProps = {
+  type: 'error',
+  text1: '오류',
+  text2: '사진 파일 접수에 실패했습니다.',
+};
+
+export const reportAudioSuccessToastProps = {
+  type: 'info',
+  text1: '현장 녹음 접수 완료',
+  text2: '현장 녹음 접수가 완료되었습니다!',
+};
+
+export const reportAudioFailureToastProps = {
+  type: 'error',
+  text1: '오류',
+  text2: '녹취 파일 접수에 실패했습니다.',
+};

@@ -1,1 +1,1 @@
-export {default as HelpText} from './HelpText';
+export { default as HelpText } from './HelpText';

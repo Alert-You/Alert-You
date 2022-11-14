@@ -1,11 +1,12 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
+import { W } from '@/constants/dimensions';
 
 export const styles = StyleSheet.create({
   logoImage: {
     position: 'absolute',
     bottom: 10,
     resizeMode: 'contain',
-    width: Dimensions.get('window').width,
+    width: W,
     height: 150,
-  }
+  },
 });

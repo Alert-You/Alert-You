@@ -1,4 +1,4 @@
-import {LocationType} from '@/types';
+import { LocationType } from '@/types';
 
 export interface ReportModalInputType {
   place: string;

@@ -1,4 +1,5 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
+import { W, H } from '@/constants/dimensions';
 
 const diameter = 80;
 
@@ -9,10 +10,10 @@ export const styles = StyleSheet.create({
   cameraButtonContainer: {
     justifyContent: 'center',
     position: 'absolute',
-    bottom: Dimensions.get('window').height / 30,
+    bottom: H / 30,
     width: diameter,
     height: diameter,
-    left: Dimensions.get('window').width / 2 - diameter / 2,
+    left: W / 2 - diameter / 2,
   },
   cameraButton: {
     justifyContent: 'center',
