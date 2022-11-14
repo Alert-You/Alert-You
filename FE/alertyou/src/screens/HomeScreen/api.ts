@@ -1,9 +1,9 @@
-import {LocationType} from '@/types';
+import { LocationType } from '@/types';
 import AxiosInstance from '@/apis/Axios';
-import {ReportModalDataType} from './components/ReportModal/types';
+import { ReportModalDataType } from './components/ReportModal/types';
 import axios from 'axios';
-import {BASE_URL} from '@/apis/urls';
-import {getAccessToken} from '@/utils/auth';
+import { BASE_URL } from '@/apis/urls';
+import { getAccessToken } from '@/utils/auth';
 
 interface SimpleMsgType {
   msg: string;
@@ -61,3 +61,10 @@ const findExtension = (path: string) => {
   const pl = path.length;
   return path.slice(pl - 3, pl);
 };
+
+export const saveToken = async (fcmToken: string) => {
+  const result = await AxiosInstance.put('report/fcmtoken', { fcmToken: fcmToken })
+    .then(response => { response; console.log('토큰 저장 성공') })
+    .then(err => err)
+  return true
+}
