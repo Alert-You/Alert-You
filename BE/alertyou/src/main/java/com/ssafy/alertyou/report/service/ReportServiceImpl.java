@@ -114,36 +114,6 @@ public class ReportServiceImpl implements ReportService {
 
             addAlert(alertReportId, user);
 
-            // fcm 토큰 처리
-//            List<String> guardToken = new ArrayList<>();
-            Report report = findReport(alertReportId);
-
-            List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
-            for (Alert alert : alertList) {
-                User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
-                String fcmToken = findUser(guardUser.getId()).getFcmToken();
-                FCMService.sendFCMMessage(fcmToken); // fcm메세지를 보냄
-//                guardToken.add(findUser(guardUser.getId()).getFcmToken());
-            }
-//            System.out.println(guardToken);
-//            System.out.println("================= 체크 1 =======================");
-//
-//            MulticastMessage message = MulticastMessage.builder()
-//                    .putData("data", "test")
-//                    .putData("data2", "test2")
-//                    .addAllTokens(guardToken)
-//                    .build();
-//
-//            System.out.println("================= 체크 2 =======================");
-//
-//            BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
-//
-//            System.out.println("================= 체크 3 =======================");
-//
-//            System.out.println(response.getSuccessCount() + " messages were sent successfully");
-//
-//            System.out.println("================= 체크 4 =======================");
-
             result.put("msg", SUCCESS);
             status = HttpStatus.OK;
         } catch (Exception e) {
@@ -224,42 +194,6 @@ public class ReportServiceImpl implements ReportService {
 
         return new ResponseEntity<>(result, status);
     }
-
-//    public ResponseEntity<Map<String, Object>> sendFCM(String token) throws Exception {
-//        HttpStatus status = null;
-//        Map<String, Object> result = new HashMap<>();
-//
-//        try {
-//            User user = findUserByPhone(decodeToken(token)); // 사용자를 찾음
-//            List<Coguard> guardlist = coGuardRepository.findAllByUser(user);
-//            List<String> registrationTokens = new ArrayList<>();
-//
-//            // 각 유저의 FCM 토큰을 가져와서 리스트로 만듦
-//            for(Coguard coguard : guardlist){
-//                String guardPhone = coguard.getCoGuard().getPhone();
-//                User guardUser = userRepository.findByPhone(guardPhone);
-//                registrationTokens.add(guardUser.getFcmToken());
-//            }
-//
-//            // 해당 토큰 리스트로 FCM을 쏴줌
-//            MulticastMessage message = MulticastMessage.builder()
-//                    .putData("data", "test")
-//                    .putData("data2", "test2")
-//                    .addAllTokens(registrationTokens)
-//                    .build();
-//            BatchResponse response = FirebaseMessaging.getInstance().sendMulticast(message);
-//            System.out.println(response.getSuccessCount() + " messages were sent successfully");
-//
-//            result.put("msg", SUCCESS);
-//            status = HttpStatus.OK;
-//        } catch (Exception e) {
-//            result.put("msg", FAIL);
-//            result.put("why", e.getMessage());
-//            result.put("why2", e.getStackTrace());
-//;            status = HttpStatus.BAD_REQUEST;
-//        }
-//        return new ResponseEntity<>(result, status);
-//    }
 
     public User findUser(long id){
         return userRepository.findById(id)
