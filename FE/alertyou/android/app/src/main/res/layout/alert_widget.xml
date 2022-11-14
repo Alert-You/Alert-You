@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:theme="@style/AppTheme.AppWidgetContainer">
 
-    <TextView
+    <!-- <TextView
         android:id="@+id/appwidget_text"
         style="@style/Widget.Alertyou.AppWidget.InnerView"
         android:layout_width="wrap_content"
@@ -15,7 +15,7 @@
         android:contentDescription="@string/appwidget_text"
         android:text="@string/appwidget_text"
         android:textSize="24sp"
-        android:textStyle="bold|italic" />
+        android:textStyle="bold|italic" /> -->
 
     <Button
         android:id="@+id/appwidget_button"
