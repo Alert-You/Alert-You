@@ -3,6 +3,7 @@ package com.ssafy.alertyou.common.auth;
 import com.ssafy.alertyou.account.entity.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class AlertYouDetails implements UserDetails {
     boolean accountNonLocked;
     boolean credentialNonExpired;
     boolean enabled = false;
-    List<GrantedAuthority> roles = new ArrayList<>();
+    List<GrantedAuthority> roles; // = new ArrayList<>();
 
     public AlertYouDetails(User user) {
         this.user = user;
@@ -24,8 +25,10 @@ public class AlertYouDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        return this.roles;
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        String userRole = this.user.getRole();
+        authorities.add(new SimpleGrantedAuthority(userRole));
+        return authorities;
     }
 
     public void setAuthorities(List<GrantedAuthority> roles) {
