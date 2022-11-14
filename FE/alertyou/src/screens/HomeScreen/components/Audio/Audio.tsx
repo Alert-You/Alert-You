@@ -1,5 +1,5 @@
 import {Box, Button, Pressable, Text, View, VStack} from 'native-base';
-import React, {Component, useState} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
@@ -13,10 +13,12 @@ import {Platform, PermissionsAndroid, Dimensions} from 'react-native';
 import Toast from 'react-native-toast-message';
 import {styles} from './style';
 import {AudioBtn} from '../AudioBtn';
-import {nonEmergencyBgStyle} from '@/theme/Home/gradient';
+import {emergencyBgStyle, nonEmergencyBgStyle} from '@/theme/Home/gradient';
+import { reportFile } from '../../api';
 
 interface AudioProps {
   navigation: any;
+  isEmergency: boolean;
 }
 
 interface AudioState {
@@ -75,6 +77,9 @@ class Audio extends Component<AudioProps, AudioState> {
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.11);
+    if (this.props.isEmergency) {
+      this.onStartRecord();
+    }
   }
 
   private onStatusPress = (e: any) => {
@@ -154,6 +159,9 @@ class Audio extends Component<AudioProps, AudioState> {
           Math.floor(e.currentPosition),
         ),
       });
+      if (this.state.recordSecs > 180000) {
+        this.onStopRecord();
+      }
     });
   };
 
@@ -181,6 +189,9 @@ class Audio extends Component<AudioProps, AudioState> {
   private onStopRecord = async () => {
     const result = await this.audioRecorderPlayer.stopRecorder();
     this.audioRecorderPlayer.removeRecordBackListener();
+    if (this.props.isEmergency) {
+      this.onReportAudio();
+    }
     this.setState({
       recordSecs: 0,
     });
@@ -270,20 +281,21 @@ class Audio extends Component<AudioProps, AudioState> {
   };
 
   private onReportAudio = async () => {
-    // console.log('이 파일을 보낼 것이다.', this.state.uri);
     if (this.state.uri) {
-      // 서버로 uri 보내는 await 로직
-      Toast.show({
-        type: 'info',
-        text1: '현장 녹음 접수 완료',
-        text2: '현장 녹음 접수가 완료되었습니다!',
-      });
-      this.state.navigation.navigate('HomeScreen');
+      const responseStatus = await reportFile(this.state.uri);
+      if (responseStatus === 201) {
+        Toast.show({
+          type: 'info',
+          text1: '현장 녹음 접수 완료',
+          text2: '현장 녹음 접수가 완료되었습니다!',
+        });
+        this.state.navigation.navigate('HomeScreen');
+      }
     } else {
       Toast.show({
         type: 'error',
         text1: '오류',
-        text2: '녹취 파일이 없습니다!',
+        text2: '녹취 파일 접수에 실패했습니다.',
       });
     }
   };
@@ -353,9 +365,13 @@ class Audio extends Component<AudioProps, AudioState> {
       isShow: true,
     };
 
+    // if(this.props.isEmergency) {
+    //   this.onStartRecord();
+    // }
+
     return (
       <View style={styles.container}>
-        <VStack bg={nonEmergencyBgStyle} style={styles.innerContainer}>
+        <VStack bg={this.props.isEmergency ? emergencyBgStyle : nonEmergencyBgStyle} style={styles.innerContainer}>
           {/* <Text style={styles.titleTxt}>
             {!this.state.page ? '녹음' : '녹음 확인'}
           </Text> */}

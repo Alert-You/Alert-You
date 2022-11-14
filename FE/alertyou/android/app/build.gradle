@@ -256,6 +256,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.work:work-runtime:2.7.1'
     implementation project(':react-native-audio-recorder-player')
     implementation project(':react-native-splash-screen')
     //noinspection GradleDynamicVersion
@@ -309,7 +310,8 @@ task copyDownloadableDepsToLibs(type: Copy) {
     into 'libs'
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
+apply plugin: 'org.jetbrains.kotlin.android'; applyNativeModulesAppBuildGradle(project)
 
 def isNewArchitectureEnabled() {
     // To opt-in for the New Architecture, you can either:
