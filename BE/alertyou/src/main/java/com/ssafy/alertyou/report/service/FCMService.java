@@ -37,7 +37,7 @@ public class FCMService {
 //        String fcmToken = "cO92x2HsT0-A0ll01iUeDd:APA91bG77LkusG2eEkXM3Kd9hjrtlnHBdhgP2L394kLaJ8kvBx6qLz7qvltSbw7ixsWy2WXlekAQRpEdN0DeLLg9eTPIDogN7Jvpxn5n1bDdq5dwiIk9oJXT3y5HpE-vuPqYBT4e2NWH"; // 개인
         Message message = Message.builder()
                 .putData("title", "알럿-유 알림")
-                .putData("content", "[긴급] 학교 폭력 신고 알림")
+                .putData("body", "[긴급] 학교 폭력 신고 알림")
                 .setToken(fcmToken)
                 .build();
         FirebaseMessaging.getInstance().sendAsync(message);
