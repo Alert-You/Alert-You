@@ -1,10 +1,12 @@
 package com.alertyou;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.content.SharedPreferences;
@@ -25,10 +27,14 @@ public class AlertWidget extends AppWidgetProvider {
             String appString = sharedPref.getString("appData", "{\"text\":'no data'}");
             JSONObject appData = new JSONObject(appString);
             RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.alert_widget);
-            views.setTextViewText(R.id.appwidget_text, appData.getString("text"));
+            // views.setTextViewText(R.id.appwidget_text, appData.getString("text"));
 
             // intent onclick
-            Intent intent = new Intent(context, context.getClass());
+            // Intent intent = new Intent(context, context.getClass());
+	         PackageManager pm = context.getPackageManager();
+//            Activity currentActivity = getCurrentActivity();
+//            PackageManager pm = currentActivity.getPackageManager();
+		    Intent intent = pm.getLaunchIntentForPackage("alertyou");
             intent.setAction("report");
             intent.putExtra("text", appData.getString("text"));
             views.setOnClickPendingIntent(R.id.appwidget_button, PendingIntent.getBroadcast(context,0,intent,0));

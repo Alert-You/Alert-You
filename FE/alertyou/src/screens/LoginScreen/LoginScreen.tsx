@@ -133,19 +133,6 @@ const LoginScreen = ({navigation}: any) => {
               회원가입
             </Text>
           </View>
-          <Button
-            title="로그인 더미"
-            onPress={() =>
-              loginMutate({phone: '01012345678', password: 'asd123'})
-            }
-          />
-          <TextInput
-            onChangeText={newText => setText(newText)}
-            value={text}
-            returnKeyType="send"
-            onEndEditing={handleSubmit}
-            placeholder="Enter the text to display on the Widget"
-          />
         </View>
       </KeyboardAvoidingView>
     </ErrorBoundary>
