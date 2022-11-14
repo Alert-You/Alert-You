@@ -3,6 +3,8 @@ import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.account.service.AuthRefreshTokenService;
 import com.ssafy.alertyou.account.service.UserService;
+import com.ssafy.alertyou.school.dto.StudentDetailResDto;
+import com.ssafy.alertyou.school.dto.StudentListResDto;
 import com.ssafy.alertyou.school.entity.School;
 import com.ssafy.alertyou.school.repository.SchoolRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @SpringBootTest
@@ -40,38 +44,42 @@ public class TeacherServiceTest {
     @AfterEach
     public void delete(){
         userRepository.deleteAll();
+        schoolRepository.deleteAll();
     }
 
     @Test
     @DisplayName("선생님 반 리스트 조회 : 토큰")
     public void getStudentListByToken() throws Exception {
         School school = schoolRepository.save(toSchool(1,"5"));
-        User teacher = userRepository.save(toEntity("teacher", "01000000000", school));
-        userRepository.save(toEntity("student", "01011111111", school));
+        User teacher = userRepository.save(toEntity("교사", "01000000000", school));
+        Long userId = userRepository.save(toEntity("학생", "01011111111", school)).getId();
         String token = authRefreshTokenService.createAccessToken(teacher.getPhone());
-
-        ResponseEntity<Map<String, Object>> res = teacherService.getClasses(token,null,null);
-
-        assertThat(res.getStatusCode().equals(200));
+        List<StudentListResDto> res = teacherService.getClasses(token,null,null);
+        assertThat(res.get(0).getStudentId() == userId);
     }
 
     @Test
     @DisplayName("선생님 반 리스트 조회 : 학년&반")
+    @Transactional
     public void getStudentListByGradeAndClassRoom() throws Exception {
         School school = schoolRepository.save(toSchool(1,"6"));
-        User teacher = userRepository.save(toEntity("teacher", "01000000000", school));
-        ResponseEntity<Map<String, Object>> res = teacherService.getClasses(null,1,"6");
-        assertThat(res.getStatusCode().equals(200));
+        User teacher = userRepository.save(toEntity("교사", "01000000000", school));
+        String token = authRefreshTokenService.createAccessToken(teacher.getPhone());
+        Long userId = userRepository.save(toEntity("학생", "01011111111", school)).getId();
+
+        List<StudentListResDto> res = teacherService.getClasses(token,1,"6");
+        assertThat(res.get(0).getStudentId() == userId);
     }
 
     @Test
     @DisplayName("선생님 학생 조회")
+    @Transactional
     public void getStudent() throws Exception {
         School school = schoolRepository.save(toSchool(1,"6"));
-        User teacher = userRepository.save(toEntity("teacher", "01000000000", school));
-        Long id = userRepository.save(toEntity("student", "01011111111", school)).getId();
-        ResponseEntity<Map<String, Object>> res = teacherService.getStudent(id);
-        assertThat(res.getStatusCode().equals(200));
+        User teacher = userRepository.save(toEntity("교사", "01000000000", school));
+        Long id = userRepository.save(toEntity("학생", "01011111111", school)).getId();
+        StudentDetailResDto res = teacherService.getStudent(id);
+        assertThat(res.getName().equals("test"));
     }
 
     @Test
@@ -79,10 +87,10 @@ public class TeacherServiceTest {
     public void removeStudent() throws Exception {
         School school = schoolRepository.save(toSchool(1,"7"));
 
-        Long id = userRepository.save(toEntity("student", "01011111111", school)).getId();
+        Long id = userRepository.save(toEntity("교사", "01011111111", school)).getId();
 
-        ResponseEntity<Map<String, Object>> res = teacherService.removeStudent(id);
-        assertThat(res.getStatusCode().equals(200));
+        Long userId = teacherService.removeStudent(id);
+        assertThat(id == userId);
     }
 
     public User toEntity(String role, String phone, School school){

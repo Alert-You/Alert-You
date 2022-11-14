@@ -29,9 +29,7 @@ public class SchoolServiceImpl implements SchoolService {
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
 
-    public ResponseEntity<Map<String, Object>> getSchools(String word) throws Exception {
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
+    public List<SchoolSearchResDto> getSchools(String word) throws Exception {
         try {
             List<School> schools = schoolRepository.findAllByNameContainsOrderByAddress(word);
             Set<SchoolSearchResDto> res = new HashSet<>();
@@ -55,28 +53,19 @@ public class SchoolServiceImpl implements SchoolService {
 
             afterRes.sort(Comparator.naturalOrder());
 
-            result.put("msg", SUCCESS);
-            result.put("schools", afterRes);
-            status = HttpStatus.OK;
+            return afterRes;
         } catch (Exception e) {
-            result.put("msg", FAIL);
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-
-
-        return new ResponseEntity<>(result, status);
     }
 
     ;
 
-    public ResponseEntity<Map<String, Object>> getGradesAndClasses(String token,String name, String address) throws Exception {
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
+    public ArrayList<ArrayList<String>> getGradesAndClasses(String token,String name, String address) throws Exception {
         try {
             //1.이름을 포함하고 있는 모든 학교들을 뽑기 (학년 및 반별로 나누어져 들어가있기 때문)
             List<School> schools = new ArrayList<>();
             String schoolName = new String();
-            System.out.println(token);
             if (token != null){
                 School school = util.findUserByPhone(decodeToken(token)).getSchool();
                 schools = schoolRepository.findAllByNameAndAddress(school.getName(), school.getAddress());
@@ -139,37 +128,19 @@ public class SchoolServiceImpl implements SchoolService {
                 ArrayList<String> lst = new ArrayList<>();
                 classes.addAll(0, Collections.singleton(lst));
             }
-
-            result.put("msg", SUCCESS);
-            result.put("classes", classes);
-            status = HttpStatus.OK;
+            return classes;
 
         } catch (Exception e) {
-            result.put("msg", FAIL);
-            result.put("error",e.getMessage());
-            System.out.println(e.getMessage());
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-
-        return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String, Object>> getSchoolsNumber(String name,String address, int grade, String classRoom) throws Exception {
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
-
+    public Long getSchoolsNumber(String name,String address, int grade, String classRoom) throws Exception {
         try {
-            Long schoolId = findSchool(address, grade,classRoom).getId();
-
-            result.put("msg", SUCCESS);
-            result.put("schoolId", schoolId);
-            status = HttpStatus.OK;
+            return findSchool(address, grade,classRoom).getId();
         }catch (Exception e){
-            result.put("msg", FAIL);
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-
-        return new ResponseEntity<>(result, status);
     }
 
     public ArrayList<String> sort(String[] sequence){

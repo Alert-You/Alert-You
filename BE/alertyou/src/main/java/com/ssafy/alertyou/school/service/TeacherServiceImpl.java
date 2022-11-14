@@ -41,13 +41,11 @@ public class TeacherServiceImpl implements TeacherService{
 
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
+
     private final String GUARD = "보디가드";
     private final String STUDENT = "학생";
 
-    public ResponseEntity<Map<String, Object>> getClasses(String token,Integer grade, String classRoom) throws Exception{
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
-
+    public List<StudentListResDto> getClasses(String token,Integer grade, String classRoom) throws Exception{
         try {
             School school = new School();
             List<StudentListResDto> list = new ArrayList<>();
@@ -61,21 +59,18 @@ public class TeacherServiceImpl implements TeacherService{
             } else {
                 school = findSchool(user.getSchool().getAddress(), grade, classRoom);
             }
-            if (list.isEmpty()){
-                List<User> userList = userRepository.findAllBySchoolAndRole(school,STUDENT);
-                for (User student : userList){
-                    // user 객체로 기본 정보를 주고, 선생님이 선택한 보디가드인지 확인하는 로직 필요
-                    // 보디가드 확인하는 로직 : findCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
-                    list.add(new StudentListResDto(student, findGuard(student)));
-                }
-                result.put("msg",SUCCESS);
-                result.put("students", list);
-                status = HttpStatus.OK;
+            List<User> userList = userRepository.findAllBySchoolAndRole(school,STUDENT);
+            for (User student : userList){
+                // user 객체로 기본 정보를 주고, 선생님이 선택한 보디가드인지 확인하는 로직 필요
+                // 보디가드 확인하는 로직 : findCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
+                list.add(new StudentListResDto(student, findGuard(student)));
             }
+            return list;
         }catch (Exception e){
-            result.put("msg",FAIL);
-            result.put("error",e.getMessage());
-            status = HttpStatus.BAD_REQUEST;
+            System.out.println(e.getMessage());
+            System.out.println("trace");
+            System.out.println(e.getStackTrace()[0]);
+            return null;
         }
 //        else if (!(grade == null) && classRoom == null){
 //            List<School> schools = findSchoolAndGrade(user.getSchool().getName(),grade);
@@ -88,12 +83,9 @@ public class TeacherServiceImpl implements TeacherService{
 //                }
 //            }
 //        }
-        return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String,Object>> getStudent(long id) throws Exception{
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
+    public StudentDetailResDto getStudent(long id) throws Exception{
         try {
 //        1. id로 findUser 찾기
             User user = util.findUser(id);
@@ -113,33 +105,22 @@ public class TeacherServiceImpl implements TeacherService{
             //3-1 String schoolName = school.getName + school.getGrade.toString() +"학년" + school.getRoom.toString()+"반";
             String schoolName = school.getName() + " " + String.valueOf(school.getGrade()) + "학년 " + String.valueOf(school.getClassRoom()) + "반";
 //        4. 분기처리 하고 들어갈 것 : StudentDetailResDto(user,role,schoolName)
-            result.put("msg",SUCCESS);
-            result.put("student", new StudentDetailResDto(user,schoolName,role));
-            status = HttpStatus.OK;
+            return new StudentDetailResDto(user,schoolName,role);
         } catch (Exception e){
-            result.put("msg",FAIL);
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-        return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String, Object>> removeStudent(long id) throws Exception{
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
+    public Long removeStudent(long id) throws Exception{
         try {
             User user = util.findUser(id);
             School school = findSchoolById(133683);
             user.deleteSchool(user,school);
-            userRepository.save(user);
-
-            result.put("msg",SUCCESS);
-            status = HttpStatus.OK;
+            Long userId = userRepository.save(user).getId();
+            return userId;
         }catch (Exception e){
-            result.put("msg",FAIL);
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-
-        return new ResponseEntity<>(result, status);
     }
 
 

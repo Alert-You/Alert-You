@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Map;
 
+import static com.ssafy.alertyou.util.Util.getResponseEntity;
+
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/proof")
@@ -22,15 +25,12 @@ public class ProofController {
 
     @PostMapping(value = "/upload")
     public ResponseEntity<Map<String, Object>> ProofUpload(@RequestHeader(value = "Authorization") String token, @RequestBody MultipartFile file) throws Exception {
-        System.out.println("test");
-        System.out.println(file);
-        return proofService.uploadProof(token, file);
+        return getResponseEntity("success", proofService.uploadProof(token, file));
     }
 
     @PostMapping(value = "/upload/test")
     public ResponseEntity<Map<String, Object>> ProofUploadToBase64(@RequestHeader(value = "Authorization") String token, @RequestBody ProofUploadReqDto file) throws Exception {
-        System.out.println("base64");
-        return proofService.uploadProofByBase64(token, file);
+        return getResponseEntity("success", proofService.uploadProofByBase64(token, file));
     }
     @GetMapping(value = "/download")
     public ResponseEntity<byte[]> ProofDownload(@RequestParam("proofId") Long id ) throws IOException {
@@ -39,8 +39,9 @@ public class ProofController {
 
     @GetMapping(value = "")
     public ResponseEntity<Map<String, Object>> ProofList(@RequestHeader(value = "Authorization") String token, @RequestParam("userId") long id) throws Exception {
-        return proofService.getProof(token, id);
+        return getResponseEntity("proofs", proofService.getProof(token, id));
     }
+
 
 
     }

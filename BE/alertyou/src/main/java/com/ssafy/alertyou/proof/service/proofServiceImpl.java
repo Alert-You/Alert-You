@@ -37,11 +37,8 @@ public class proofServiceImpl implements ProofService {
     private final S3UtilByBase64 s3UtilByBase64;
     private final String IMAGE = "image";
     private final String AUDIO = "audio";
-    private final String SUCCESS = "SUCCESS";
-    private final String FAIL = "FAIL";
-    public ResponseEntity<Map<String, Object>> uploadProof(String token, MultipartFile file) throws Exception{
-        Map<String, Object> result = new HashMap<>();
-        HttpStatus status;
+
+    public Long uploadProof(String token, MultipartFile file) throws Exception{
         String type = new String();
         Boolean ctype = null;
         String endPoint = file.getContentType();
@@ -56,20 +53,13 @@ public class proofServiceImpl implements ProofService {
         }
         String url = s3Util.upload(file,type+"/"+uId);
         try {
-            Long res = proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
-            result.put("msg",SUCCESS);
-            status = HttpStatus.CREATED;
+            return proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
         } catch (Exception e){
-            result.put("msg",FAIL);
-            result.put("error",e.getStackTrace());
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-        return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String, Object>> uploadProofByBase64(String token, ProofUploadReqDto file) throws Exception{
-        Map<String, Object> result = new HashMap<>();
-        HttpStatus status;
+    public Long uploadProofByBase64(String token, ProofUploadReqDto file) throws Exception{
         String type = new String();
         Boolean ctype = null;
         User user = util.findUserByPhone(decodeToken(token));
@@ -80,7 +70,6 @@ public class proofServiceImpl implements ProofService {
         String endPoint = point.substring(point.lastIndexOf('"')+1);
         String S3Point = endPoint.substring(endPoint.lastIndexOf("/")+1);
         String baseFile = seperateFile[1];
-        System.out.println(baseFile.length());
         byte[] newFile = Base64.getMimeDecoder().decode(baseFile);
         if (endPoint.contains("image")){
             type = IMAGE;
@@ -91,15 +80,10 @@ public class proofServiceImpl implements ProofService {
         }
         String url = s3UtilByBase64.upload(newFile,S3Point,type+"/"+uId);
         try {
-            Long res = proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
-            result.put("msg",SUCCESS);
-            status = HttpStatus.CREATED;
+            return proofRepository.save(toEntity(user, url,ctype,endPoint)).getId();
         } catch (Exception e){
-            result.put("msg",FAIL);
-            result.put("error",e.getStackTrace());
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-        return new ResponseEntity<>(result, status);
     }
 
 
@@ -115,7 +99,7 @@ public class proofServiceImpl implements ProofService {
         return s3Util.download(url,proof.getEndPoint());
     }
 
-    public ResponseEntity<Map<String, Object>> getProof(String token, long id) throws Exception{
+    public  List<ProofListResDto> getProof(String token, long id) throws Exception{
 
         User teacher = util.findUserByPhone(decodeToken(token));
         HttpStatus status = null;
@@ -127,19 +111,13 @@ public class proofServiceImpl implements ProofService {
                 for (Proof proof : entityList){
                     list.add(new ProofListResDto(proof));
                 }
-
-                result.put("msg",SUCCESS);
-                result.put("proofs", list);
-                status = HttpStatus.OK;
+                return list;
             } catch (Exception e){
-                result.put("msg",FAIL);
-                status = HttpStatus.BAD_REQUEST;
+                return null;
             }
         } else {
-            result.put("msg",FAIL);
-            status = HttpStatus.NOT_FOUND;
+            return null;
         }
-        return new ResponseEntity<>(result, status);
     }
 
     public Proof toEntity(User user, String url, Boolean ctype, String endPoint){
