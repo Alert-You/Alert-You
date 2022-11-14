@@ -235,11 +235,4 @@ public class UserController {
         return ResponseEntity.status(404).body(BaseResponseBody.result(404, "해당 유저가 없습니다."));
     }
 
-
-    @GetMapping("/test") // 권한 테스트용
-    @ResponseBody
-    public String test() {
-        return "스프링 시큐리티 권한 테스트";
-    }
-
 }
