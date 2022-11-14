@@ -271,21 +271,21 @@ class Audio extends Component<AudioProps, AudioState> {
   };
 
   private onReportAudio = async () => {
-    console.log('이 파일을 보낼 것이다.', this.state.uri);
     if (this.state.uri) {
-      // 서버로 uri 보내는 await 로직
-      reportFile(this.state.uri)
-      Toast.show({
-        type: 'info',
-        text1: '현장 녹음 접수 완료',
-        text2: '현장 녹음 접수가 완료되었습니다!',
-      });
-      this.state.navigation.navigate('HomeScreen');
+      const responseStatus = await reportFile(this.state.uri);
+      if (responseStatus === 201) {
+        Toast.show({
+          type: 'info',
+          text1: '현장 녹음 접수 완료',
+          text2: '현장 녹음 접수가 완료되었습니다!',
+        });
+        this.state.navigation.navigate('HomeScreen');
+      }
     } else {
       Toast.show({
         type: 'error',
         text1: '오류',
-        text2: '녹취 파일이 없습니다!',
+        text2: '녹취 파일 접수에 실패했습니다.',
       });
     }
   };

@@ -14,16 +14,22 @@ interface PropsType {
 
 const CameraCheckScreen = ({navigation}: PropsType) => {
   const uri = useRoute<RouteProp<HomeParamList>>().params?.uri;
-  const reportImage = (imgURI: string|undefined) => {
-    const fileURI = `file://${imgURI}`;
-    console.log('fileURI: ', fileURI);
-    reportFile(fileURI)
-    Toast.show({
-      type: 'info',
-      text1: '현장 사진 접수 완료',
-      text2: '현장 사진 접수가 완료되었습니다!',
-    });
-    navigation.navigate('HomeScreen');
+  const reportImage = async (imgURI: string|undefined) => {
+    const responseStatus = await reportFile(imgURI);
+    if (responseStatus === 201){
+      Toast.show({
+        type: 'info',
+        text1: '현장 사진 접수 완료',
+        text2: '현장 사진 접수가 완료되었습니다!',
+      });
+      navigation.navigate('HomeScreen');
+    } else {
+      Toast.show({
+        type: 'error',
+        text1: '오류',
+        text2: '사진 파일 접수에 실패했습니다.',
+      });
+    }
   };
 
   return (

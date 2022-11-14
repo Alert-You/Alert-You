@@ -43,44 +43,29 @@ interface fileType {
 }
 
 export const reportFile = async (file: any) => {
-  console.log('file:', typeof file, file);
   const extension = findExtension(file) === 'mp4' ? 'mp4' : 'jpg';
   const fileType = extension === 'mp4' ? 'audio' : 'image';
   let fileData = {
     uri: file,
-    type: 'image/jpg',
+    type: `${fileType}/${extension}`,
     name: `${new Date().getTime()}.${extension}`,
   };
   const fileFormData = new FormData();
-  console.log('fileFormData: ', typeof fileFormData, fileFormData);
-  fileFormData.append(fileType, fileData);
-  console.log('fileFormData: ', typeof fileFormData, fileFormData);
+  fileFormData.append('file', fileData);
   try {
     const token = await getAccessToken();
-    const result = await axios.post<fileType>(
-      `${BASE_URL}proof/upload`,
-      fileFormData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          // 'Content-Type': 'multipart/form-data',
-        },
+    const result: any = await fetch(`${BASE_URL}proof/upload`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'multipart/form-data',
       },
-    );
-    console.log('result : ', result);
-    return result.data;
+      body: fileFormData,
+      method: 'POST',
+    });
+    return result.status;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.log('error.request: ', error.request);
-      console.log('error.response: ', error.response);
-      console.log('error.config: ', error.config);
-      console.log('error message: ', error.message);
-      // 👇️ error: AxiosError<any, any>
-      return error.message;
-    } else {
-      console.log('unexpected error: ', error);
-      return 'An unexpected error occurred';
-    }
+    console.log('unexpected error: ', error);
+    return 'An unexpected error occurred';
   }
 };
 
