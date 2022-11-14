@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/signout", "/api/auth/profile", "/api/auth/update", "/api/auth/logout")
                 .authenticated()
-                .antMatchers("/api/bodyguard/**", "/api/location/**", "/api/report/**", "/api/alert/**")
+                .antMatchers("/api/bodyguard/**", "/api/location/**", "/api/report/**", "/api/alert/**", "/api/proof/**")
                 .authenticated()
                 .antMatchers("/api/teacher/**")
                 .access("hasRole('교사')")
