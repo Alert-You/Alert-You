@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -44,8 +45,6 @@ public class AlertServiceTest {
     private UserRepository userRepository;
     @Autowired
     private SchoolRepository schoolRepository;
-    @Autowired
-    private BodyGuardService bodyGuardService;
     @Autowired
     private ReportRepository reportRepository;
     @Autowired
@@ -90,6 +89,31 @@ public class AlertServiceTest {
 
         // then
         assertThat(checkTest).isEqualTo(true);
+    }
+
+    @Test
+    @DisplayName("알람 전체 확인(수정) 테스트")
+    public void modifyAlertListTest() throws Exception{
+        // given
+        School school = schoolRepository.save(toSchool(2,"39"));
+        User user = userRepository.save(toUser("01871114423", "김마리", "0000", "student", school));
+        Report report = reportRepository.save(toReport(user, true, 36.339929, 127.388519));
+
+        Alert alert = alertRepository.save(toAlert(user, report));
+        String token = authRefreshTokenService.createAccessToken(user.getPhone());
+
+        List<Alert> alertlist = alertRepository.findAllByUser(user);
+        int usercnt = alertlist.size();
+
+        // when
+        alertService.modifyAlertList(token);
+
+        List<Alert> checklist = alertRepository.findAllByUserAndChecked(user, true);
+        int checkcnt = checklist.size();
+
+        // then
+        assertThat(usercnt).isEqualTo(checkcnt);
+
     }
 
     public User toUser(String phone, String name, String password, String role, School school){
