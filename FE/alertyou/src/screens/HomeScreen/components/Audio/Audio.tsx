@@ -1,8 +1,11 @@
 import { emergencyBgStyle, nonEmergencyBgStyle } from '@/theme/Home/gradient';
+import { AudioBtn } from '@/screens/HomeScreen/components/AudioBtn';
+import { reportFile } from '@/screens/HomeScreen/api';
 
-import { Platform, PermissionsAndroid, Dimensions } from 'react-native';
+import { Platform, PermissionsAndroid } from 'react-native';
 import { Pressable, Text, View, VStack } from 'native-base';
 import Toast from 'react-native-toast-message';
+import { W } from '@/constants/dimensions';
 import { Component } from 'react';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
@@ -14,8 +17,6 @@ import AudioRecorderPlayer, {
   RecordBackType,
 } from 'react-native-audio-recorder-player';
 
-import { AudioBtn } from '../AudioBtn';
-import { reportFile } from '../../api';
 import { styles } from './style';
 
 
@@ -48,7 +49,7 @@ interface AudioState {
   isShowStopPlay: boolean;
 }
 
-const screenWidth = Dimensions.get('screen').width;
+const screenWidth = W;
 
 class Audio extends Component<AudioProps, AudioState> {
   private audioRecorderPlayer: AudioRecorderPlayer;

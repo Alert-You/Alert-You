@@ -1,4 +1,5 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
+import { H } from '@/constants/dimensions';
 
 export const styles = StyleSheet.create({
   container: {
@@ -6,7 +7,7 @@ export const styles = StyleSheet.create({
   },
 
   innerContainer: {
-    minHeight: Dimensions.get('window').height,
+    minHeight: H,
     padding: 16,
     paddingTop: 64,
   },

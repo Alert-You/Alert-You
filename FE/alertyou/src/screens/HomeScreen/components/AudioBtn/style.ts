@@ -1,7 +1,7 @@
-import { Dimensions, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { W } from '@/constants/dimensions';
 
-const WIDTH = Dimensions.get('window').width;
-const DIAMETER = WIDTH * 0.2;
+const DIAMETER = W * 0.2;
 
 export const styles = StyleSheet.create({
   btnContainer: {

@@ -1,7 +1,7 @@
-import { Dimensions, StyleSheet } from "react-native";
 import { MAIN, RED, WHITE } from '@/theme/colorVariants';
-import { FONT_WEIGHT } from "@/theme/fontWeightVariants";
-
+import { FONT_WEIGHT } from '@/theme/fontWeightVariants';
+import { W } from '@/constants/dimensions';
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
@@ -104,7 +104,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     top: 26,
-    width: Dimensions.get('window').width - 250,
+    width: W - 250,
     elevation: 6,
     backgroundColor: WHITE.white,
     height: 60,
@@ -148,11 +148,11 @@ export const styles = StyleSheet.create({
   logoutText: {
     fontSize: 16,
     fontWeight: FONT_WEIGHT.SemiBold,
-    color: MAIN.placeholder
+    color: MAIN.placeholder,
   },
   logoutButton: {
     position: 'absolute',
     right: 10,
     bottom: 10,
-  }
+  },
 });

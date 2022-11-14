@@ -1,10 +1,11 @@
-import {WHITE} from '@/theme/colorVariants';
-import {FONT_WEIGHT} from '@/theme/fontWeightVariants';
-import {Dimensions, StyleSheet} from 'react-native';
+import { WHITE } from '@/theme/colorVariants';
+import { FONT_WEIGHT } from '@/theme/fontWeightVariants';
+import { StyleSheet } from 'react-native';
+import { W } from '@/constants/dimensions';
 
 export const styles = StyleSheet.create({
   container: {
-    width: Dimensions.get('window').width - 32,
+    width: W - 32,
     elevation: 6,
     height: 205,
     backgroundColor: WHITE.white,

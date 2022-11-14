@@ -1,4 +1,5 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
+import { H } from '@/constants/dimensions';
 
 export const styles = StyleSheet.create({
   container: {
@@ -8,7 +9,7 @@ export const styles = StyleSheet.create({
   innerContainer: {
     flex: 1,
     alignItems: 'center',
-    minHeight: Dimensions.get('window').height - 60,
+    minHeight: H - 60,
     paddingHorizontal: 16,
   },
 

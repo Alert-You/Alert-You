@@ -6,9 +6,9 @@ import {
   Pressable,
 } from 'native-base';
 import {emergencyBgStyle, nonEmergencyBgStyle} from '@/theme/Home/gradient';
-import React from 'react';
-import {Dimensions} from 'react-native';
 import {MAIN} from '@/theme/colorVariants';
+import { W } from '@/constants/dimensions';
+
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface propsType {
@@ -18,10 +18,9 @@ interface propsType {
 
 const ToggleBtn = ({toggleIsEmergency, isEmergency}: propsType) => {
   const calcToggleMove = () => {
-    const WIDTH = Dimensions.get('window').width;
-    const WIDTH_INNER = WIDTH - 32;
-    const TOGGLE_OUTER_WIDTH = WIDTH_INNER * 0.4;
-    return TOGGLE_OUTER_WIDTH * 0.6;
+    const W_INNER = W - 32;
+    const TOGGLE_OUTER_W = W_INNER * 0.4;
+    return TOGGLE_OUTER_W * 0.6;
   };
   const toggleMove = calcToggleMove();
 
