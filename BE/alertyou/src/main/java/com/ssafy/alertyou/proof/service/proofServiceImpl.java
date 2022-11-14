@@ -120,7 +120,7 @@ public class proofServiceImpl implements ProofService {
         User teacher = util.findUserByPhone(decodeToken(token));
         HttpStatus status = null;
         Map<String, Object> result = new HashMap<>();
-        if (teacher.isActive() == true && teacher.getRole().equals("teacher")){
+        if (teacher.isActive() == true && teacher.getRole().equals("교사")){
             try {
                 List<Proof> entityList = proofRepository.findAllByUserOrderByCreatedAtDesc(util.findUser(id));
                 List<ProofListResDto> list = new ArrayList<>();
