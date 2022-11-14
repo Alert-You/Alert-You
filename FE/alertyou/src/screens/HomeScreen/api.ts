@@ -27,34 +27,22 @@ export const reportWitness = async (
   return result.data;
 };
 
-// export const reportFile = async (file: any): Promise<SimpleMsgType> => {
-//   const result = await axios({
-//     url: 'proof/upload',
-//     methods: 'post',
-//     data: {file}
-//   })
-//     .then(response => response)
-//     .catch(err => err);
-//   return result.data;
-// };
-
-interface fileType {
-  file: any;
-}
-
-export const reportFile = async (file: any) => {
-  const extension = findExtension(file) === 'mp4' ? 'mp4' : 'jpg';
-  const fileType = extension === 'mp4' ? 'audio' : 'image';
-  let fileData = {
-    uri: file,
-    type: `${fileType}/${extension}`,
-    name: `${new Date().getTime()}.${extension}`,
-  };
-  const fileFormData = new FormData();
-  fileFormData.append('file', fileData);
+export const reportFile = async (file: string | undefined) => {
   try {
+    if (!file) {
+      throw new Error('no file URI');
+    }
+    const extension = findExtension(file) === 'mp4' ? 'mp4' : 'jpg';
+    const fileType = extension === 'mp4' ? 'audio' : 'image';
+    let fileData = {
+      uri: file,
+      type: `${fileType}/${extension}`,
+      name: `${new Date().getTime()}.${extension}`,
+    };
+    const fileFormData = new FormData();
+    fileFormData.append('file', fileData);
     const token = await getAccessToken();
-    const result: any = await fetch(`${BASE_URL}proof/upload`, {
+    const result: Response = await fetch(`${BASE_URL}proof/upload`, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'multipart/form-data',
