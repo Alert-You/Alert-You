@@ -151,7 +151,7 @@ public class ReportServiceImpl implements ReportService {
             result.put("msg", SUCCESS);
             status = HttpStatus.OK;
         } catch (Exception e) {
-            System.out.println("================= 체크 3 =======================")
+            System.out.println("================= 체크 3 =======================");
             result.put("msg", FAIL);
             result.put("why", e.getMessage());
             result.put("why2", e.getStackTrace());
