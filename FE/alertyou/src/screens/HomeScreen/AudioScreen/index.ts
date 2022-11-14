@@ -1,1 +1,1 @@
-export {default as AudioScreen} from './AudioScreen';
+export { default as AudioScreen } from './AudioScreen';
