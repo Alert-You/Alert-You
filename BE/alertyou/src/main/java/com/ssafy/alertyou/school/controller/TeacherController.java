@@ -1,33 +1,43 @@
 package com.ssafy.alertyou.school.controller;
 
+import com.ssafy.alertyou.school.dto.StudentListResDto;
 import com.ssafy.alertyou.school.service.TeacherService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static com.ssafy.alertyou.util.Util.getResponseEntity;
 
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/teacher")
 public class TeacherController {
+
     private final TeacherService teacherService;
+
 
     @GetMapping("")
     public ResponseEntity<Map<String, Object>> StudentList(@RequestHeader(value = "Authorization") String token, @RequestParam(required = false) Integer grade, String classRoom) throws Exception {
-        return teacherService.getClasses(token, grade, classRoom);
+        return getResponseEntity("students",teacherService.getClasses(token, grade, classRoom));
+
     }
 
     @GetMapping("/student")
     public ResponseEntity<Map<String, Object>> StudentDetails(@RequestParam(value = "studentId") long id) throws Exception{
-        return teacherService.getStudent(id);
+        return getResponseEntity("student", teacherService.getStudent(id));
     }
 
     @DeleteMapping("/student")
     public ResponseEntity<Map<String, Object>> StudentRemove(@RequestParam(value = "studentId") long id) throws Exception{
-        return teacherService.removeStudent(id);
+        return getResponseEntity("success",teacherService.removeStudent(id));
     }
+
 
 }
