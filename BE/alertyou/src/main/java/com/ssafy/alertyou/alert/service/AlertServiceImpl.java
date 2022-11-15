@@ -11,6 +11,7 @@ import com.ssafy.alertyou.alert.entity.Alert;
 import com.ssafy.alertyou.alert.repository.AlertRepository;
 import com.ssafy.alertyou.report.dto.LocationReqDto;
 import com.ssafy.alertyou.report.entity.Report;
+import com.ssafy.alertyou.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +19,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.ssafy.alertyou.util.Util.decodeToken;
+
 @Service
 @RequiredArgsConstructor
 public class AlertServiceImpl implements AlertService{
 
     private final AlertRepository alertRepository;
-    private final UserRepository userRepository;
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
+    private final Util util;
 
     public ResponseEntity<Map<String, Object>> getAlertList(String token) throws Exception{
 
@@ -35,7 +38,7 @@ public class AlertServiceImpl implements AlertService{
         List<AlertResDto> read = new ArrayList<>();
         List<AlertResDto> unRead = new ArrayList<>();
 
-        User user = findUserByPhone(decodeToken(token));
+        User user = util.findUserByPhone(decodeToken(token));
 
         List<Alert> unreadList = alertRepository.findAllByUserAndChecked(user, false);
         List<Alert> readList = alertRepository.findAllByUserAndChecked(user, true);
@@ -73,10 +76,7 @@ public class AlertServiceImpl implements AlertService{
 
     }
 
-    public ResponseEntity<Map<String, Object>> modifyAlert(long id) throws Exception {
-
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
+    public Long modifyAlert(long id) throws Exception {
 
         Alert checkAlert = findAlert(id);
 
@@ -86,23 +86,17 @@ public class AlertServiceImpl implements AlertService{
                 alertRepository.save(checkAlert);
             }
 
-            result.put("msg",SUCCESS);
-            status = HttpStatus.OK;
+            return id;
 
         }catch (Exception e){
-            result.put("msg", FAIL);
-            status = HttpStatus.BAD_REQUEST;
-
+            return null;
         }
-        return new ResponseEntity<>(result, status);
 
     }
 
-    public ResponseEntity<Map<String, Object>> modifyAlertList(String token) throws Exception {
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
+    public Long modifyAlertList(String token) throws Exception {
 
-        User user = findUserByPhone(decodeToken(token));
+        User user = util.findUserByPhone(decodeToken(token));
         List<Alert> userList = findAlertList(user);
 
         try{
@@ -113,18 +107,13 @@ public class AlertServiceImpl implements AlertService{
                 }
             }
 
-            result.put("msg",SUCCESS);
-            status = HttpStatus.OK;
+            return user.getId();
 
         }catch (Exception e){
-            result.put("msg", FAIL);
-            status = HttpStatus.BAD_REQUEST;
-
+            return null;
         }
-        return new ResponseEntity<>(result, status);
 
     }
-
 
     public Alert findAlert(long id){
         return alertRepository.findById(id)
@@ -135,13 +124,5 @@ public class AlertServiceImpl implements AlertService{
         return alertRepository.findAllByUser(user);
     }
 
-    public User findUserByPhone(String phone){
-        return userRepository.findByPhone(phone);
-    }
 
-    public String decodeToken(String token) throws Exception{
-        JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
-        DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
-        return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
-    }
 }

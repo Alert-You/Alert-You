@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+import static com.ssafy.alertyou.util.Util.getResponseEntity;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/bodyguard")
@@ -15,11 +17,11 @@ public class BodyGuardController {
 
     @PostMapping("")
     public ResponseEntity<Map<String, Object>> BodyGuardSave(@RequestHeader(value = "Authorization") String token, @RequestParam("guardId") long id) throws Exception {
-        return bodyGuardService.addBodyGuard(token, id);
+        return getResponseEntity("success", bodyGuardService.addBodyGuard(token, id));
     }
 
     @GetMapping(value = "/list")
     public ResponseEntity<Map<String, Object>> BodyGuardList(@RequestParam("userId") long id) throws Exception{
-        return bodyGuardService.getBodyGuard(id);
+        return getResponseEntity("bodyguards", bodyGuardService.getBodyGuard(id));
     }
 }

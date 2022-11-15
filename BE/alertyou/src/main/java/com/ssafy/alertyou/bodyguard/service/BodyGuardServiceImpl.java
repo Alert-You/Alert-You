@@ -1,20 +1,19 @@
 package com.ssafy.alertyou.bodyguard.service;
 
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.interfaces.DecodedJWT;
+
 import com.ssafy.alertyou.account.entity.User;
-import com.ssafy.alertyou.account.jwt.JwtProperties;
-import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.bodyguard.dto.BodyGuardResDto;
 import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.entity.Opguard;
 import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.bodyguard.repository.OpGuardRepository;
+import com.ssafy.alertyou.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import static com.ssafy.alertyou.util.Util.decodeToken;
 
 import java.util.*;
 
@@ -23,19 +22,13 @@ import java.util.*;
 public class BodyGuardServiceImpl implements BodyGuardService {
     private final OpGuardRepository opGuardRepository;
     private final CoGuardRepository coGuardRepository;
-    private final UserRepository userRepository;
+    private final Util util;
 
-    private final String SUCCESS = "SUCCESS";
-    private final String FAIL = "FAIL";
-
-    public ResponseEntity<Map<String, Object>> getBodyGuard(long id) throws Exception {
-
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
+    public List<BodyGuardResDto> getBodyGuard(long id) throws Exception {
 
         List<BodyGuardResDto> list = new ArrayList<>();
 
-        User user = findUser(id); // 분기를 위한 User 찾기
+        User user = util.findUser(id); // 분기를 위한 User 찾기
 
         try{
             if (user.getRole().equals("학생")) {
@@ -47,7 +40,7 @@ public class BodyGuardServiceImpl implements BodyGuardService {
                 }
             }
 
-            else if(user.getRole().equals("교사")) {
+            else if(user.getRole().equals("선생님")) {
 
                 List<Coguard> guardlist = coGuardRepository.findAllByUser(user);
 
@@ -55,30 +48,22 @@ public class BodyGuardServiceImpl implements BodyGuardService {
                     list.add(new BodyGuardResDto(coguard.getCoGuard()));
                 }
             }
-
-            result.put("msg",SUCCESS);
-            result.put("bodyguards", list);
-            status = HttpStatus.OK;
+            return list;
 
         } catch (Exception e){
-            result.put("msg", FAIL);
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-        return new ResponseEntity<>(result, status);
     }
 
     //보디가드 등록 및 해제
-    public ResponseEntity<Map<String, Object>> addBodyGuard(String token, long id) throws Exception{
+    public Long addBodyGuard(String token, long id) throws Exception{
 
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
-
-        User user = findUserByPhone(decodeToken(token));
+        User user = util.findUserByPhone(decodeToken(token));
 
         long enroll_id = user.getId();
 
-        User userRole = findUser(enroll_id); // 분기를 위한 User 찾기
-        User guard = findUser(id); // 저장할 가드 id
+        User userRole = util.findUser(enroll_id); // 분기를 위한 User 찾기
+        User guard = util.findUser(id); // 저장할 가드 id
 
         Optional<Opguard> opguard = opGuardRepository.findByOpGuardAndUser(guard, userRole);
         Optional<Coguard> coguard = coGuardRepository.findByCoGuardAndUser(guard, userRole);
@@ -99,7 +84,7 @@ public class BodyGuardServiceImpl implements BodyGuardService {
                 }
             }
 
-            else if(userRole.getRole().equals("교사")) {
+            else if(userRole.getRole().equals("선생님")) {
                 if(coguard.isPresent()){
                     coGuardRepository.delete(coguard.get());
                 }
@@ -112,29 +97,12 @@ public class BodyGuardServiceImpl implements BodyGuardService {
                 }
 
             }
-            result.put("msg",SUCCESS);
-            status = HttpStatus.OK;
+            return id;
 
         } catch (Exception e){
-            result.put("msg", FAIL);
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
 
-        return new ResponseEntity<>(result, status);
     }
 
-    public User findUser(long id){
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
-    }
-
-    public User findUserByPhone(String phone){
-        return userRepository.findByPhone(phone);
-    }
-
-    public String decodeToken(String token) throws Exception{
-        JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
-        DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
-        return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
-    }
 }
