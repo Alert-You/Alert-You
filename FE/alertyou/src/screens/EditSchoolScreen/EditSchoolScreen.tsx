@@ -22,6 +22,9 @@ const EditSchoolScreen = () => {
       suspense: true,
       enabled: false,
       cacheTime: 0,
+      onError: (err) => {
+        console.log(err)
+      }
     },
   );
 

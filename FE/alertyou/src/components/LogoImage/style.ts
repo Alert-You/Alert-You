@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -20,
     resizeMode: 'contain',
-    width: Dimensions.get('window').width,
+    width: W,
     height: 165,
   }
 });
