@@ -114,6 +114,15 @@ public class ReportServiceImpl implements ReportService {
 
             addAlert(alertReportId, user);
 
+            Report report = findReport(alertReportId);
+
+            List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
+            for (Alert alert : alertList) {
+                User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
+                String fcmToken = findUser(guardUser.getId()).getFcmToken();
+                FCMService.sendFCMMessage(fcmToken); // fcm메세지를 보냄
+            }
+
             result.put("msg", SUCCESS);
             status = HttpStatus.OK;
         } catch (Exception e) {
