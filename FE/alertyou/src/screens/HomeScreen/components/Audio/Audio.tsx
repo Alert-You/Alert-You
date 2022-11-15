@@ -18,16 +18,12 @@ import AudioRecorderPlayer, {
   RecordBackType,
 } from 'react-native-audio-recorder-player';
 
+import { RecordingAnimation } from '.';
 import { styles } from './style';
-
-
-interface AudioProps {
-  navigation: any;
-  isEmergency: boolean;
-}
 
 interface AudioState {
   isLoggingIn: boolean;
+  isRecording: boolean;
   recordSecs: number;
   recordTime: string;
   currentPositionSec: number;
@@ -48,17 +44,20 @@ interface AudioState {
   isShowPausePlay: boolean;
   isShowResumePlay: boolean;
   isShowStopPlay: boolean;
+  isShowRestartRecord: boolean;
+  isShowReportAudio: boolean;
 }
 
 const screenWidth = W;
 
-class Audio extends Component<AudioProps, AudioState> {
+class Audio extends Component<any, AudioState> {
   private audioRecorderPlayer: AudioRecorderPlayer;
 
-  constructor(props: AudioProps) {
+  constructor(props: any) {
     super(props);
     this.state = {
       isLoggingIn: false,
+      isRecording: false,
       recordSecs: 0,
       recordTime: '00:00:00',
       currentPositionSec: 0,
@@ -79,6 +78,8 @@ class Audio extends Component<AudioProps, AudioState> {
       isShowPausePlay: false,
       isShowResumePlay: false,
       isShowStopPlay: false,
+      isShowRestartRecord: true,
+      isShowReportAudio: true,
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.11);
@@ -152,6 +153,7 @@ class Audio extends Component<AudioProps, AudioState> {
     );
     this.setState({ uri });
     this.setState({
+      isRecording: true,
       isShowStartRecord: false,
       isShowPauseRecord: true,
       isShowStopRecord: true,
@@ -178,6 +180,7 @@ class Audio extends Component<AudioProps, AudioState> {
     }
 
     this.setState({
+      isRecording: false,
       isShowPauseRecord: false,
       isShowResumeRecord: true,
     });
@@ -186,6 +189,7 @@ class Audio extends Component<AudioProps, AudioState> {
   private onResumeRecord = async () => {
     await this.audioRecorderPlayer.resumeRecorder();
     this.setState({
+      isRecording: true,
       isShowResumeRecord: false,
       isShowPauseRecord: true,
     });
@@ -197,14 +201,15 @@ class Audio extends Component<AudioProps, AudioState> {
     if (this.props.isEmergency) {
       this.onReportAudio();
     }
-    this.setState({
+    await this.setState({
+      isRecording: false,
       recordSecs: 0,
-    });
-    this.setState({
       playTime: '00:00:00',
       duration: this.state.recordTime,
       page: 1,
     });
+
+    console.log('녹음 종료', this.state);
   };
 
   private onStartPlay = async () => {
@@ -212,10 +217,9 @@ class Audio extends Component<AudioProps, AudioState> {
     const msg = await this.audioRecorderPlayer.startPlayer(this.state.path);
     const volume = await this.audioRecorderPlayer.setVolume(1.0);
     console.log(`file: ${msg}`, `volume: ${volume}`);
-    this.setState({
+    await this.setState({
       isShowStartPlay: false,
       isShowPausePlay: true,
-      // isShowStopPlay: true,
     });
 
     this.audioRecorderPlayer.addPlayBackListener((e: PlayBackType) => {
@@ -240,7 +244,7 @@ class Audio extends Component<AudioProps, AudioState> {
 
   private onPausePlay = async () => {
     await this.audioRecorderPlayer.pausePlayer();
-    this.setState({
+    await this.setState({
       isShowPausePlay: false,
       isShowStartPlay: true,
       isShowResumePlay: true,
@@ -249,7 +253,7 @@ class Audio extends Component<AudioProps, AudioState> {
 
   private onResumePlay = async () => {
     await this.audioRecorderPlayer.resumePlayer();
-    this.setState({
+    await this.setState({
       isShowResumePlay: false,
       isShowPausePlay: true,
       isShowStartPlay: true,
@@ -261,16 +265,17 @@ class Audio extends Component<AudioProps, AudioState> {
     this.audioRecorderPlayer.removePlayBackListener();
   };
 
-  private onRestartRecord = () => {
-    this.setState({
+  private onRestartRecord = async () => {
+    this.onStopPlay();
+    await this.setState({
       isLoggingIn: false,
+      isRecording: false,
       recordSecs: 0,
       recordTime: '00:00:00',
       currentPositionSec: 0,
       currentDurationSec: 0,
       playTime: '00:00:00',
       duration: '00:00:00',
-      page: 0,
       path: '',
       uri: '',
 
@@ -283,15 +288,26 @@ class Audio extends Component<AudioProps, AudioState> {
       isShowPausePlay: false,
       isShowResumePlay: false,
       isShowStopPlay: false,
+      isShowRestartRecord: true,
+      isShowReportAudio: true,
     });
+    await this.setState({
+      page: 0,
+    })
+    console.log('돌아간다.', this.state);
   };
 
   private onReportAudio = async () => {
+    console.log('eh')
+    console.log('this.state.uri: ', this.state.uri);
     if (this.state.uri) {
       const responseStatus = await reportFile(this.state.uri);
-      if (responseStatus === 201) {
+      console.log('responseStatus: ', responseStatus);
+      if (responseStatus === 200 || responseStatus === 201) {
         Toast.show(reportAudioSuccessToastProps);
         this.state.navigation.navigate('HomeScreen');
+      } else {
+        Toast.show(reportAudioFailureToastProps);
       }
     } else {
       Toast.show(reportAudioFailureToastProps);
@@ -299,9 +315,15 @@ class Audio extends Component<AudioProps, AudioState> {
   };
 
   public render() {
-    let playWidth =
-      (this.state.currentPositionSec / this.state.currentDurationSec) *
-      (screenWidth - 32 - 56);
+    let playWidth;
+    if (this.state.page) {
+      playWidth = (this.state.currentPositionSec / this.state.currentDurationSec) *
+        (screenWidth - 32 - 56);
+    } else {
+      playWidth = (this.state.recordSecs / (180 * 1000)) *
+        (screenWidth - 32 - 56);
+    }
+
 
     if (!playWidth) {
       playWidth = 0;
@@ -319,7 +341,6 @@ class Audio extends Component<AudioProps, AudioState> {
       isShow: this.state.isShowPauseRecord,
     };
     const resumeRecordProps = {
-      // name: 'redo',
       name: 'record',
       onPress: this.onResumeRecord,
       isShow: this.state.isShowResumeRecord,
@@ -355,27 +376,28 @@ class Audio extends Component<AudioProps, AudioState> {
     const restartRecordProps = {
       name: 'refresh',
       onPress: this.onRestartRecord,
-      isShow: true,
+      isShow: this.state.isShowRestartRecord,
     };
     const reportAudioProps = {
       name: 'email-send-outline',
       onPress: this.onReportAudio,
-      isShow: true,
+      isShow: this.state.isShowReportAudio,
     };
-
-    // if(this.props.isEmergency) {
-    //   this.onStartRecord();
-    // }
 
     return (
       <View style={styles.container}>
         <VStack bg={this.props.isEmergency ? emergencyBgStyle : nonEmergencyBgStyle} style={styles.innerContainer}>
-          {/* <Text style={styles.titleTxt}>
-            {!this.state.page ? '녹음' : '녹음 확인'}
-          </Text> */}
           {!this.state.page ? (
             <View style={styles.viewRecorder}>
-              <Text style={styles.counterTxt}>{this.state.recordTime}</Text>
+              {/* <RecordingAnimation isActive={this.state.isRecording} /> */}
+              <Pressable
+                style={styles.viewBarWrapper}>
+                <View style={styles.viewBar}>
+                  <View style={[styles.viewBarPlay, { width: playWidth }]} />
+                </View>
+              </Pressable>
+
+              <Text style={styles.counterTxt}>{this.state.recordTime.slice(0, 5)} / 03:00</Text>
               <View style={styles.btnWrapper}>
                 <AudioBtn props={startRecordProps} />
                 <AudioBtn props={pauseRecordProps} />
@@ -393,8 +415,7 @@ class Audio extends Component<AudioProps, AudioState> {
                 </View>
               </Pressable>
 
-              <Text style={styles.counterTxt}>{this.state.playTime}</Text>
-              <Text style={styles.counterTxt}>/ {this.state.duration}</Text>
+              <Text style={styles.counterTxt}>{this.state.playTime.slice(0, 5)} / {this.state.duration.slice(0, 5)}</Text>
 
               <View style={styles.btnWrapper}>
                 <AudioBtn props={startPlayProps} />
