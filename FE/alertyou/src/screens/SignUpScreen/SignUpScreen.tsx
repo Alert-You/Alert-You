@@ -1,5 +1,5 @@
 import {View, Text, Pressable, Dimensions} from 'react-native';
-import React, {useMemo, useState} from 'react';
+import {useMemo, useState} from 'react';
 import {
   Center,
   FormControl,
@@ -14,6 +14,7 @@ import {useQuery} from '@tanstack/react-query';
 
 import {LogoImage, SpinnerButton} from '@/components';
 import {MAIN} from '@/theme/colorVariants';
+import { W } from '@/constants/dimensions';
 import {classListState, schoolIdState, schoolState} from '@/store/signUpState';
 
 import {styles} from './style';
@@ -115,7 +116,7 @@ const SignUpScreen = ({navigation}: any) => {
               </Pressable>
             </FormControl>
             <HStack justifyContent="space-between">
-              <Center w={(Dimensions.get('window').width - 32) / 2 - 20}>
+              <Center w={(W - 32) / 2 - 20}>
                 <FormControl isRequired>
                   <FormControl.Label>학년</FormControl.Label>
                   <Select
@@ -142,7 +143,7 @@ const SignUpScreen = ({navigation}: any) => {
                   </Select>
                 </FormControl>
               </Center>
-              <Center w={(Dimensions.get('window').width - 32) / 2 - 20}>
+              <Center w={(W - 32) / 2 - 20}>
                 <FormControl isRequired>
                   <FormControl.Label>반</FormControl.Label>
                   <Select

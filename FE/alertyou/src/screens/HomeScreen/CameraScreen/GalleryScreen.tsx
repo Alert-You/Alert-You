@@ -1,15 +1,8 @@
-import React from 'react';
+import { Gallery } from '@/screens/HomeScreen/components/Gallery';
 
-import { Gallery } from '../components/Gallery';
-
-type Props = {
-  navigation: any;
-};
-
-const GalleryScreen = ({navigation}: Props) => {
-
+const GalleryScreen = ({ navigation }: any) => {
   return (
-    <Gallery navigation={navigation}/>
+    <Gallery navigation={navigation} />
   );
 };
 

@@ -1,8 +1,7 @@
-import {HStack} from 'native-base';
-import React from 'react';
-import {ReportBtn} from '@/screens/HomeScreen/components';
+import { ReportBtn } from '@/screens/HomeScreen/components';
+import { HStack } from 'native-base';
 
-const ReportBtns = ({navigation}: any) => {
+const ReportBtns = ({ navigation }: any) => {
   const moveCameraScreen = () => {
     navigation.navigate('CameraScreen');
   }
@@ -16,10 +15,10 @@ const ReportBtns = ({navigation}: any) => {
   }
 
   return (
-    <HStack justifyContent="space-between">
-      <ReportBtn name='camera' nameKr='현장 촬영' moveScreen={moveCameraScreen}/>
-      <ReportBtn name='image-plus' nameKr='사진 업로드' moveScreen={moveGalleryScreen}/>
-      <ReportBtn name='microphone' nameKr='녹음 시작' moveScreen={moveAudioScreen}/>
+    <HStack width="100%" justifyContent="space-around">
+      <ReportBtn name='camera' nameKr='현장 촬영' moveScreen={moveCameraScreen} />
+      <ReportBtn name='image-plus' nameKr='사진 업로드' moveScreen={moveGalleryScreen} />
+      <ReportBtn name='microphone' nameKr='녹음 시작' moveScreen={moveAudioScreen} />
     </HStack>
   );
 };

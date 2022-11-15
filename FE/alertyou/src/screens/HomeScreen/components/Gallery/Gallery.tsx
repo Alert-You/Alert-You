@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import { CameraRoll } from '@react-native-camera-roll/camera-roll';
+import { Component } from 'react';
 import {
   Platform,
   PermissionsAndroid,
@@ -7,8 +8,7 @@ import {
   FlatList,
   Pressable,
 } from 'react-native';
-import {CameraRoll} from '@react-native-camera-roll/camera-roll';
-import {styles} from './style';
+import { styles } from './style';
 
 interface AppProps {
   navigation: any;
@@ -49,7 +49,7 @@ class Gallery extends Component<AppProps, AppState> {
       assetType: 'Photos',
     })
       .then(res => {
-        this.setState({data: res.edges});
+        this.setState({ data: res.edges });
       })
       .catch(error => {
         console.log(error);
@@ -57,7 +57,9 @@ class Gallery extends Component<AppProps, AppState> {
   }
 
   selectImage(item: any) {
-    this.state.navigation.navigate('CameraCheckScreen', {uri: item.node.image.uri});
+    this.state.navigation.navigate('CameraCheckScreen', {
+      uri: item.node.image.uri,
+    });
   }
 
   render() {
@@ -66,10 +68,9 @@ class Gallery extends Component<AppProps, AppState> {
         <FlatList
           data={this.state.data}
           numColumns={3}
-          renderItem={({item}) => (
-            <Pressable
-              onPress={() => this.selectImage(item)}>
-              <Image style={styles.image} source={{uri: item.node.image.uri}} />
+          renderItem={({ item }) => (
+            <Pressable onPress={() => this.selectImage(item)}>
+              <Image style={styles.image} source={{ uri: item.node.image.uri }} />
             </Pressable>
           )}
         />

@@ -1,5 +1,13 @@
-import {Box, Button, Pressable, Text, View, VStack} from 'native-base';
-import React, {Component, useEffect, useState} from 'react';
+import { reportAudioFailureToastProps, reportAudioSuccessToastProps } from '@/constants/toastProps';
+import { emergencyBgStyle, nonEmergencyBgStyle } from '@/theme/Home/gradient';
+import { AudioBtn } from '@/screens/HomeScreen/components/AudioBtn';
+import { reportFile } from '@/screens/HomeScreen/api';
+
+import { Platform, PermissionsAndroid } from 'react-native';
+import { Pressable, Text, View, VStack } from 'native-base';
+import Toast from 'react-native-toast-message';
+import { W } from '@/constants/dimensions';
+import { Component } from 'react';
 import AudioRecorderPlayer, {
   AVEncoderAudioQualityIOSType,
   AVEncodingOption,
@@ -9,12 +17,9 @@ import AudioRecorderPlayer, {
   PlayBackType,
   RecordBackType,
 } from 'react-native-audio-recorder-player';
-import {Platform, PermissionsAndroid, Dimensions} from 'react-native';
-import Toast from 'react-native-toast-message';
-import {styles} from './style';
-import {AudioBtn} from '../AudioBtn';
-import {emergencyBgStyle, nonEmergencyBgStyle} from '@/theme/Home/gradient';
-import { reportFile } from '../../api';
+
+import { styles } from './style';
+
 
 interface AudioProps {
   navigation: any;
@@ -45,7 +50,7 @@ interface AudioState {
   isShowStopPlay: boolean;
 }
 
-const screenWidth = Dimensions.get('screen').width;
+const screenWidth = W;
 
 class Audio extends Component<AudioProps, AudioState> {
   private audioRecorderPlayer: AudioRecorderPlayer;
@@ -112,11 +117,11 @@ class Audio extends Component<AudioProps, AudioState> {
 
         if (
           grants['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
+          PermissionsAndroid.RESULTS.GRANTED &&
           grants['android.permission.READ_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
+          PermissionsAndroid.RESULTS.GRANTED &&
           grants['android.permission.RECORD_AUDIO'] ===
-            PermissionsAndroid.RESULTS.GRANTED
+          PermissionsAndroid.RESULTS.GRANTED
         ) {
           console.log('permissions granted');
         } else {
@@ -139,13 +144,13 @@ class Audio extends Component<AudioProps, AudioState> {
 
     const date = new Date().getTime();
     const path = `data/user/0/com.alertyou/cache/${date}.mp4`;
-    this.setState({path});
+    this.setState({ path });
 
     const uri = await this.audioRecorderPlayer.startRecorder(
       this.state.path,
       audioSet,
     );
-    this.setState({uri});
+    this.setState({ uri });
     this.setState({
       isShowStartRecord: false,
       isShowPauseRecord: true,
@@ -246,6 +251,7 @@ class Audio extends Component<AudioProps, AudioState> {
     await this.audioRecorderPlayer.resumePlayer();
     this.setState({
       isShowResumePlay: false,
+      isShowPausePlay: true,
       isShowStartPlay: true,
     });
   };
@@ -284,26 +290,18 @@ class Audio extends Component<AudioProps, AudioState> {
     if (this.state.uri) {
       const responseStatus = await reportFile(this.state.uri);
       if (responseStatus === 201) {
-        Toast.show({
-          type: 'info',
-          text1: '현장 녹음 접수 완료',
-          text2: '현장 녹음 접수가 완료되었습니다!',
-        });
+        Toast.show(reportAudioSuccessToastProps);
         this.state.navigation.navigate('HomeScreen');
       }
     } else {
-      Toast.show({
-        type: 'error',
-        text1: '오류',
-        text2: '녹취 파일 접수에 실패했습니다.',
-      });
+      Toast.show(reportAudioFailureToastProps);
     }
   };
 
   public render() {
     let playWidth =
       (this.state.currentPositionSec / this.state.currentDurationSec) *
-      (screenWidth-32-56);
+      (screenWidth - 32 - 56);
 
     if (!playWidth) {
       playWidth = 0;
@@ -391,15 +389,15 @@ class Audio extends Component<AudioProps, AudioState> {
                 style={styles.viewBarWrapper}
                 onPress={this.onStatusPress}>
                 <View style={styles.viewBar}>
-                  <View style={[styles.viewBarPlay, {width: playWidth}]} />
+                  <View style={[styles.viewBarPlay, { width: playWidth }]} />
                 </View>
               </Pressable>
 
               <Text style={styles.counterTxt}>{this.state.playTime}</Text>
               <Text style={styles.counterTxt}>/ {this.state.duration}</Text>
-              
+
               <View style={styles.btnWrapper}>
-              <AudioBtn props={startPlayProps} />
+                <AudioBtn props={startPlayProps} />
                 <AudioBtn props={pausePlayProps} />
                 <AudioBtn props={resumePlayProps} />
                 <AudioBtn props={stopPlayProps} />
