@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useRecoilValue, useSetRecoilState} from 'recoil';
 import {
   HomeNavigation,
@@ -15,10 +15,10 @@ import {getToken} from '@/utils/auth';
 import {useRefreshToken} from '@/hooks';
 import {splashState} from '@/store/splashState';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MAIN } from '@/theme/colorVariants';
+import { MAIN, WHITE, BLUE, RED } from '@/theme/colorVariants';
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 const MainNavigation = () => {
   const {mutate: refreshMutate} = useRefreshToken();
@@ -48,24 +48,30 @@ const MainNavigation = () => {
       {isLoggedIn ? (
         <Tab.Navigator
           initialRouteName="Home"
-          screenOptions={{
-            tabBarActiveTintColor: MAIN.red,
-            // tabBarShowLabel: false,
-            tabBarHideOnKeyboard: true,
-            tabBarStyle: {height: 60, paddingTop: 7, paddingBottom: 7},
-          }}>
+          inactiveColor={MAIN.placeholder}
+          shifting={true}
+          labeled={true}
+          barStyle={{ backgroundColor: BLUE.blue300 }}
+          // screenOptions={
+          //   {
+          //     //   tabBarActiveTintColor: MAIN.red,
+          //     //   // tabBarShowLabel: false,
+          //     // tabBarHideOnKeyboard: true
+          //   }
+          // }
+        >
           <Tab.Screen
             name="Notice"
             component={NoticeNavigation}
             options={{
-              headerShown: false,
-              title: '알림',
-              tabBarLabelStyle: {fontSize: 12},
-              tabBarIcon: ({color}) => (
+              tabBarLabel: '알림',
+              tabBarColor: MAIN.lightGrey,
+              // tabBarLabelStyle: { fontSize: 12 },
+              tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons
                   color={color}
                   size={30}
-                  name="bell-outline"
+                  name="comment-alert-outline"
                 />
               ),
             }}
@@ -74,14 +80,14 @@ const MainNavigation = () => {
             name="Home"
             component={HomeNavigation}
             options={{
-              headerShown: false,
-              title: '홈',
-              tabBarLabelStyle: {fontSize: 12},
-              tabBarIcon: ({color}) => (
+              tabBarLabel: '신고',
+              tabBarColor: RED.red300,
+              // tabBarLabel: { fontSize: 12 },
+              tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons
                   color={color}
                   size={30}
-                  name="home-outline"
+                  name="bell-ring-outline"
                 />
               ),
             }}
@@ -90,10 +96,10 @@ const MainNavigation = () => {
             name="Profile"
             component={ProfileNavigation}
             options={{
-              headerShown: false,
-              title: '마이페이지',
-              tabBarLabelStyle: {fontSize: 12},
-              tabBarIcon: ({color}) => (
+              title: '프로필',
+              tabBarColor: BLUE.blue300p,
+              // tabBarLabelStyle: { fontSize: 12 },
+              tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons
                   color={color}
                   size={30}
@@ -108,12 +114,12 @@ const MainNavigation = () => {
           <Stack.Screen
             name="Login"
             component={LoginNavigation}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="SignUp"
             component={SignUpNavigation}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       )}
