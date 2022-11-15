@@ -1,4 +1,4 @@
-import type {ReportModalActionType, ReportModalInputType} from './types';
+import type { ReportModalActionType, ReportModalInputType } from './types';
 
 export const reportModalInitialState: ReportModalInputType = {
   place: '',

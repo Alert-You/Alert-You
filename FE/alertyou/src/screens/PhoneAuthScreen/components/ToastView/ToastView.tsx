@@ -1,7 +1,7 @@
-import { Text, Dimensions } from 'react-native'
-import React from 'react'
-import { Box } from 'native-base';
+import { W } from '@/constants/dimensions';
 import { BLUE } from '@/theme/colorVariants';
+import { Text } from 'react-native'
+import { Box } from 'native-base';
 
 import { styles } from './style';
 
@@ -14,7 +14,7 @@ const ToastView = (props: Props) => {
       shadow={3}
       px="2"
       py="1"
-      w={Dimensions.get('window').width - 120}
+      w={W - 120}
       h="35"
       rounded="40"
       mb={4}
