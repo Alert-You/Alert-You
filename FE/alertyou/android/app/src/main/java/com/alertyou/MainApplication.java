@@ -33,7 +33,6 @@ public class MainApplication extends Application implements ReactApplication {
           new RNAudioRecorderPlayerPackage();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new CameraRollPackage());
-             packages.add(new SharedStoragePackager());
           return packages;
         }
 
