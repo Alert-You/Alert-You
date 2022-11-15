@@ -1,10 +1,12 @@
 package com.ssafy.alertyou.bodyguard.service;
 
+import com.ssafy.alertyou.bodyguard.dto.BodyGuardResDto;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
 import java.util.Map;
 
 public interface BodyGuardService {
-    public ResponseEntity<Map<String, Object>> getBodyGuard(long id) throws Exception;
-    public ResponseEntity<Map<String, Object>> addBodyGuard(String token, long id) throws Exception;
+    public List<BodyGuardResDto> getBodyGuard(long id) throws Exception;
+    public Long addBodyGuard(String token, long id) throws Exception;
 }

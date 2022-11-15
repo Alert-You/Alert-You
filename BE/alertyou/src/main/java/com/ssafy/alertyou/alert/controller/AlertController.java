@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+import static com.ssafy.alertyou.util.Util.getResponseEntity;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/alert")
@@ -22,12 +24,12 @@ public class AlertController {
 
     @PutMapping(value = "/check")
     public ResponseEntity<Map<String, Object>> AlertModify(@RequestParam("alertId") long id) throws Exception{
-        return alertService.modifyAlert(id);
+        return getResponseEntity("success", alertService.modifyAlert(id));
     }
 
     @PutMapping(value = "/allcheck")
     public ResponseEntity<Map<String, Object>> AlertListModify(@RequestHeader(value = "Authorization") String token) throws Exception{
-        return alertService.modifyAlertList(token);
+        return getResponseEntity("success", alertService.modifyAlertList(token));
     }
 
 

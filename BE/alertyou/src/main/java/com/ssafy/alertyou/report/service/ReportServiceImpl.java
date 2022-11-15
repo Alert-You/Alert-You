@@ -19,6 +19,7 @@ import com.ssafy.alertyou.report.dto.*;
 import com.ssafy.alertyou.report.repository.ReportRepository;
 import com.ssafy.alertyou.report.entity.Report;
 import com.ssafy.alertyou.school.entity.School;
+import com.ssafy.alertyou.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import static com.ssafy.alertyou.util.Util.decodeToken;
 
 @Service
 @RequiredArgsConstructor
@@ -37,17 +40,15 @@ public class ReportServiceImpl implements ReportService {
     private final OpGuardRepository opGuardRepository;
     private final CoGuardRepository coGuardRepository;
     private final AlertRepository alertRepository;
+    private final Util util;
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
 
-    public ResponseEntity<Map<String, Object>> getReportList(long id) throws Exception{
-
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
+    public List<ReportListResDto> getReportList(long id) throws Exception{
         List<ReportListResDto> list = new ArrayList<>();
 
         try{
-            User user = findUser(id);
+            User user = util.findUser(id);
 
             List<Report> reportlist = reportRepository.findAllByReUser(user);
 
@@ -55,44 +56,28 @@ public class ReportServiceImpl implements ReportService {
                 list.add(new ReportListResDto(report));
             }
 
-            result.put("msg",SUCCESS);
-            result.put("reports", list);
-            status = HttpStatus.OK;
+            return list;
 
         } catch (Exception e){
-            result.put("msg",FAIL);
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-
-        return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String, Object>> getReportDetail(long id) throws Exception{
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
-
+    public ReportResDto getReportDetail(long id) throws Exception{
         Report report = findReport(id);
-
         try{
-            result.put("msg",SUCCESS);
-            result.put("report", new ReportResDto(report));
-            status = HttpStatus.OK;
-        } catch (Exception e){
-            result.put("msg",FAIL);
-            status = HttpStatus.BAD_REQUEST;
-        }
+            return new ReportResDto(report);
 
-        return new ResponseEntity<>(result, status);
+        } catch (Exception e){
+            return null;
+        }
 
     }
     
     // 당사자 신고
-    public ResponseEntity<Map<String, Object>> addReportVictim(String token, ReportVictimReqDto reportVictimReqDto) throws Exception{
+    public Long addReportVictim(String token, ReportVictimReqDto reportVictimReqDto) throws Exception{
 
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
-
-        User user = findUser(findUserByPhone(decodeToken(token)).getId());
+        User user = util.findUser(util.findUserByPhone(decodeToken(token)).getId());
 
         double latitude = reportVictimReqDto.getLatitude();
         double longitude = reportVictimReqDto.getLongitude();
@@ -114,23 +99,16 @@ public class ReportServiceImpl implements ReportService {
 
             addAlert(alertReportId, user);
 
-            result.put("msg", SUCCESS);
-            status = HttpStatus.OK;
-        } catch (Exception e) {
-            result.put("msg", FAIL);
-            result.put("why", e.getMessage());
-            result.put("why2", e.getStackTrace());
-            status = HttpStatus.BAD_REQUEST;
-        }
+            return user.getId();
 
-        return new ResponseEntity<>(result, status);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
-    public ResponseEntity<Map<String, Object>> addReportWitness(String token, ReportWitnessReqDto reportWitnessReqDto) throws Exception{
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
+    public Long addReportWitness(String token, ReportWitnessReqDto reportWitnessReqDto) throws Exception{
 
-        User user = findUser(findUserByPhone(decodeToken(token)).getId());
+        User user = util.findUser(util.findUserByPhone(decodeToken(token)).getId());
 
         double latitude = reportWitnessReqDto.getLatitude();
         double longitude = reportWitnessReqDto.getLongitude();
@@ -160,63 +138,35 @@ public class ReportServiceImpl implements ReportService {
             List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
             for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
-                String fcmToken = findUser(guardUser.getId()).getFcmToken();
+                String fcmToken = util.findUser(guardUser.getId()).getFcmToken();
                 FCMService.sendFCMMessage(fcmToken); // fcm메세지를 보냄
             }
 
-            result.put("msg",SUCCESS);
-            status = HttpStatus.OK;
+            return user.getId();
 
         }catch (Exception e){
-            result.put("msg", FAIL);
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-        return new ResponseEntity<>(result, status);
     }
 
-    public ResponseEntity<Map<String, Object>> addFCMToken(String token, FCMReqDto fcmResDto) throws Exception {
-        HttpStatus status = null;
-        Map<String, Object> result = new HashMap<>();
+    public Long addFCMToken(String token, FCMReqDto fcmResDto) throws Exception {
 
         try{
-            User user = findUserByPhone(decodeToken(token)); // 사용자를 가지고 사용자 id를 찾기
+            User user = util.findUserByPhone(decodeToken(token)); // 사용자를 가지고 사용자 id를 찾기
             String fcmtoken = fcmResDto.getFcmToken();
             user.updateFCM(fcmtoken);
             userRepository.save(user);
 
-            result.put("msg", SUCCESS);
-            status = HttpStatus.OK;
+            return user.getId();
 
         } catch (Exception e) {
-            result.put("msg", FAIL);
-            status = HttpStatus.BAD_REQUEST;
+            return null;
         }
-
-        return new ResponseEntity<>(result, status);
-    }
-
-    public User findUser(long id){
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User Not Found"));
     }
 
     public Report findReport(long id){
         return reportRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Report Not Found"));
-    }
-
-    public List<Opguard> findGuard(User user){
-        return opGuardRepository.findAllByOpGuard(user);
-    }
-
-    public User findUserByPhone(String phone){
-        return userRepository.findByPhone(phone);
-    }
-
-    public String decodeToken(String token) throws Exception{
-        JWTVerifier jwtVerifier = JwtTokenProvider.getVerifier(); // 토큰 검증을 실시
-        DecodedJWT decodedJWT = jwtVerifier.verify(token.replace(JwtProperties.TOKEN_PREFIX, "")); // 토큰에서 Bearer 를 제거함
-        return decodedJWT.getSubject(); // 디코딩한 JWT 토큰에서 핸드폰 번호를 가져옴
     }
 
     public List<Alert> findAlertUser(Report report){
