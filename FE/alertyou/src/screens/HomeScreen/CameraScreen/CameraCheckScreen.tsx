@@ -17,7 +17,7 @@ const CameraCheckScreen = ({ navigation }: PropsType) => {
   const uri = useRoute<RouteProp<HomeParamList>>().params?.uri;
   const reportImage = async (imgURI: string | undefined) => {
     const responseStatus = await reportFile(imgURI);
-    if (responseStatus === 201) {
+    if (responseStatus === 200||responseStatus === 201) {
       Toast.show(reportImageSuccessToastProps);
       navigation.navigate('HomeScreen');
     } else {
