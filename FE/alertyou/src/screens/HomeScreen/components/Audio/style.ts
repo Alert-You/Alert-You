@@ -13,13 +13,8 @@ export const styles = StyleSheet.create({
     padding: 16,
     paddingTop: H * 0.1,
   },
-  titleTxt: {
-    color: 'white',
-    fontSize: 50,
-    paddingTop: H * 0.1,
-  },
   viewRecorder: {
-    marginTop: 40,
+    marginTop: 60,
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
@@ -30,10 +25,10 @@ export const styles = StyleSheet.create({
   },
   counterTxt: {
     textAlign: 'center',
-    fontSize: 80,
+    fontSize: 50,
     width: '100%',
     color: 'white',
-    paddingTop: 80,
+    paddingTop: 40,
   },
 
   viewPlayer: {
@@ -43,17 +38,17 @@ export const styles = StyleSheet.create({
   },
   viewBarWrapper: {
     marginHorizontal: 28,
-    marginBottom: 40,
+    marginBottom: 0,
     alignSelf: 'stretch',
   },
   viewBar: {
     backgroundColor: '#ccc',
-    height: 4,
+    height: 8,
     alignSelf: 'stretch',
   },
   viewBarPlay: {
     backgroundColor: 'white',
-    height: 4,
+    height: 8,
     width: 0,
   },
   playStatusTxt: {
