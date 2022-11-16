@@ -59,7 +59,7 @@ public class TeacherServiceImpl implements TeacherService{
             } else {
                 school = findSchool(user.getSchool().getAddress(), grade, classRoom);
             }
-            List<User> userList = userRepository.findAllBySchoolAndRole(school,STUDENT);
+            List<User> userList = userRepository.findAllBySchoolAndRoleOrderByUsernameAsc(school,STUDENT);
             for (User student : userList){
                 // user 객체로 기본 정보를 주고, 선생님이 선택한 보디가드인지 확인하는 로직 필요
                 // 보디가드 확인하는 로직 : findCoGuard 값이 있다면 true, 없다면 false를 반환하는 함수를 만들어서 넣을 예정
