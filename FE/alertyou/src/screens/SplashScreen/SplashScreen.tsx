@@ -13,11 +13,8 @@ const SplashScreen = () => {
         justifyContent: 'center',
       }}>
       <Lottie
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-        source={require('@assets/ring.json')}
+        
+        source={require('@/assets/lottie.json')}
         autoPlay
         loop={true}
       />

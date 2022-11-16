@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
+import React, { useEffect } from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   HomeNavigation,
   NoticeNavigation,
@@ -9,19 +8,20 @@ import {
   SignUpNavigation,
   LoginNavigation,
 } from '@/navigations';
-import {isLoggedInState} from '@/store';
-import {SplashScreen} from '@/screens';
-import {getToken} from '@/utils/auth';
-import {useRefreshToken} from '@/hooks';
-import {splashState} from '@/store/splashState';
+import { isLoggedInState } from '@/store';
+import { SplashScreen } from '@/screens';
+import { getToken } from '@/utils/auth';
+import { useRefreshToken } from '@/hooks';
+import { splashState } from '@/store/splashState';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { MAIN } from '@/theme/colorVariants';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { CustomTabBar } from '@/components';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const MainNavigation = () => {
-  const {mutate: refreshMutate} = useRefreshToken();
+  const { mutate: refreshMutate } = useRefreshToken();
   const appLoaded = useRecoilValue(splashState);
   const setSplashState = useSetRecoilState(splashState);
 
@@ -34,7 +34,7 @@ const MainNavigation = () => {
       } else {
         setTimeout(() => {
           setSplashState(true);
-        }, 2000);
+        }, 3000);
       }
     });
   }, []);
@@ -48,24 +48,22 @@ const MainNavigation = () => {
       {isLoggedIn ? (
         <Tab.Navigator
           initialRouteName="Home"
+          tabBar={props => <CustomTabBar {...props} />}
           screenOptions={{
-            tabBarActiveTintColor: MAIN.red,
             // tabBarShowLabel: false,
             tabBarHideOnKeyboard: true,
-            tabBarStyle: {height: 60, paddingTop: 7, paddingBottom: 7},
           }}>
           <Tab.Screen
             name="Notice"
             component={NoticeNavigation}
             options={{
+              tabBarLabel: '알림',
               headerShown: false,
-              title: '알림',
-              tabBarLabelStyle: {fontSize: 12},
-              tabBarIcon: ({color}) => (
+              tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons
                   color={color}
                   size={30}
-                  name="bell-outline"
+                  name="comment-alert-outline"
                 />
               ),
             }}
@@ -74,14 +72,13 @@ const MainNavigation = () => {
             name="Home"
             component={HomeNavigation}
             options={{
+              tabBarLabel: '신고',
               headerShown: false,
-              title: '홈',
-              tabBarLabelStyle: {fontSize: 12},
-              tabBarIcon: ({color}) => (
+              tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons
                   color={color}
                   size={30}
-                  name="home-outline"
+                  name="bell-ring-outline"
                 />
               ),
             }}
@@ -90,10 +87,9 @@ const MainNavigation = () => {
             name="Profile"
             component={ProfileNavigation}
             options={{
+              title: '프로필',
               headerShown: false,
-              title: '마이페이지',
-              tabBarLabelStyle: {fontSize: 12},
-              tabBarIcon: ({color}) => (
+              tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons
                   color={color}
                   size={30}
@@ -108,12 +104,12 @@ const MainNavigation = () => {
           <Stack.Screen
             name="Login"
             component={LoginNavigation}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
           <Stack.Screen
             name="SignUp"
             component={SignUpNavigation}
-            options={{headerShown: false}}
+            options={{ headerShown: false }}
           />
         </Stack.Navigator>
       )}

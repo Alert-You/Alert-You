@@ -122,7 +122,6 @@ const PhoneAuthScreen = ({navigation}: any) => {
     if (allowSignUp) {
       signUpMutate.mutate(signUpValue);
     } else if (!allowSignUp) {
-      //회원가입 실패(요청 이후의 알럿으로 분기처리)
       failSignUp();
     }
   };

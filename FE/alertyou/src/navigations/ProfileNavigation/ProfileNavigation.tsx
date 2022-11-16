@@ -53,7 +53,7 @@ const ProfileNavigation = () => {
         name="SettingScreen"
         component={SettingScreen}
         options={{
-          title: '계정 설정',
+          title: '설정',
           headerTitleAlign: 'center',
           headerTitleStyle: {
             fontWeight: '700',

@@ -22,7 +22,7 @@ export const passwordValidation = (password: string): boolean => {
 };
 
 export const onFailHandler = () => {
-  Alert.alert('인증 실패', '휴대폰 번호가 유효하지 않습니다.', [
+  Alert.alert('유효하지 않은 휴대폰 번호', '휴대폰 번호가 유효하지 않습니다.', [
     {text: '확인'},
   ]);
 };
@@ -34,13 +34,13 @@ export const onVerifySuccess = () => {
 };
 
 export const onVerifyFail = () => {
-  Alert.alert('인증 실패', '인증 번호가 일치하지 않습니다.', [
+  Alert.alert('인증 번호 불일치', '인증 번호가 일치하지 않습니다.', [
     {text: '확인'},
   ]);
 };
 
 export const failEdit = () => {
-  Alert.alert('수정 실패', '회원정보수정에 실패했습니다. 다시 시도해주세요.', [{text: '확인'}]);
+  Alert.alert('요청 오류', '회원정보수정에 실패했습니다. 다시 시도해주세요.', [{text: '확인'}]);
 }
 
 export const SuccessEdit = () => {
@@ -48,9 +48,13 @@ export const SuccessEdit = () => {
 }
 
 export const errorOccured = (err:string) => {
-  Alert.alert('수정 실패', err, [{text: '확인'}]);
+  Alert.alert('오류 발생', err, [{text: '확인'}]);
 }
 
 export const passwordWrong = () => {
-  Alert.alert('수정 실패', "확인 비밀번호가 일치하지 않습니다.", [{text: '확인'}]);
+  Alert.alert('비밀번호 불일치', "확인 비밀번호가 일치하지 않습니다.", [{text: '확인'}]);
+}
+
+export const failedEdit = () => {
+  Alert.alert('빈 칸을 채워주세요', "빈 칸이 존재합니다.", [{text: '확인'}]);
 }

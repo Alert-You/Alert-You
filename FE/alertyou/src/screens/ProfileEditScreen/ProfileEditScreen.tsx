@@ -10,20 +10,18 @@ import {
   useToast,
   CheckIcon,
 } from 'native-base';
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useMutation} from '@tanstack/react-query';
 import {AxiosError} from 'axios';
 
-import {MAIN} from '@/theme/colorVariants';
+import {BLACK, MAIN} from '@/theme/colorVariants';
 
 import {styles} from './style';
-import {fetchAuthKey, requestAccountInfo, requestEdit} from './apis';
+import {fetchAuthKey, requestEdit} from './apis';
 import {
   editResponseType,
-  profileResponseType,
   verifyResponseType,
 } from './types';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {schoolState} from '@/store/signUpState';
 import AuthSpinnerButton from '../PhoneAuthScreen/components/AuthSpinnerButton/AuthSpinnerButton';
 import {
   editPasswordConfirmState,
@@ -37,6 +35,7 @@ import {
 } from '@/store/profileState';
 import {ToastView} from '../PhoneAuthScreen/components';
 import {
+  failedEdit,
   failEdit,
   onFailHandler,
   onVerifyFail,
@@ -47,6 +46,7 @@ import {
   SuccessEdit,
 } from './functions';
 import {SpinnerButton} from '@/components';
+import { FONT_WEIGHT } from '@/theme/fontWeightVariants';
 
 const ProfileEditScreen = ({navigation}: any) => {
   const schoolName = useRecoilValue(editSchoolNameState);
@@ -185,6 +185,8 @@ const ProfileEditScreen = ({navigation}: any) => {
       editMutate.mutate(editProfileCredentials)
     } else if (password !== password2) {
       passwordWrong();
+    } else {
+      failedEdit();
     }
   };
 
@@ -200,9 +202,10 @@ const ProfileEditScreen = ({navigation}: any) => {
                 variant="underlined"
                 editable={false}
                 placeholder="ex) 싸피고등학교"
+                fontWeight={FONT_WEIGHT.SemiBold}
                 size="md"
                 h="9"
-                color={MAIN.mainFont}
+                color={BLACK.black}
                 focusOutlineColor={MAIN.red}
                 InputRightElement={
                   <Pressable onPress={moveToEditSchool}>
@@ -220,9 +223,10 @@ const ProfileEditScreen = ({navigation}: any) => {
               type="text"
               variant="underlined"
               placeholder="ex) 홍길동"
+              fontWeight={FONT_WEIGHT.SemiBold}
               size="md"
               h="9"
-              color={MAIN.mainFont}
+              color={BLACK.black}
               focusOutlineColor={MAIN.red}
               InputRightElement={
                 <Pressable onPress={deleteUsername}>
@@ -240,9 +244,10 @@ const ProfileEditScreen = ({navigation}: any) => {
               type="password"
               variant="underlined"
               placeholder="숫자, 영어 소문자, 대문자, 특수문자를 포함한 비밀번호"
+              fontWeight={FONT_WEIGHT.SemiBold}
               size="md"
               h="9"
-              color={MAIN.mainFont}
+              color={BLACK.black}
               focusOutlineColor={MAIN.red}
               InputRightElement={
                 <Pressable onPress={deletePassword}>
@@ -264,9 +269,10 @@ const ProfileEditScreen = ({navigation}: any) => {
               type="password"
               variant="underlined"
               placeholder="숫자, 영어 소문자, 대문자, 특수문자를 포함한 비밀번호"
+              fontWeight={FONT_WEIGHT.SemiBold}
               size="md"
               h="9"
-              color={MAIN.mainFont}
+              color={BLACK.black}
               focusOutlineColor={MAIN.red}
               InputRightElement={
                 <Pressable onPress={deletePassword2}>
@@ -289,10 +295,11 @@ const ProfileEditScreen = ({navigation}: any) => {
                 variant="underlined"
                 placeholder=" - 을 제외한 전화번호"
                 keyboardType="numeric"
+                fontWeight={FONT_WEIGHT.SemiBold}
                 size="md"
                 w="75%"
                 h="9"
-                color={MAIN.mainFont}
+                color={BLACK.black}
                 focusOutlineColor={MAIN.red}
                 InputRightElement={
                   <Pressable onPress={deletePhone}>
@@ -316,10 +323,11 @@ const ProfileEditScreen = ({navigation}: any) => {
                   variant="underlined"
                   placeholder="ex) 12345"
                   keyboardType="numeric"
+                  fontWeight={FONT_WEIGHT.SemiBold}
                   size="md"
                   w="75%"
                   h="9"
-                  color={MAIN.mainFont}
+                  color={BLACK.black}
                   focusOutlineColor={MAIN.red}
                   InputRightElement={
                     <Pressable onPress={deleteAuthNumber}>
