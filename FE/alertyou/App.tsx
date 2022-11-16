@@ -40,7 +40,6 @@ const App: React.FunctionComponent = () => {
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
-      console.log(remoteMessage);
       pushNoti.displayNoti(remoteMessage);
     });
 
