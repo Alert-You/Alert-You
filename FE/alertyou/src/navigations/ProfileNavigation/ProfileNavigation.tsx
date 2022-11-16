@@ -9,7 +9,7 @@ import { RED } from '@/theme/colorVariants';
 export type ProfileParamList = {
   ProfileScreen: undefined;
   TeacherScreen: undefined;
-  StudentDetail: {studentId: number};
+  StudentDetail: { studentId: number | null };
   SettingScreen: undefined;
   ProfileEditScreen: undefined;
   EditSchoolScreen: undefined;
@@ -47,7 +47,7 @@ const ProfileNavigation = () => {
       <Stack.Screen
         name="StudentDetail"
         component={StudentDetail}
-        options={{headerShown: false}}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="SettingScreen"
