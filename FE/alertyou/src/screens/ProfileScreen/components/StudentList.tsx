@@ -1,16 +1,14 @@
 import React, { useCallback } from 'react'
-import { FlatList, Text, View } from 'native-base'
+import { FlatList, ScrollView, Text, View } from 'native-base'
 
 import { studentsType } from '@/types';
 
 import { styles } from '../style';
 import StudentItem from './StudentItem';
+import { Dimensions } from 'react-native';
 
 const StudentList: React.FC<{ students: studentsType[] | undefined; grade: string; classRoom: string; }> = ({ students, grade, classRoom }) => {
 
-  const renderItem = useCallback(({ item }: { item: studentsType }) => {
-    return <StudentItem item={item} />;
-  }, []);
   return (
     <View>
       {grade && classRoom ?
@@ -19,15 +17,15 @@ const StudentList: React.FC<{ students: studentsType[] | undefined; grade: strin
             <Text style={styles.countText}>{grade}학년 {classRoom}반</Text>
             <Text style={styles.countText}>{students?.length}명</Text>
           </View>
-          <View>
+          <ScrollView style={{ height: Dimensions.get('window').height - 225 }}>
             {students?.length !== 0 ?
-              <FlatList
-                data={students}
-                renderItem={renderItem}
-                keyExtractor={item => item.phone}
-              />
+              students?.map((item) => {
+                return <View key={item.phone}>
+                  <StudentItem item={item} />
+                </View>
+              })
               : <Text>해당 반에 학생이 없습니다.</Text>}
-          </View>
+          </ScrollView>
         </View>
         : <View>
           <Text style={styles.selectText}>학년 및 반을 선택해 주세요.</Text>
