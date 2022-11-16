@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect, useState } from 'react'
 import { Box, Select, View } from 'native-base'
+import { AxiosError } from 'axios';
 
 import { MAIN } from '@/theme/colorVariants';
 import { StudentList } from '@/screens'
@@ -8,11 +9,19 @@ import { useQuery } from '@tanstack/react-query';
 import { useIsFocused } from '@react-navigation/native';
 
 import { styles } from './style';
-import { getClasses, getStudents } from './apis';
+import { getClasses, getStudents, requestUserProfile } from './apis';
+import { profileResponseType } from './types';
 
 const TeacherScreen = () => {
-  const [grade, setGrade] = useState<any>('')
-  const [classRoom, setClassRoom] = useState<string>('')
+
+  const { data } = useQuery<profileResponseType, AxiosError>(
+    ['userProfile'],
+    requestUserProfile,
+    { suspense: true },
+  );
+  const schoolName: any = data?.schoolName.split(' ')
+  const [grade, setGrade] = useState<any>(schoolName[1].replace('학년', ''))
+  const [classRoom, setClassRoom] = useState<string>(schoolName[2].replace('반', ''))
   const [students, setStudents] = useState<studentsType[]>([])
 
   const isFocused = useIsFocused()

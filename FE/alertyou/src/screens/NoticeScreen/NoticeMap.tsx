@@ -37,7 +37,7 @@ const NoticeMap = ({ navigation }: Props) => {
       }
     })
   console.log(location, data)
-  const writeDay = new Date(data?.noticeDateTime + '')
+  const writeDay = new Date(data?.noticeDateTime.replace(/-/gi, '/') + '')
   const convertDay = writeDay.getFullYear() + '년 ' + (writeDay.getMonth() + 1) + '월 ' + writeDay.getDate() + '일 ' + writeDay.getHours() + '시 ' + writeDay.getMinutes() + '분'
   // 차후에 내 위치 정보, 신고자 위치 정보로 갈아끼워야 함
 
