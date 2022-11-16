@@ -52,7 +52,6 @@ export const downloadProof = async (proofId: number | undefined): Promise<string
 export const handleBodyguard = async (guardId: number | null | undefined) => {
   const result = await AxiosInstance.post(`bodyguard?guardId=${guardId}`)
     .then((response) => {
-      console.log(response.data)
       return response;
     });
   return true
