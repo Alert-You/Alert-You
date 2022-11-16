@@ -50,7 +50,7 @@ public class UserService {
         if (user.getPhone().equals(newPhone) || userRepository.findByPhone(newPhone) == null) {
             String newPassword = bCryptPasswordEncoder.encode(userSignupReqDto.getPassword());
             School school = schoolRepository.getById(userSignupReqDto.getSchoolId());
-            user.updateAccount(userSignupReqDto, school, newPassword);
+            user.updateAccount(user, userSignupReqDto, school, newPassword);
             userRepository.save(user);
             return true;
         }
