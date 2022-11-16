@@ -40,7 +40,7 @@ public class BodyGuardServiceImpl implements BodyGuardService {
                 }
             }
 
-            else if(user.getRole().equals("선생님")) {
+            else if(user.getRole().equals("교사")) {
 
                 List<Coguard> guardlist = coGuardRepository.findAllByUser(user);
 
@@ -57,19 +57,26 @@ public class BodyGuardServiceImpl implements BodyGuardService {
 
     //보디가드 등록 및 해제
     public Long addBodyGuard(String token, long id) throws Exception{
-
         User user = util.findUserByPhone(decodeToken(token));
-
-        long enroll_id = user.getId();
-
-        User userRole = util.findUser(enroll_id); // 분기를 위한 User 찾기
         User guard = util.findUser(id); // 저장할 가드 id
-
-        Optional<Opguard> opguard = opGuardRepository.findByOpGuardAndUser(guard, userRole);
-        Optional<Coguard> coguard = coGuardRepository.findByCoGuardAndUser(guard, userRole);
+        Optional<Opguard> opguard = opGuardRepository.findByOpGuardAndUser(guard, user);
+        Optional<Coguard> coguard = coGuardRepository.findByCoGuardAndUser(guard, user);
         try{
+            if(user.getRole().equals("교사")) {
+                if(coguard.isPresent()){
+                    coGuardRepository.delete(coguard.get());
+                }
+                else{
+                    Coguard newCoguard = Coguard.builder()
+                            .coGuard(guard)
+                            .user(user)
+                            .build();
+                    coGuardRepository.save(newCoguard);
+                }
+
+            }
             // 학생이 등록하는 경우
-            if (userRole.getRole().equals("학생")) {
+            else if (user.getRole().equals("학생")) {
                 // 있는 경우 등록 해제
                 if(opguard.isPresent()){
                     opGuardRepository.delete(opguard.get());
@@ -78,24 +85,10 @@ public class BodyGuardServiceImpl implements BodyGuardService {
                 else{
                     Opguard newOpguard = Opguard.builder()
                             .opGuard(guard)
-                            .user(userRole)
+                            .user(user)
                             .build();
                     opGuardRepository.save(newOpguard);
                 }
-            }
-
-            else if(userRole.getRole().equals("선생님")) {
-                if(coguard.isPresent()){
-                    coGuardRepository.delete(coguard.get());
-                }
-                else{
-                    Coguard newCoguard = Coguard.builder()
-                            .coGuard(guard)
-                            .user(userRole)
-                            .build();
-                    coGuardRepository.save(newCoguard);
-                }
-
             }
             return id;
 
