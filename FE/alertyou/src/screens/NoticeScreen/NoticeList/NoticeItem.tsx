@@ -2,6 +2,7 @@ import { View } from 'native-base'
 import React, { useCallback } from 'react'
 import { Pressable } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import moment from 'moment'
 
 import { noticeItemType } from '@/types'
 import { FlatListItem } from '@/components'
@@ -23,7 +24,9 @@ const NoticeItem: React.FC<{ item: noticeItemType; read: boolean }> = ({ item, r
     notice = '목격자 제보가 도착했습니다!'
   }
   const date = new Date()
-  const writeDay = new Date(item.noticeDateTime)
+  const noticeDateTime = item.noticeDateTime.replace(/-/gi, '/')
+  console.log(noticeDateTime)
+  const writeDay = new Date(noticeDateTime)
 
   let dif = date.getTime() - writeDay.getTime()
   dif = Math.trunc(dif / 1000);
