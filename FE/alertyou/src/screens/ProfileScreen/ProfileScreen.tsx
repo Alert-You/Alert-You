@@ -1,25 +1,30 @@
 import { View, Text, Alert } from 'react-native';
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useEffect, useMemo } from 'react';
 import { Box, Spinner } from 'native-base';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
+import { useIsFocused } from '@react-navigation/native';
+import ErrorBoundary from 'react-native-error-boundary';
 
 import { redProfileGradientStyle } from '@/theme/gradient';
 import { ProfileBox, SpinnerButton } from '@/components';
+import { CustomSpinner } from '@/screens/ProfileScreen';
+import { MAIN } from '@/theme/colorVariants';
 
 import { styles } from './style';
 import { requestUserProfile } from './apis';
 import { profileResponseType } from './types';
-import { MAIN } from '@/theme/colorVariants';
-import ErrorBoundary from 'react-native-error-boundary';
-import { CustomSpinner } from '@/screens/ProfileScreen';
 
 const ProfileScreen = ({ navigation }: any) => {
-  const { data } = useQuery<profileResponseType, AxiosError>(
+  const isFocused = useIsFocused()
+  const { data, refetch } = useQuery<profileResponseType, AxiosError>(
     ['userProfile'],
     requestUserProfile,
-    { suspense: true },
+    { suspense: true, refetchOnMount: true },
   );
+  useEffect(() => {
+    refetch();
+  }, [isFocused])
 
   //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
   const isTeacher = useMemo(() => data?.role === '교사', [data?.role]);
@@ -28,7 +33,7 @@ const ProfileScreen = ({ navigation }: any) => {
     if (isTeacher) {
       navigation.navigate('TeacherScreen');
     } else {
-      Alert.alert('실패', '접근 권한이 없습니다.', [
+      Alert.alert('접근 권한 없음', '접근 권한이 없습니다.', [
         {
           text: '확인',
         },
@@ -80,7 +85,7 @@ const ProfileScreen = ({ navigation }: any) => {
               onPress={moveToSettingScreen}
               height={55}
               fontSize={20}>
-              계정 설정
+              설정
             </SpinnerButton>
           </View>
         </Box>

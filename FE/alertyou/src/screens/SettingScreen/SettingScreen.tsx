@@ -79,7 +79,7 @@ const SettingScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.category}>
-        <Text style={styles.categoryTitle}>계정 설정</Text>
+        {/* <Text style={styles.categoryTitle}>계정 설정</Text> */}
         <TouchableOpacity activeOpacity={0.6} onPress={moveToProfileEdit}>
           <View style={styles.categoryItem}>
             <Text style={styles.categoryText}>회원 정보 수정</Text>

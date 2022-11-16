@@ -1,4 +1,4 @@
-import {View, Text, Button, NativeModules, TextInput} from 'react-native';
+import { View, Text } from 'react-native';
 import {
   CloseIcon,
   FormControl,
@@ -8,15 +8,14 @@ import {
   Spinner,
   Stack,
 } from 'native-base';
-import React, {useReducer, useState} from 'react';
+import React, { useReducer } from 'react';
 import ErrorBoundary from 'react-native-error-boundary';
 
-import {MAIN} from '@/theme/colorVariants';
-import {LogoImage, SpinnerButton} from '@/components';
-import {useLogIn} from '@/hooks';
-import SharedGroupPreferences from 'react-native-shared-group-preferences';
+import { MAIN } from '@/theme/colorVariants';
+import { LogoImage, SpinnerButton } from '@/components';
+import { useLogIn } from '@/hooks';
 
-import {styles} from './style';
+import { styles } from './style';
 import {
   failPhoneValidation,
   loginInitialState,
@@ -25,26 +24,24 @@ import {
   phoneValidation,
 } from './functions';
 
-const SharedStorage = NativeModules.SharedStorage;
-
-const LoginScreen = ({navigation}: any) => {
+const LoginScreen = ({ navigation }: any) => {
   const [state, dispatch] = useReducer(loginReducer, loginInitialState);
-  const {mutate: loginMutate, isLoading} = useLogIn();
+  const { mutate: loginMutate, isLoading } = useLogIn();
 
   const changePhoneNumber = (e: string): void => {
-    dispatch({type: 'phone', payload: e});
+    dispatch({ type: 'phone', payload: e });
   };
 
   const changePassword = (e: string): void => {
-    dispatch({type: 'password', payload: e});
+    dispatch({ type: 'password', payload: e });
   };
 
   const deletePhoneNumber = (): void => {
-    dispatch({type: 'phone', payload: ''});
+    dispatch({ type: 'phone', payload: '' });
   };
 
   const deletePassword = (): void => {
-    dispatch({type: 'password', payload: ''});
+    dispatch({ type: 'password', payload: '' });
   };
 
   const submitAndClearForm = () => {
@@ -62,11 +59,6 @@ const LoginScreen = ({navigation}: any) => {
 
   const moveToSignUp = () => {
     navigation.navigate('SignUp');
-  };
-
-  const [text, setText] = useState('');
-  const handleSubmit = async () => {
-    SharedStorage.set(JSON.stringify({text}));
   };
 
   return (
