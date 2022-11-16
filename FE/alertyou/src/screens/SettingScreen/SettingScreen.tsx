@@ -1,23 +1,31 @@
-import {View, Text, TouchableOpacity, Alert, ScrollView} from 'react-native';
-import React from 'react';
-import {ChevronRightIcon, Divider, Center} from 'native-base';
+import { View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import React, { useEffect } from 'react';
+import { ChevronRightIcon, Divider, Center } from 'native-base';
 
-import {getToken} from '@/utils/auth';
-import {useLogout} from '@/hooks';
+import { getToken } from '@/utils/auth';
+import { useLogout } from '@/hooks';
 
-import {styles} from './style';
-import {editPasswordConfirmState, editSchoolNameState, profileFormState} from '@/store/profileState';
-import {useSetRecoilState} from 'recoil';
-import {useQuery} from '@tanstack/react-query';
-import {profileResponseType} from './types';
-import {AxiosError} from 'axios';
-import {requestAccountInfo} from './apis';
+import { styles } from './style';
+import {
+  editPasswordConfirmState,
+  editPhoneState,
+  editSchoolNameState,
+  profileFormState,
+} from '@/store/profileState';
+import { useSetRecoilState } from 'recoil';
+import { useQuery } from '@tanstack/react-query';
+import { profileResponseType } from './types';
+import { AxiosError } from 'axios';
+import { requestAccountInfo } from './apis';
+import { useIsFocused } from '@react-navigation/native';
 
-const SettingScreen = ({navigation}: any) => {
+const SettingScreen = ({ navigation }: any) => {
   const setProfileForm = useSetRecoilState(profileFormState);
   const setSchoolName = useSetRecoilState(editSchoolNameState);
   const setPassword2 = useSetRecoilState(editPasswordConfirmState);
-  const userQuery = useQuery<profileResponseType, AxiosError>(
+  const setPhone = useSetRecoilState(editPhoneState);
+  const focused = useIsFocused();
+  const {refetch} = useQuery<profileResponseType, AxiosError>(
     ['accountInfo'],
     requestAccountInfo,
     {
@@ -32,13 +40,17 @@ const SettingScreen = ({navigation}: any) => {
         });
         setPassword2('');
         setSchoolName(res.schoolName);
+        setPhone(res.phone);
       },
-      refetchOnMount: true
+      refetchOnMount: true,
     },
-  );
-  const {mutate} = useLogout();
-
-  //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
+    );
+    useEffect(() => {
+      refetch()
+    }, [focused]);
+    const { mutate } = useLogout();
+    
+    //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
   const logoutHandler = (): void => {
     getToken().then(res => {
       if (res) {
@@ -67,7 +79,7 @@ const SettingScreen = ({navigation}: any) => {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.category}>
-        <Text style={styles.categoryTitle}>계정 설정</Text>
+        {/* <Text style={styles.categoryTitle}>계정 설정</Text> */}
         <TouchableOpacity activeOpacity={0.6} onPress={moveToProfileEdit}>
           <View style={styles.categoryItem}>
             <Text style={styles.categoryText}>회원 정보 수정</Text>

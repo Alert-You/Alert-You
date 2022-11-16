@@ -9,7 +9,7 @@ export const phoneValidation = (phone: string): boolean => {
 };
 
 export const onFailHandler = () => {
-  Alert.alert('인증 실패', '휴대폰 번호가 유효하지 않습니다.', [
+  Alert.alert('유효하지 않은 휴대폰 번호', '휴대폰 번호가 유효하지 않습니다.', [
     {text: '확인'},
   ]);
 };
@@ -21,15 +21,15 @@ export const onVerifySuccess = () => {
 };
 
 export const onVerifyFail = () => {
-  Alert.alert('인증 실패', '인증 번호가 일치하지 않습니다.', [
+  Alert.alert('인증 번호 불일치', '인증 번호가 일치하지 않습니다.', [
     {text: '확인'},
   ]);
 };
 
 export const failSignUp = () => {
-  Alert.alert('가입 실패', '인증에 실패했습니다. 다시 인증을 진행해주세요..', [{text: '확인'}]);
+  Alert.alert('인증 실패', '인증에 실패했습니다. 다시 인증을 진행해주세요..', [{text: '확인'}]);
 }
 
 export const errorOccured = (err:string) => {
-  Alert.alert('가입 실패', err, [{text: '확인'}]);
+  Alert.alert('오류 발생', err, [{text: '확인'}]);
 }

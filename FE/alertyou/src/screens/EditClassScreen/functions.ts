@@ -1,9 +1,9 @@
 import {Alert} from 'react-native';
 
 export const formIsNotFilled = (): void => {
-  Alert.alert('실패', '학교, 학년, 반을 입력해주세요.', [{text: '확인'}]);
+  Alert.alert('빈 칸을 채워주세요', '학교, 학년, 반을 입력해주세요.', [{text: '확인'}]);
 };
 
 export const failedFetchSchoolId = (): void => {
-  Alert.alert('실패', '학교 등록에 실패했습니다. 다시 시도해주세요.', [{text: '확인'}]);
+  Alert.alert('학교 검색', '학교 정보를 다시 확인해주세요.', [{text: '확인'}]);
 };

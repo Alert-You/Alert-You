@@ -22,24 +22,22 @@ const useRefreshToken = () => {
     refreshToken => requestRefreshToken(refreshToken),
     {
       onSuccess: (res) => {
-        console.log("성공했어")
         setToken(res.accessToken);
         saveAccessToken(res.accessToken);
         setIsLoggedIn(true);
         saveToken(res.refreshToken);
         setTimeout(() => {
           setSplashState(true);
-        }, 2000);
+        }, 3000);
       },
       onError: () => {
-        console.log('실패했어');
         setToken('');
         removeAccessToken();
         setIsLoggedIn(false);
         removeToken();
         setTimeout(() => {
           setSplashState(true);
-        }, 2000);
+        }, 3000);
       }
     },
   );

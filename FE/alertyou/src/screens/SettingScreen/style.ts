@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     backgroundColor: WHITE.white
   },
   category: {
-    //
+    paddingVertical: 15
   },
   categoryTitle: {
     marginTop: 20,

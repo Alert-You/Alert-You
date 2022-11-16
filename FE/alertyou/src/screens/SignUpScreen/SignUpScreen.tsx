@@ -1,5 +1,5 @@
-import {View, Text, Pressable, Dimensions} from 'react-native';
-import {useMemo, useState} from 'react';
+import { View, Text, Pressable, Dimensions } from 'react-native';
+import { useMemo, useState, useEffect } from 'react';
 import {
   Center,
   FormControl,
@@ -9,25 +9,34 @@ import {
   Select,
   Stack,
 } from 'native-base';
-import {useRecoilValue, useSetRecoilState} from 'recoil';
-import {useQuery} from '@tanstack/react-query';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useQuery } from '@tanstack/react-query';
+import { useIsFocused } from '@react-navigation/native';
 
-import {LogoImage, SpinnerButton} from '@/components';
-import {MAIN} from '@/theme/colorVariants';
+import { LogoImage, SpinnerButton } from '@/components';
+import { MAIN } from '@/theme/colorVariants';
 import { W } from '@/constants/dimensions';
-import {classListState, schoolIdState, schoolState} from '@/store/signUpState';
+import {
+  classListState,
+  schoolIdState,
+  schoolState,
+} from '@/store/signUpState';
 
-import {styles} from './style';
-import {failedFetchSchoolId, formIsNotFilled} from './functions';
-import {requestSchoolId} from './apis';
+import { styles } from './style';
+import { failedFetchSchoolId, formIsNotFilled } from './functions';
+import { requestSchoolId } from './apis';
 
-const SignUpScreen = ({navigation}: any) => {
+const SignUpScreen = ({ navigation }: any) => {
+  const isFocused = useIsFocused();
   const [grade, setGrade] = useState<string>('');
   const [classroom, setClassroom] = useState<string>('');
   const schoolValue = useRecoilValue(schoolState);
   const classList = useRecoilValue(classListState);
   const setSchoolId = useSetRecoilState(schoolIdState);
-
+  useEffect(() => {
+    setClassroom('')
+    setGrade('')
+  }, [isFocused]);
   const hasChosenSchool = useMemo(() => classList.length !== 0, [classList]);
   const hasChosenGrade = useMemo(
     () => grade && !!classList[parseInt(grade)],
@@ -36,7 +45,7 @@ const SignUpScreen = ({navigation}: any) => {
   const formIsFilled =
     schoolValue.address && schoolValue.name && grade && classroom;
 
-  const {refetch} = useQuery(
+  const { refetch } = useQuery(
     ['schoolIdKey'],
     () =>
       requestSchoolId(schoolValue.name, grade, classroom, schoolValue.address),
@@ -131,11 +140,12 @@ const SignUpScreen = ({navigation}: any) => {
                     }}>
                     {hasChosenSchool
                       ? classList.map((item, idx) => {
+                          if (idx === 0) return;
                           return (
                             <Select.Item
                               key={`gradeItemKey${idx}`}
-                              label={`${idx + 1}학년`}
-                              value={String(idx + 1)}
+                              label={`${idx}학년`}
+                              value={String(idx)}
                             />
                           );
                         })
