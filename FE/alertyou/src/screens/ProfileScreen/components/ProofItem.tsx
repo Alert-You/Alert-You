@@ -111,11 +111,15 @@ const ProofItem: React.FC<{ item: proofType }> = ({ item }) => {
     title = "사진 파일"
   }
 
+  const writeDay = new Date(item?.createDate.replace(/-/gi, '/') + '')
+  const convertDay = writeDay.getFullYear() + '년 ' + (writeDay.getMonth() + 1) + '월 ' + writeDay.getDate() + '일 ' + writeDay.getHours() + '시 ' + writeDay.getMinutes() + '분'
+
+
   return (
     <View>
       <FlatListItem
         title={title}
-        subTitle={item.createDate}
+        subTitle={convertDay}
         bgColor={WHITE.white}
         rightContent={rightContent}
         bdColor={WHITE.white}

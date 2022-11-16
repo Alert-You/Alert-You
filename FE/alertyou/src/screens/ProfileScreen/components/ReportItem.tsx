@@ -28,13 +28,14 @@ const ReportItem: React.FC<{ item: repType }> = ({ item }) => {
     bgColor = RED.red500
     title = "긴급 도움 요청"
   }
-
+  const writeDay = new Date(item?.noticeDateTime.replace(/-/gi, '/') + '')
+  const convertDay = writeDay.getFullYear() + '년 ' + (writeDay.getMonth() + 1) + '월 ' + writeDay.getDate() + '일 ' + writeDay.getHours() + '시 ' + writeDay.getMinutes() + '분'
 
   return (
     <View>
       <FlatListItem
         title={title}
-        subTitle={item.noticeDateTime}
+        subTitle={convertDay}
         bgColor={bgColor}
         rightContent=''
         bdColor={bgColor}
