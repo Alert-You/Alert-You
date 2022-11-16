@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // list 반환이기 때문에 findAll 메서드 사용
     // 학생들만 찾아야하기 때문에 AndRole 추가
-    List<User> findAllBySchoolAndRoleOrderByUsernameAsc(School school,String role);
+    List<User> findAllBySchoolAndRoleOrderByUsernameAsc(School school, String role);
     User findBySchoolAndRole(School school, String role);
 
 }

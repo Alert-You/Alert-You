@@ -3,6 +3,7 @@ package com.ssafy.alertyou.account.service;
 import com.ssafy.alertyou.account.dto.UserInfoResDto;
 import com.ssafy.alertyou.account.dto.UserSignupReqDto;
 import com.ssafy.alertyou.account.entity.User;
+import com.ssafy.alertyou.account.repository.UserQueryDslRepository;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.school.entity.School;
@@ -19,10 +20,12 @@ public class UserService {
     private final CoGuardRepository coGuardRepository;
     private final SchoolRepository schoolRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final UserQueryDslRepository userQueryDslRepository;
     // 회원가입
     public boolean createUser(UserSignupReqDto userRequestDto) {
         // 핸드폰 번호가 이미 있으면 false
-        if (userRepository.findByPhone(userRequestDto.getPhone()) != null) {
+        if (userQueryDslRepository.findByPhone(userRequestDto.getPhone()) != null) {
             return false;
         }
         // 학교 정보 받아서 넣어야함
@@ -40,14 +43,14 @@ public class UserService {
 
     // 휴대전화 번호로 유저 조회
     public User getUserByPhone(String phone) {
-        return userRepository.findByPhone(phone);
+        return userQueryDslRepository.findByPhone(phone);
     }
     
     // 유저 정보 수정(setter 사용을 피하기 위해 회원 정보 수정 로직을 엔티티에 추가함)
     public boolean modifyUserInfo(User user, UserSignupReqDto userSignupReqDto) {
         String newPhone = userSignupReqDto.getPhone();
         // 바꾸려는 핸드폰 번호를 가진 유저가 없거나 자기 자신의 번호라면 회원정보 수정 진행
-        if (user.getPhone().equals(newPhone) || userRepository.findByPhone(newPhone) == null) {
+        if (user.getPhone().equals(newPhone) || userQueryDslRepository.findByPhone(newPhone) == null) {
             String newPassword = bCryptPasswordEncoder.encode(userSignupReqDto.getPassword());
             School school = schoolRepository.getById(userSignupReqDto.getSchoolId());
             user.updateAccount(user, userSignupReqDto, school, newPassword);
@@ -66,7 +69,7 @@ public class UserService {
     
     // 유저 정보 조회
     public UserInfoResDto getUserInfo(String phone) {
-        User user = userRepository.findByPhone(phone);
+        User user = userQueryDslRepository.findByPhone(phone);
         boolean ret = coGuardRepository.findAllByCoGuard(user).isEmpty(); // 보디가드 역할인지 확인
         String role = user.getRole();
         School school = user.getSchool();
@@ -80,7 +83,7 @@ public class UserService {
 
     // 유저 삭제 로직(나중에 삭제)
     public boolean removeUser(String phone) {
-        User user = userRepository.findByPhone(phone);
+        User user = userQueryDslRepository.findByPhone(phone);
         if (user == null) {
             return false;
         }

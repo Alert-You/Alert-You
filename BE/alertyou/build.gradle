@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.5.8'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10" // query dsl
 }
 
 group = 'com.ssafy.alertyou'
@@ -39,8 +40,29 @@ dependencies {
 	testImplementation group: 'software.amazon.awssdk', name: 's3', version: '2.18.2'
 	implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.3.3' //file to MultipartFile & TestCode용
 	implementation 'com.google.firebase:firebase-admin:9.1.0' // fcm
+	implementation 'com.querydsl:querydsl-jpa' // query dsl
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// 아래부터는 query dsl을 위한 설정
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+	main.java.srcDir querydslDir
+}
+
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
 }

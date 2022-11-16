@@ -2,6 +2,7 @@ package com.ssafy.alertyou.account.service;
 
 import com.ssafy.alertyou.account.dto.UserSignupReqDto;
 import com.ssafy.alertyou.account.entity.User;
+import com.ssafy.alertyou.account.repository.UserQueryDslRepository;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.school.repository.SchoolRepository;
@@ -18,6 +19,8 @@ import static org.assertj.core.api.Assertions.*; // junit4??
 public class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserQueryDslRepository userQueryDslRepository;
     @Autowired
     private UserService userService;
     @Autowired
@@ -55,12 +58,12 @@ public class UserServiceTest {
         userService.createUser(userSignupReqDto);
 
         // when
-        UserSignupReqDto userModifyReqDto = new UserSignupReqDto("01092458873", "asd123", "시원박", 3L);
-        userService.modifyUserInfo(userRepository.findByPhone(userSignupReqDto.getPhone()), userModifyReqDto);
+        UserSignupReqDto userModifyReqDto = new UserSignupReqDto("01092458873", "asd123", "시원박", 2L);
+        userService.modifyUserInfo(userQueryDslRepository.findByPhone(userSignupReqDto.getPhone()), userModifyReqDto);
 
         // then
-        User user = userRepository.findByPhone(userModifyReqDto.getPhone());
-        assertThat(user.getUsername()).isEqualTo("시원박");
+        User newUser = userQueryDslRepository.findByPhone(userModifyReqDto.getPhone());
+        assertThat(newUser.getUsername()).isEqualTo("시원박");
     }
     
     @Test
@@ -75,10 +78,10 @@ public class UserServiceTest {
 
         // when
         UserSignupReqDto userModifyReqDto = new UserSignupReqDto("01092458874", "asd123", "시원박", 1L);
-        userService.modifyUserInfo(userRepository.findByPhone(userSignupReqDto.getPhone()), userModifyReqDto);
+        userService.modifyUserInfo(userQueryDslRepository.findByPhone(userSignupReqDto.getPhone()), userModifyReqDto);
 
         // then
-        User user = userRepository.findByPhone(userModifyReqDto.getPhone());
+        User user = userQueryDslRepository.findByPhone(userModifyReqDto.getPhone());
         assertThat(user.getUsername()).isEqualTo("원시박"); // 유저 수정이 되지 않았으니 원래 주인인 원시박이어야함
     }
     
@@ -91,7 +94,7 @@ public class UserServiceTest {
         userService.createUser(userSignupReqDto);
 
         // when
-        User user = userRepository.findByPhone(userSignupReqDto.getPhone());
+        User user = userQueryDslRepository.findByPhone(userSignupReqDto.getPhone());
         userService.removeUser(user);
 
         // then
