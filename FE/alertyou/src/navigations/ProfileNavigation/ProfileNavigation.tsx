@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { EditClassScreen, EditSchoolScreen, ProfileEditScreen, ProfileScreen, SettingScreen, TeacherScreen } from "@/screens"
+import { EditClassScreen, EditSchoolScreen, ProfileEditScreen, ProfileScreen, TeacherScreen } from "@/screens"
 import { StudentDetail } from '@/screens/ProfileScreen';
 import { MAIN, RED, WHITE } from '@/theme/colorVariants';
 import { useQuery } from '@tanstack/react-query';
@@ -14,7 +14,6 @@ export type ProfileParamList = {
   ProfileScreen: undefined;
   TeacherScreen: undefined;
   StudentDetail: { studentId: number | null };
-  SettingScreen: undefined;
   ProfileEditScreen: undefined;
   EditSchoolScreen: undefined;
   EditClassScreen: undefined;
@@ -57,18 +56,6 @@ const ProfileNavigation = () => {
         name="StudentDetail"
         component={StudentDetail}
         options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="SettingScreen"
-        component={SettingScreen}
-        options={{
-          title: '설정',
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: '700',
-            fontSize: 20,
-          },
-        }}
       />
       <Stack.Screen
         name="ProfileEditScreen"

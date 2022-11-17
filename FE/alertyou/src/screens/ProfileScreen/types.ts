@@ -1,8 +1,9 @@
 export interface profileResponseType {
   message: string;
-  statusCode: number;
-  schoolName: string;
   name: string;
-  role: string;
   phone: string;
+  role: string;
+  schoolId: number;
+  schoolName: string;
+  statusCode: number;
 }

@@ -4,55 +4,34 @@ import { W } from '@/constants/dimensions';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: WHITE.white,
-  },
+  container: {},
   teacherScreenContainer: {
     flex: 1,
     backgroundColor: WHITE.white,
   },
-  headerText: {
-    color: WHITE.white,
-    fontSize: 24,
-    textAlign: 'center',
-    fontWeight: FONT_WEIGHT.Bold,
-    marginTop: 15,
-  },
-  nameText: {
-    color: WHITE.white,
-    fontSize: 36,
-    textAlign: 'center',
-    fontWeight: FONT_WEIGHT.Bold,
-    marginTop: 30,
-  },
   profileContainer: {
     flex: 1,
-    height: '100%',
-  },
-  profileAbsoluteBox: {
-    left: 16,
-    bottom: 135,
+    height: 150,
+    justifyContent: 'center',
+    paddingHorizontal: 16,
+    backgroundColor: WHITE.white,
   },
   profileBox: {
     marginTop: 16,
     marginHorizontal: 16,
   },
-  studentListButton: {
-    marginTop: 100,
-    marginHorizontal: 16,
-  },
   buttonText: {
     fontSize: 16,
-    marginLeft: 3,
-    marginBottom: 5,
+    marginLeft: 16,
+    marginTop: 32,
+    marginBottom: 16,
     fontWeight: FONT_WEIGHT.Medium,
   },
   accountText: {
     fontSize: 16,
-    marginTop: 16,
-    marginLeft: 3,
-    marginBottom: 5,
+    marginTop: 32,
+    marginBottom: 16,
+    marginLeft: 16,
     fontWeight: FONT_WEIGHT.Medium,
   },
   selectBoxGroup: {
@@ -140,11 +119,6 @@ export const styles = StyleSheet.create({
     color: MAIN.mainFont,
     marginBottom: 12,
   },
-  headerStyle: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
-  },
   logoutText: {
     fontSize: 16,
     fontWeight: FONT_WEIGHT.SemiBold,
@@ -155,4 +129,21 @@ export const styles = StyleSheet.create({
     right: 10,
     bottom: 10,
   },
+  categoryItem: {
+    height: 45,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+  categoryText: {
+    fontSize: 20,
+    fontWeight: FONT_WEIGHT.Medium,
+    marginLeft: 5,
+    color: MAIN.mainFont,
+  },
+  categoryIcon: {
+    flexDirection: 'row',
+    justifyContent: 'center'
+  }
 });
