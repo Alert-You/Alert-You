@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
   teacherScreenContainer: {
     flex: 1,
-    backgroundColor: RED.redBg,
+    backgroundColor: WHITE.white,
   },
   headerText: {
     color: WHITE.white,
@@ -82,14 +82,14 @@ export const styles = StyleSheet.create({
     color: MAIN.mainFont,
   },
   arrowBox: {
-    color: MAIN.red,
+    color: MAIN.mainFont,
   },
   headerBox: {
     position: 'relative',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: RED.redBg,
+    backgroundColor: WHITE.white,
     marginVertical: 16,
     marginHorizontal: 16,
     zIndex: 1,

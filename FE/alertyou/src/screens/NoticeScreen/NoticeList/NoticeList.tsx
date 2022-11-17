@@ -10,13 +10,12 @@ const NoticeList: React.FC<{ noticeList: noticeItemType[] | undefined; read: boo
 
   return (
     <View>
-      {noticeList ?
-        noticeList.map((item) => {
+      {noticeList?.length !== 0 &&
+        noticeList?.map((item) => {
           return <View key={item.noticeDateTime + item.reportId}>
             <NoticeItem item={item} read={read} />
           </View>
-        })
-        : <Text>알림내역이 없습니다.</Text>}
+        })}
     </View>
   )
 }
