@@ -17,6 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.DateFormatter;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static com.ssafy.alertyou.util.Util.decodeToken;
@@ -43,17 +49,41 @@ public class AlertServiceImpl implements AlertService{
         List<Alert> unreadList = alertRepository.findAllByUserAndChecked(user, false);
         List<Alert> readList = alertRepository.findAllByUserAndChecked(user, true);
 
+        LocalDateTime endDate = LocalDateTime.now(); // 현재 날짜 가져오기
+
         try{
             for(Alert alert : unreadList){
                 Report alertReport = alert.getReport();
-                unRead.add(new AlertResDto(alertReport, alert));
 
+                // 해당 알림의 신고 날짜를 가져옴
+                String noticeTime = alertReport.getNoticeDateTime();
+                // 비교 가능한 날짜로 가져오기
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                LocalDateTime startDate = LocalDateTime.parse(noticeTime, formatter);
+                
+                // 날짜 비교
+                long day = ChronoUnit.DAYS.between(startDate, endDate);
+
+                if(day <= 1){
+                    unRead.add(new AlertResDto(alertReport, alert));
+                }
             }
 
             for(Alert alert : readList){
                 Report alertReport = alert.getReport();
-                read.add(new AlertResDto(alertReport, alert));
 
+                // 해당 알림의 신고 날짜를 가져옴
+                String noticeTime = alertReport.getNoticeDateTime();
+                // 비교 가능한 날짜로 가져오기
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                LocalDateTime startDate = LocalDateTime.parse(noticeTime, formatter);
+
+                // 날짜 비교
+                long day = ChronoUnit.DAYS.between(startDate, endDate);
+
+                if(day <= 1){
+                    read.add(new AlertResDto(alertReport, alert));
+                }
             }
 
             // 최신순 정렬
@@ -68,9 +98,7 @@ public class AlertServiceImpl implements AlertService{
         }catch (Exception e){
             result.put("msg", FAIL);
             status = HttpStatus.BAD_REQUEST;
-
         }
-
         return new ResponseEntity<>(result, status);
 
 
