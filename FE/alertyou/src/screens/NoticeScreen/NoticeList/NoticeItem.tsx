@@ -25,7 +25,6 @@ const NoticeItem: React.FC<{ item: noticeItemType; read: boolean }> = ({ item, r
   }
   const date = new Date()
   const noticeDateTime = item.noticeDateTime.replace(/-/gi, '/')
-  console.log(noticeDateTime)
   const writeDay = new Date(noticeDateTime)
 
   let dif = date.getTime() - writeDay.getTime()
