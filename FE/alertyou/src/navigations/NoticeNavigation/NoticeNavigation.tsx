@@ -2,6 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NoticeScreen } from "@/screens"
 import { NoticeMap } from '@/screens/NoticeScreen';
+import { WHITE } from '@/theme/colorVariants';
 
 export type NoticeParamList = {
   NoticeScreen: undefined,
@@ -24,7 +25,7 @@ const NoticeNavigation = () => {
             fontSize: 20,
           },
           headerStyle: {
-            backgroundColor: '#FFF9F7'
+            backgroundColor: WHITE.white
           }
         }}
       />
