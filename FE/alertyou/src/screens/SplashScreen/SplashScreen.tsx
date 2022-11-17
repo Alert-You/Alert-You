@@ -13,7 +13,6 @@ const SplashScreen = () => {
         justifyContent: 'center',
       }}>
       <Lottie
-        
         source={require('@/assets/lottie.json')}
         autoPlay
         loop={true}

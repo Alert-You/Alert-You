@@ -1,22 +1,67 @@
-import { View, Text, Alert } from 'react-native';
+import { View, Text, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import React, { Suspense, useEffect, useMemo } from 'react';
-import { Box, Spinner } from 'native-base';
+import {
+  Avatar,
+  Box,
+  Spinner,
+  Divider,
+  ChevronRightIcon,
+  Center,
+} from 'native-base';
 import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useIsFocused } from '@react-navigation/native';
 import ErrorBoundary from 'react-native-error-boundary';
 
-import { redProfileGradientStyle } from '@/theme/gradient';
-import { ProfileBox, SpinnerButton } from '@/components';
 import { CustomSpinner } from '@/screens/ProfileScreen';
 import { MAIN } from '@/theme/colorVariants';
+import { ProfileInfo } from '@/screens/ProfileScreen';
 
 import { styles } from './style';
-import { requestUserProfile } from './apis';
+import { requestAccountInfo, requestUserProfile } from './apis';
 import { profileResponseType } from './types';
+import { getToken } from '@/utils/auth';
+import { useLogout } from '@/hooks';
+import { useSetRecoilState } from 'recoil';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {
+  editPasswordConfirmState,
+  editPhoneState,
+  editSchoolNameState,
+  profileFormState,
+} from '@/store/profileState';
 
 const ProfileScreen = ({ navigation }: any) => {
-  const isFocused = useIsFocused()
+  const isFocused = useIsFocused();
+  const setProfileForm = useSetRecoilState(profileFormState);
+  const setSchoolName = useSetRecoilState(editSchoolNameState);
+  const setPassword2 = useSetRecoilState(editPasswordConfirmState);
+  const setPhone = useSetRecoilState(editPhoneState);
+  const focused = useIsFocused();
+
+  const userQuery = useQuery<profileResponseType, AxiosError>(
+    ['accountInfo'],
+    requestAccountInfo,
+    {
+      suspense: true,
+      onSuccess: res => {
+        console.log(res);
+        setProfileForm({
+          username: res.name,
+          phone: res.phone,
+          schoolId: res.schoolId,
+          password: '',
+        });
+        setPassword2('');
+        setSchoolName(res.schoolName);
+        setPhone(res.phone);
+      },
+      refetchOnMount: true,
+    },
+  );
+
+  const { mutate } = useLogout();
+
   const { data, refetch } = useQuery<profileResponseType, AxiosError>(
     ['userProfile'],
     requestUserProfile,
@@ -24,9 +69,12 @@ const ProfileScreen = ({ navigation }: any) => {
   );
   useEffect(() => {
     refetch();
-  }, [isFocused])
+  }, [isFocused]);
 
-  //로그아웃 요청, 전역 토큰 삭제, 기기 토큰 삭제, 로그인으로 이동
+  useEffect(() => {
+    userQuery.refetch();
+  }, [focused]);
+
   const isTeacher = useMemo(() => data?.role === '교사', [data?.role]);
 
   const moveToTeacherScreen = (): void => {
@@ -41,55 +89,146 @@ const ProfileScreen = ({ navigation }: any) => {
     }
   };
 
-  const moveToSettingScreen = (): void => {
-    navigation.navigate('SettingScreen');
+  const moveToProfileEdit = (): void => {
+    navigation.navigate('ProfileEditScreen');
+  };
+
+  const logoutHandler = (): void => {
+    getToken().then(res => {
+      if (res) {
+        mutate(res);
+      }
+    });
+  };
+
+  const confirmLogout = (): void => {
+    Alert.alert('로그아웃', '정말로 로그아웃 하시겠습니까?', [
+      {
+        text: '취소',
+      },
+      {
+        text: '로그아웃',
+        style: 'cancel',
+        onPress: () => logoutHandler(),
+      },
+    ]);
   };
 
   return (
     <>
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={styles.profileContainer}>
-          <Box bg={redProfileGradientStyle} w="100%" h="100%">
-            <View style={styles.headerStyle}>
-              <Text style={styles.headerText}>프로필</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Avatar
+              bg="green.500"
+              size="lg"
+              source={{
+                uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80',
+              }}></Avatar>
+            <View style={{ marginLeft: 16 }}>
+              <Suspense fallback={<Spinner color={MAIN.red} size="md" />}>
+                <ErrorBoundary FallbackComponent={CustomSpinner}>
+                  <ProfileInfo
+                    name={data?.name}
+                    schoolName={data?.schoolName}
+                    role={data?.role}
+                    phone={data?.phone}
+                  />
+                </ErrorBoundary>
+              </Suspense>
             </View>
-            <Text style={styles.nameText}>{data?.name}</Text>
-          </Box>
-          <View style={styles.profileAbsoluteBox}>
-            <Suspense fallback={<Spinner color={MAIN.red} size="md" />}>
-              <ErrorBoundary FallbackComponent={CustomSpinner}>
-                <ProfileBox
-                  schoolInfo={data?.schoolName}
-                  role={data?.role}
-                  phone={data?.phone}
-                />
-              </ErrorBoundary>
-            </Suspense>
           </View>
         </View>
-        <Box flex={1.3}>
-          <View style={styles.studentListButton}>
-            {isTeacher ? (
-              <>
-                <Text style={styles.buttonText}>학생 관리</Text>
-                <SpinnerButton
-                  onPress={moveToTeacherScreen}
-                  height={55}
-                  fontSize={20}>
-                  학생 목록 조회
-                </SpinnerButton>
-              </>
-            ) : null}
-            <Text style={styles.accountText}>계정 관리</Text>
-            <SpinnerButton
-              onPress={moveToSettingScreen}
-              height={55}
-              fontSize={20}>
-              설정
-            </SpinnerButton>
+        <View style={{ backgroundColor: 'white', marginTop: 16 }}>
+          {isTeacher ? (
+            <>
+              <Text style={styles.buttonText}>학생 관리</Text>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={moveToTeacherScreen}>
+                <View style={styles.categoryItem}>
+                  <View style={styles.categoryIcon}>
+                    <MaterialCommunityIcons
+                      name="school-outline"
+                      size={24}
+                      color={MAIN.mainFont}
+                    />
+                    <Text style={styles.categoryText}>학생 목록 조회</Text>
+                  </View>
+                  <ChevronRightIcon size="sm" />
+                </View>
+              </TouchableOpacity>
+              <Center mt={4}>
+                <Divider w="94%" />
+              </Center>
+            </>
+          ) : null}
+          <Text style={styles.accountText}>약관 및 정책</Text>
+          <View>
+            <TouchableOpacity activeOpacity={0.6} onPress={() => {}}>
+              <View style={styles.categoryItem}>
+                <View style={styles.categoryIcon}>
+                  <MaterialCommunityIcons
+                    name="file-document-multiple-outline"
+                    size={24}
+                    color={MAIN.mainFont}
+                  />
+                  <Text style={styles.categoryText}>이용약관</Text>
+                </View>
+                <ChevronRightIcon size="sm" />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.6} onPress={() => {}}>
+              <View style={styles.categoryItem}>
+                <View style={styles.categoryIcon}>
+                  <MaterialCommunityIcons
+                    name="logout"
+                    size={24}
+                    color={MAIN.mainFont}
+                  />
+                  <Text style={styles.categoryText}>개인정보 처리방침</Text>
+                </View>
+                <ChevronRightIcon size="sm" />
+              </View>
+            </TouchableOpacity>
+            <Center mt={4}>
+              <Divider w="94%" />
+            </Center>
           </View>
-        </Box>
-      </View>
+          <Text style={styles.accountText}>계정 관리</Text>
+          <View>
+            <TouchableOpacity activeOpacity={0.6} onPress={moveToProfileEdit}>
+              <View style={styles.categoryItem}>
+                <View style={styles.categoryIcon}>
+                  <MaterialCommunityIcons
+                    name="account-edit-outline"
+                    size={24}
+                    color={MAIN.mainFont}
+                  />
+                  <Text style={styles.categoryText}>회원 정보 수정</Text>
+                </View>
+                <ChevronRightIcon size="sm" />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity activeOpacity={0.6} onPress={confirmLogout}>
+              <View style={styles.categoryItem}>
+                <View style={styles.categoryIcon}>
+                  <MaterialCommunityIcons
+                    name="logout"
+                    size={24}
+                    color={MAIN.mainFont}
+                  />
+                  <Text style={styles.categoryText}>로그아웃</Text>
+                </View>
+                <ChevronRightIcon size="sm" />
+              </View>
+            </TouchableOpacity>
+            <Center mt={4}>
+              <Divider w="94%" />
+            </Center>
+          </View>
+        </View>
+      </ScrollView>
     </>
   );
 };
