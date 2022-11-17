@@ -2,7 +2,6 @@ import { View, Text, Alert, ScrollView, TouchableOpacity } from 'react-native';
 import React, { Suspense, useEffect, useMemo } from 'react';
 import {
   Avatar,
-  Box,
   Spinner,
   Divider,
   ChevronRightIcon,
@@ -12,18 +11,14 @@ import { useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useIsFocused } from '@react-navigation/native';
 import ErrorBoundary from 'react-native-error-boundary';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useSetRecoilState } from 'recoil';
 
 import { CustomSpinner } from '@/screens/ProfileScreen';
-import { MAIN } from '@/theme/colorVariants';
+import { MAIN, WHITE } from '@/theme/colorVariants';
 import { ProfileInfo } from '@/screens/ProfileScreen';
-
-import { styles } from './style';
-import { requestAccountInfo, requestUserProfile } from './apis';
-import { profileResponseType } from './types';
 import { getToken } from '@/utils/auth';
 import { useLogout } from '@/hooks';
-import { useSetRecoilState } from 'recoil';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   editPasswordConfirmState,
   editPhoneState,
@@ -31,14 +26,17 @@ import {
   profileFormState,
 } from '@/store/profileState';
 
+import { styles } from './style';
+import { requestAccountInfo, requestUserProfile } from './apis';
+import { profileResponseType } from './types';
+
 const ProfileScreen = ({ navigation }: any) => {
   const isFocused = useIsFocused();
   const setProfileForm = useSetRecoilState(profileFormState);
   const setSchoolName = useSetRecoilState(editSchoolNameState);
   const setPassword2 = useSetRecoilState(editPasswordConfirmState);
   const setPhone = useSetRecoilState(editPhoneState);
-  const focused = useIsFocused();
-
+  const { mutate } = useLogout();
   const userQuery = useQuery<profileResponseType, AxiosError>(
     ['accountInfo'],
     requestAccountInfo,
@@ -59,21 +57,16 @@ const ProfileScreen = ({ navigation }: any) => {
       refetchOnMount: true,
     },
   );
-
-  const { mutate } = useLogout();
-
   const { data, refetch } = useQuery<profileResponseType, AxiosError>(
     ['userProfile'],
     requestUserProfile,
     { suspense: true, refetchOnMount: true },
   );
-  useEffect(() => {
-    refetch();
-  }, [isFocused]);
-
+  
   useEffect(() => {
     userQuery.refetch();
-  }, [focused]);
+    refetch();
+  }, [isFocused]);
 
   const isTeacher = useMemo(() => data?.role === '교사', [data?.role]);
 
@@ -91,6 +84,10 @@ const ProfileScreen = ({ navigation }: any) => {
 
   const moveToProfileEdit = (): void => {
     navigation.navigate('ProfileEditScreen');
+  };
+
+  const moveToPrivacy = (): void => {
+    navigation.navigate('PrivacyScreen');
   };
 
   const logoutHandler = (): void => {
@@ -139,6 +136,7 @@ const ProfileScreen = ({ navigation }: any) => {
             </View>
           </View>
         </View>
+        <Divider h="4" bgColor={MAIN.lightGrey} />
         <View style={{ backgroundColor: 'white', marginTop: 16 }}>
           {isTeacher ? (
             <>
@@ -178,7 +176,7 @@ const ProfileScreen = ({ navigation }: any) => {
                 <ChevronRightIcon size="sm" />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.6} onPress={() => {}}>
+            <TouchableOpacity activeOpacity={0.6} onPress={moveToPrivacy}>
               <View style={styles.categoryItem}>
                 <View style={styles.categoryIcon}>
                   <MaterialCommunityIcons
@@ -221,6 +219,25 @@ const ProfileScreen = ({ navigation }: any) => {
                   <Text style={styles.categoryText}>로그아웃</Text>
                 </View>
                 <ChevronRightIcon size="sm" />
+              </View>
+            </TouchableOpacity>
+            <Center mt={4}>
+              <Divider w="94%" />
+            </Center>
+          </View>
+          <Text style={styles.accountText}>앱 정보</Text>
+          <View>
+            <TouchableOpacity activeOpacity={0.6}>
+              <View style={styles.categoryItem}>
+                <View style={styles.categoryIcon}>
+                  <MaterialCommunityIcons
+                    name="layers-triple-outline"
+                    size={24}
+                    color={MAIN.mainFont}
+                  />
+                  <Text style={styles.categoryText}>버전정보</Text>
+                </View>
+                <Text style={styles.versionText}>1.0.2</Text>
               </View>
             </TouchableOpacity>
             <Center mt={4}>

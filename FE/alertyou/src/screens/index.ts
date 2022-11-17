@@ -22,4 +22,5 @@ export {SplashScreen} from './SplashScreen';
 export {ProfileEditScreen} from './ProfileEditScreen';
 export {EditSchoolScreen} from './EditSchoolScreen';
 export {EditClassScreen} from './EditClassScreen';
+export {PrivacyScreen} from './PrivacyScreen';
 

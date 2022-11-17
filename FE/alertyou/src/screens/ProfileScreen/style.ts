@@ -4,7 +4,10 @@ import { W } from '@/constants/dimensions';
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    backgroundColor: WHITE.white,
+  },
   teacherScreenContainer: {
     flex: 1,
     backgroundColor: WHITE.white,
@@ -17,7 +20,6 @@ export const styles = StyleSheet.create({
     backgroundColor: WHITE.white,
   },
   profileBox: {
-    marginTop: 16,
     marginHorizontal: 16,
   },
   buttonText: {
@@ -30,7 +32,7 @@ export const styles = StyleSheet.create({
   accountText: {
     fontSize: 16,
     marginTop: 32,
-    marginBottom: 16,
+    marginBottom: 32,
     marginLeft: 16,
     fontWeight: FONT_WEIGHT.Medium,
   },
@@ -144,6 +146,11 @@ export const styles = StyleSheet.create({
   },
   categoryIcon: {
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
+  },
+  versionText: {
+    fontSize: 20,
+    fontWeight: FONT_WEIGHT.Regular,
+    color: MAIN.mainFont,
   }
 });
