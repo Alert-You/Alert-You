@@ -5,7 +5,7 @@ import { FONT_WEIGHT } from '@/theme/fontWeightVariants';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: RED.redBg,
+    backgroundColor: WHITE.white,
   },
   readContainer: {
     textAlign: 'right',
@@ -26,18 +26,18 @@ export const styles = StyleSheet.create({
     left: 0,
     marginHorizontal: 16,
     marginVertical: 14,
-    color: WHITE.white
+    color: MAIN.mainFont
   },
   headerBox: {
     position: 'relative',
     // display: 'flex',
     // flexDirection: 'row',
-    backgroundColor: RED.red700,
+    backgroundColor: WHITE.white
   },
   textBox: {
     fontSize: 20,
     fontWeight: FONT_WEIGHT.Bold,
-    color: WHITE.white,
+    color: MAIN.mainFont,
   },
   circleBox: {
     display: 'flex',

@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react'
-import { FlatList, ScrollView, Text, View } from 'native-base'
+import { Center, FlatList, ScrollView, Text, View } from 'native-base'
 
 import { studentsType } from '@/types';
+import gradeClass from '@assets/grade.png'
+import noStudent from '@assets/nostudent.png'
 
 import { styles } from '../style';
 import StudentItem from './StudentItem';
-import { Dimensions } from 'react-native';
+import { Dimensions, Image } from 'react-native';
 
 const StudentList: React.FC<{ students: studentsType[] | undefined; grade: string; classRoom: string; }> = ({ students, grade, classRoom }) => {
 
@@ -24,11 +26,24 @@ const StudentList: React.FC<{ students: studentsType[] | undefined; grade: strin
                   <StudentItem item={item} />
                 </View>
               })
-              : <Text>해당 반에 학생이 없습니다.</Text>}
+              :
+              <View style={{ marginTop: Dimensions.get('window').width - 300 }}>
+                <Center>
+                  <Image
+                    source={noStudent}
+                    style={{ width: Dimensions.get('window').width - 250, height: Dimensions.get('window').height - 500 }} />
+                </Center>
+              </View>
+            }
           </ScrollView>
         </View>
-        : <View>
-          <Text style={styles.selectText}>학년 및 반을 선택해 주세요.</Text>
+        :
+        <View style={{ marginTop: Dimensions.get('window').width - 300 }}>
+          <Center>
+            <Image
+              source={gradeClass}
+              style={{ width: Dimensions.get('window').width - 250, height: Dimensions.get('window').height - 500 }} />
+          </Center>
         </View>
       }
     </View>

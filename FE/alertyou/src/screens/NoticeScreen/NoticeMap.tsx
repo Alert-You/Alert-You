@@ -12,6 +12,7 @@ import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 import { styles } from './style';
 import { getNoticeItem } from './api';
 import { Dimensions } from 'react-native';
+import { RED } from '@/theme/colorVariants';
 
 type Props = {
   navigation: any
@@ -36,7 +37,6 @@ const NoticeMap = ({ navigation }: Props) => {
         console.log(e);
       }
     })
-  console.log(location, data)
   const writeDay = new Date(data?.noticeDateTime.replace(/-/gi, '/') + '')
   const convertDay = writeDay.getFullYear() + '년 ' + (writeDay.getMonth() + 1) + '월 ' + writeDay.getDate() + '일 ' + writeDay.getHours() + '시 ' + writeDay.getMinutes() + '분'
   // 차후에 내 위치 정보, 신고자 위치 정보로 갈아끼워야 함
@@ -73,18 +73,18 @@ const NoticeMap = ({ navigation }: Props) => {
               {({
                 isPressed
               }) => {
-                return <Circle size="42px" bg={isPressed ? "coolGray.300" : "white"} shadow={6}>
-                  <Circle size="20px" bg={isPressed ? "coolGray.300" : "white"} borderColor="black" borderWidth="1">
+                return <Circle size="54px" bg={isPressed ? RED.red300 : RED.red500} shadow={9}>
+                  <Circle size="32px" bg={isPressed ? RED.red300 : RED.red500} borderColor="white" borderWidth="2">
                     <MaterialCommunityIcons
                       name='exclamation'
-                      size={16}
-                      color='black' />
+                      size={26}
+                      color='white' />
                   </Circle>
                 </Circle>
               }}
             </Pressable>
             {/* 상세내역 창 모달 */}
-            <Modal isOpen={showModal} onClose={() => setShowModal(false)} backdropVisible={false}>
+            <Modal isOpen={showModal} onClose={() => setShowModal(false)} backdropVisible={true}>
               <Modal.Content width="90%" maxH="212" style={styles.modalBox}>
                 <Modal.Body>
                   <View style={styles.reportBox}>

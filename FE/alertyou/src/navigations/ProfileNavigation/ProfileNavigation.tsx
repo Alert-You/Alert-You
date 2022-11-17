@@ -3,7 +3,11 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { EditClassScreen, EditSchoolScreen, ProfileEditScreen, ProfileScreen, SettingScreen, TeacherScreen } from "@/screens"
 import { StudentDetail } from '@/screens/ProfileScreen';
-import { RED } from '@/theme/colorVariants';
+import { MAIN, RED, WHITE } from '@/theme/colorVariants';
+import { useQuery } from '@tanstack/react-query';
+import { profileResponseType } from '@/screens/ProfileScreen/types';
+import { AxiosError } from 'axios';
+import { requestUserProfile } from '@/screens/ProfileScreen/apis';
 
 
 export type ProfileParamList = {
@@ -18,7 +22,12 @@ export type ProfileParamList = {
 const Stack = createNativeStackNavigator<ProfileParamList>();
 
 const ProfileNavigation = () => {
-  const schoolName: string = '대전광역시 유성구 싸피고등학교'
+  const { data } = useQuery<profileResponseType, AxiosError>(
+    ['userProfile'],
+    requestUserProfile,
+    { suspense: true, refetchOnMount: true },
+  );
+  const schoolName = data?.schoolName.split(' ')[0]
   return (
     <Stack.Navigator initialRouteName="ProfileScreen">
       <Stack.Screen
@@ -38,9 +47,9 @@ const ProfileNavigation = () => {
             fontWeight: '700',
             fontSize: 20,
           },
-          headerTintColor: 'white',
+          headerTintColor: WHITE.white,
           headerStyle: {
-            backgroundColor: RED.red700,
+            backgroundColor: RED.red500,
           },
         }}
       />
