@@ -3,10 +3,6 @@ import { PROFILE } from "@/apis/urls"
 import { proofType, repType, studentsType, studentType } from "@/types"
 import { profileResponseType } from "./types"
 
-type data = {
-  grade: any,
-  classRoom: string
-}
 
 export const requestUserProfile = async (): Promise<profileResponseType> => {
   const { data } = await AxiosInstance.get(PROFILE)
@@ -61,6 +57,12 @@ export const excludeStudent = async (studentId: number | null | undefined) => {
   const result = await AxiosInstance.delete(`/teacher/student?studentId=${studentId}`)
     .then((response) => response);
   return true
-
 }
+
+
+export const requestAccountInfo = async (): Promise<profileResponseType> => {
+  const { data } = await AxiosInstance.get(PROFILE);
+  return data;
+};
+
 
