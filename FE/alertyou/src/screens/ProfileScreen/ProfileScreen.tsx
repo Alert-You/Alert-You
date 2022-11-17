@@ -182,7 +182,7 @@ const ProfileScreen = ({ navigation }: any) => {
               <View style={styles.categoryItem}>
                 <View style={styles.categoryIcon}>
                   <MaterialCommunityIcons
-                    name="logout"
+                    name="shield-account-outline"
                     size={24}
                     color={MAIN.mainFont}
                   />
