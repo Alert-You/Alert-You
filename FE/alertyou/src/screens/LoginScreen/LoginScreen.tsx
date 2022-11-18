@@ -1,5 +1,6 @@
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import {
+  Text,
   CloseIcon,
   FormControl,
   Input,
@@ -115,7 +116,7 @@ const LoginScreen = ({ navigation }: any) => {
             <Spinner color={MAIN.red} size="lg" />
           )}
           <View style={styles.spinnerButtonStyle}>
-            <SpinnerButton onPress={isLoading ? () => {} : submitAndClearForm}>
+            <SpinnerButton onPress={isLoading ? () => { } : submitAndClearForm}>
               로그인
             </SpinnerButton>
           </View>
