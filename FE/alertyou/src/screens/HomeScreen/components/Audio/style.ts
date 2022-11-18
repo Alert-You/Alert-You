@@ -1,9 +1,14 @@
 import { StyleSheet } from 'react-native';
 import { W, H } from '@/constants/dimensions';
+import HomeScreen from '../../HomeScreen';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  lottie: {
+    height: 0.3 * H,
+    maxWidth: W,
   },
   innerContainer: {
     flex: 1,
@@ -13,15 +18,14 @@ export const styles = StyleSheet.create({
     padding: 16,
     paddingTop: H * 0.1,
   },
-  viewRecorder: {
-    marginTop: 60,
+  viewContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
   },
   btnWrapper: {
     flexDirection: 'row',
-    paddingTop: H * 0.1,
+    paddingTop: H * 0.05,
   },
   counterTxt: {
     textAlign: 'center',
@@ -30,19 +34,12 @@ export const styles = StyleSheet.create({
     color: 'white',
     paddingTop: 40,
   },
-
-  viewPlayer: {
-    marginTop: 60,
-    alignSelf: 'stretch',
-    alignItems: 'center',
-  },
   viewBarWrapper: {
     marginHorizontal: 28,
-    marginBottom: 0,
     alignSelf: 'stretch',
   },
   viewBar: {
-    backgroundColor: '#ccc',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
     height: 8,
     alignSelf: 'stretch',
   },
