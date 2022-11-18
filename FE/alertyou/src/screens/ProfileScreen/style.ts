@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: WHITE.white,
+    opacity: 0.8
   },
   teacherScreenContainer: {
     flex: 1,
@@ -152,5 +153,8 @@ export const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: FONT_WEIGHT.Regular,
     color: MAIN.mainFont,
-  }
+  },
+  avatarFlex: { flexDirection: 'row' },
+  contentMargin: { marginLeft: 16 },
+  teacherButton: { backgroundColor: 'white', marginTop: 16 },
 });
