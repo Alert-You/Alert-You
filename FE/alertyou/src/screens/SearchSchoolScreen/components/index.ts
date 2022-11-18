@@ -1,0 +1,1 @@
+export {SchoolInfo} from './SchoolInfo';
