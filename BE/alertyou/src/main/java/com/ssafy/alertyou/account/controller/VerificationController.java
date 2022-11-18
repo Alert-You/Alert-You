@@ -1,6 +1,5 @@
 package com.ssafy.alertyou.account.controller;
 
-import com.ssafy.alertyou.account.dto.UserLoginResDto;
 import com.ssafy.alertyou.account.dto.VerificationResDto;
 import com.ssafy.alertyou.account.service.VerificationService;
 import io.swagger.annotations.Api;

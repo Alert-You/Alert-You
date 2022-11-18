@@ -1,16 +1,10 @@
 package com.ssafy.alertyou.school.controller;
 
-import com.ssafy.alertyou.school.dto.StudentListResDto;
 import com.ssafy.alertyou.school.service.TeacherService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.ssafy.alertyou.util.Util.getResponseEntity;

@@ -1,7 +1,6 @@
 package com.ssafy.alertyou.alert.controller;
 
 import com.ssafy.alertyou.alert.service.AlertService;
-import com.ssafy.alertyou.report.dto.LocationReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

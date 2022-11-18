@@ -1,7 +1,6 @@
 package com.ssafy.alertyou.account.dto;
 
 
-import com.ssafy.alertyou.school.entity.School;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

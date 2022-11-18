@@ -1,11 +1,9 @@
 package com.ssafy.alertyou.school.service;
 
 import com.ssafy.alertyou.school.dto.SchoolSearchResDto;
-import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public interface SchoolService {
     public List<SchoolSearchResDto> getSchools(String word) throws Exception;

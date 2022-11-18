@@ -1,10 +1,8 @@
 package com.ssafy.alertyou.report.service;
 
 import com.ssafy.alertyou.report.dto.*;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ReportService {
 

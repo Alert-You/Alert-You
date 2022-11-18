@@ -3,7 +3,6 @@ package com.ssafy.alertyou.proof.dto;
 import com.ssafy.alertyou.proof.entity.Proof;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 
 @Getter
 public class ProofListResDto {

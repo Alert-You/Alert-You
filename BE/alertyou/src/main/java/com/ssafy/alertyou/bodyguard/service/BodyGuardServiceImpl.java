@@ -2,7 +2,6 @@ package com.ssafy.alertyou.bodyguard.service;
 
 
 import com.ssafy.alertyou.account.entity.User;
-import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.bodyguard.dto.BodyGuardResDto;
 import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.entity.Opguard;
@@ -10,8 +9,6 @@ import com.ssafy.alertyou.bodyguard.repository.CoGuardRepository;
 import com.ssafy.alertyou.bodyguard.repository.OpGuardRepository;
 import com.ssafy.alertyou.util.Util;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import static com.ssafy.alertyou.util.Util.decodeToken;
 

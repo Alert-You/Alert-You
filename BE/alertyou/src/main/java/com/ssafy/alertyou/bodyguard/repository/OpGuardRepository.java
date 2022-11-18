@@ -1,7 +1,6 @@
 package com.ssafy.alertyou.bodyguard.repository;
 
 import com.ssafy.alertyou.account.entity.User;
-import com.ssafy.alertyou.bodyguard.entity.Coguard;
 import com.ssafy.alertyou.bodyguard.entity.Opguard;
 import org.springframework.data.jpa.repository.JpaRepository;
 

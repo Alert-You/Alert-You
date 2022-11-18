@@ -1,11 +1,6 @@
 package com.ssafy.alertyou.proof.service;
 
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssafy.alertyou.account.entity.User;
-import com.ssafy.alertyou.account.jwt.JwtProperties;
-import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
-import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.proof.config.S3Util;
 import com.ssafy.alertyou.proof.config.S3UtilByBase64;
 import com.ssafy.alertyou.proof.dto.ProofListResDto;
@@ -17,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
