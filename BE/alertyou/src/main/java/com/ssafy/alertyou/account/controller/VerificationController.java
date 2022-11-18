@@ -24,8 +24,8 @@ public class VerificationController {
     @ApiOperation(value = "인증 번호 요청", notes = "휴대전화 번호를 입력하여 인증 번호를 요청한다.")
     public ResponseEntity<VerificationResDto> sendSMS(@RequestParam("phone") String phone) { // , HttpServletRequest request
         String certRandNum = verificationService.getRandomVerificationNumber();
-
-        verificationService.sendSMS(phone, certRandNum);
+        String content = "알럿-유 본인 인증 번호입니다. ["+ certRandNum +"]";
+        verificationService.sendSMS(phone, content);
 //        HttpSession session = request.getSession();
 //        session.setAttribute("certNum", numStr);
         return ResponseEntity.ok().body(VerificationResDto.result(200, "인증 번호 발송 성공", certRandNum));

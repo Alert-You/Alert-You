@@ -98,7 +98,7 @@ public class VerificationService {
 		    "scheduleCode": "string"
 		}
 	 */
-    public void sendSMS(String to, String randNum) { // to에게 randNum을 전송함
+    public void sendSMS(String to, String content) { // to에게 randNum을 전송함
         String hostNameUrl = "https://sens.apigw.ntruss.com"; // 호스트 URL
         String requestUrl= "/sms/v2/services/"; // 요청 URL
         String requestUrlType = "/messages"; // 요청 URL
@@ -112,16 +112,16 @@ public class VerificationService {
         JSONObject toJson = new JSONObject();
         JSONArray toArr = new JSONArray();
 
-        //toJson.put("subject","");							// Optional, messages.subject	개별 메시지 제목, LMS, MMS에서만 사용 가능
-        //toJson.put("content","sms test in spring 111");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
+        // toJson.put("subject","");							// Optional, messages.subject	개별 메시지 제목, LMS, MMS에서만 사용 가능
+        // toJson.put("content","sms test in spring 111");	// Optional, messages.content	개별 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
         toJson.put("to", to); // Mandatory(필수), messages.to	수신번호, -를 제외한 숫자만 입력 가능
         toArr.add(toJson);
         bodyJson.put("type", "SMS"); // Madantory, 메시지 Type (SMS | LMS | MMS), (소문자 가능)
         bodyJson.put("contentType", "COMM"); // Optional, 메시지 내용 Type (AD | COMM) * AD: 광고용, COMM: 일반용 (default: COMM) * 광고용 메시지 발송 시 불법 스팸 방지를 위한 정보통신망법 (제 50조)가 적용됩니다.
         bodyJson.put("countryCode", "82"); // Optional, 국가 전화번호, (default: 82)
         bodyJson.put("from", "01092458873"); // Mandatory, 발신번호, 사전 등록된 발신번호만 사용 가능
-        //bodyJson.put("subject",""); // Optional, 기본 메시지 제목, LMS, MMS에서만 사용 가능
-        bodyJson.put("content", "알럿-유 본인 인증 번호입니다. ["+ randNum +"]");	// Mandatory(필수), 기본 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
+        // bodyJson.put("subject",""); // Optional, 기본 메시지 제목, LMS, MMS에서만 사용 가능
+        bodyJson.put("content", content);	// Mandatory(필수), 기본 메시지 내용, SMS: 최대 80byte, LMS, MMS: 최대 2000byte
         bodyJson.put("messages", toArr); // Mandatory(필수), 아래 항목들 참조 (messages.XXX), 최대 1,000개
 
         String body = bodyJson.toJSONString(); // String body = bodyJson.toString();
