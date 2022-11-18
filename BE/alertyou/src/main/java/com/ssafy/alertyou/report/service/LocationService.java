@@ -8,17 +8,10 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class LocationService {
-
-//    @Value("${naver.cloud.geo.clientid}")
-//    private static String clientId; // 클라이언트 ID
-//
-//    @Value("${naver.cloud.geo.clientsecret}")
-//    private static String clientSecret; // 클라이언트 키
 
     // 역지오 서비스
     public static String[] reverseGeo(double longitude, double latitude) { // 경도(longitude): 세로선(x축), 위도(latitude): 가로선(y축)

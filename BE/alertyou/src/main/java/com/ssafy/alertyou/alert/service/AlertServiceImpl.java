@@ -1,15 +1,9 @@
 package com.ssafy.alertyou.alert.service;
 
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssafy.alertyou.account.entity.User;
-import com.ssafy.alertyou.account.jwt.JwtProperties;
-import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
-import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.alert.dto.AlertResDto;
 import com.ssafy.alertyou.alert.entity.Alert;
 import com.ssafy.alertyou.alert.repository.AlertRepository;
-import com.ssafy.alertyou.report.dto.LocationReqDto;
 import com.ssafy.alertyou.report.entity.Report;
 import com.ssafy.alertyou.util.Util;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.DateFormatter;
-import java.text.DateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;

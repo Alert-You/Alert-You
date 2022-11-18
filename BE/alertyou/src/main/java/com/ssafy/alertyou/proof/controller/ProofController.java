@@ -1,6 +1,5 @@
 package com.ssafy.alertyou.proof.controller;
 
-import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.proof.config.S3Util;
 import com.ssafy.alertyou.proof.dto.ProofUploadReqDto;
 import com.ssafy.alertyou.proof.service.ProofService;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.Map;
 
 import static com.ssafy.alertyou.util.Util.getResponseEntity;

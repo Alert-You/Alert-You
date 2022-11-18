@@ -3,8 +3,6 @@ package com.ssafy.alertyou.school.dto;
 import com.ssafy.alertyou.school.entity.School;
 import lombok.Getter;
 
-import java.util.Comparator;
-
 @Getter
 public class SchoolSearchResDto implements Comparable<SchoolSearchResDto>{
     private String address;

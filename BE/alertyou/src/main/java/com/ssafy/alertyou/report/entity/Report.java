@@ -2,15 +2,10 @@ package com.ssafy.alertyou.report.entity;
 
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.alert.entity.Alert;
-import com.ssafy.alertyou.school.entity.School;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
 
 import javax.persistence.*;
 import java.util.ArrayList;

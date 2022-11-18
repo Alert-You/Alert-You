@@ -1,13 +1,6 @@
 package com.ssafy.alertyou.report.service;
 
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.interfaces.DecodedJWT;
-import com.google.firebase.messaging.BatchResponse;
-import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.MulticastMessage;
 import com.ssafy.alertyou.account.entity.User;
-import com.ssafy.alertyou.account.jwt.JwtProperties;
-import com.ssafy.alertyou.account.jwt.JwtTokenProvider;
 import com.ssafy.alertyou.account.repository.UserRepository;
 import com.ssafy.alertyou.alert.entity.Alert;
 import com.ssafy.alertyou.alert.repository.AlertRepository;
@@ -21,8 +14,6 @@ import com.ssafy.alertyou.report.entity.Report;
 import com.ssafy.alertyou.school.entity.School;
 import com.ssafy.alertyou.util.Util;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -102,10 +93,12 @@ public class ReportServiceImpl implements ReportService {
             Report report = findReport(alertReportId);
 
             List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
+
+            String body = "[긴급] 학교 폭력 피해자 도움 요청";
             for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
                 String fcmToken = util.findUser(guardUser.getId()).getFcmToken();
-                FCMService.sendFCMMessage(fcmToken); // fcm메세지를 보냄
+                FCMService.sendFCMMessage(fcmToken, body); // fcm메세지를 보냄
             }
 
             return user.getId();
@@ -144,11 +137,12 @@ public class ReportServiceImpl implements ReportService {
 
             Report report = findReport(alertReportId);
 
+            String body = "[긴급] 학교 폭력 목격자 현장 제보";
             List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
             for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
                 String fcmToken = util.findUser(guardUser.getId()).getFcmToken();
-                FCMService.sendFCMMessage(fcmToken); // fcm메세지를 보냄
+                FCMService.sendFCMMessage(fcmToken, body); // fcm메세지를 보냄
             }
 
             return user.getId();
