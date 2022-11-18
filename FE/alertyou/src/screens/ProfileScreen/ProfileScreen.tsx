@@ -91,6 +91,9 @@ const ProfileScreen = ({ navigation }: any) => {
   const moveToPrivacy = (): void => {
     navigation.navigate('PrivacyScreen');
   };
+  const moveToServiceAgree = (): void => {
+    navigation.navigate('ServiceAgreeScreen');
+  };
 
   const logoutHandler = (): void => {
     getToken().then(res => {
@@ -109,13 +112,6 @@ const ProfileScreen = ({ navigation }: any) => {
         text: '로그아웃',
         style: 'cancel',
         onPress: () => logoutHandler(),
-      },
-    ]);
-  };
-  const noServiceYet = (): void => {
-    Alert.alert('공사중', '추후 업데이트될 예정입니다.', [
-      {
-        text: '확인',
       },
     ]);
   };
@@ -183,7 +179,9 @@ const ProfileScreen = ({ navigation }: any) => {
             ) : null}
             <Text style={styles.accountText}>약관 및 정책</Text>
             <View>
-              <TouchableOpacity activeOpacity={0.6} onPress={noServiceYet}>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={moveToServiceAgree}>
                 <View style={styles.categoryItem}>
                   <View style={styles.categoryIcon}>
                     <MaterialCommunityIcons

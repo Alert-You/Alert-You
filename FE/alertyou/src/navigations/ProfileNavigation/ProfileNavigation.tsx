@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { EditClassScreen, EditSchoolScreen, PrivacyScreen, ProfileEditScreen, ProfileScreen, TeacherScreen } from "@/screens"
+import { EditClassScreen, EditSchoolScreen, PrivacyScreen, ProfileEditScreen, ProfileScreen, ServiceAgreeScreen, TeacherScreen } from "@/screens"
 import { StudentDetail } from '@/screens/ProfileScreen';
 import { MAIN, RED, WHITE } from '@/theme/colorVariants';
 import { useQuery } from '@tanstack/react-query';
@@ -18,6 +18,7 @@ export type ProfileParamList = {
   EditSchoolScreen: undefined;
   EditClassScreen: undefined;
   PrivacyScreen: undefined;
+  ServiceAgreeScreen: undefined;
 };
 const Stack = createNativeStackNavigator<ProfileParamList>();
 
@@ -99,6 +100,18 @@ const ProfileNavigation = () => {
         component={PrivacyScreen}
         options={{
           title: '개인정보 처리 방침',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: '700',
+            fontSize: 20,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ServiceAgreeScreen"
+        component={ServiceAgreeScreen}
+        options={{
+          title: '이용약관',
           headerTitleAlign: 'center',
           headerTitleStyle: {
             fontWeight: '700',
