@@ -20,6 +20,7 @@ const ReportModal = ({
   toggleIsShowReportModal,
 }: PropsType) => {
   const { location } = useCurrentLocation();
+
   const onClickReport = async () => {
     if (location) {
       const data = { ...location, ...state };
@@ -34,6 +35,12 @@ const ReportModal = ({
     }
     toggleIsShowReportModal();
   };
+
+  const onCancelReport = () => {
+    changeReportPlace('');
+    changeReportContent('');
+    toggleIsShowReportModal();
+  }
 
   const [state, dispatch] = useReducer(
     reportModalReducer,
@@ -78,7 +85,7 @@ const ReportModal = ({
             <Button
               variant="unstyled"
               _text={{ color: 'gray.500' }}
-              onPress={toggleIsShowReportModal}>
+              onPress={onCancelReport}>
               취소
             </Button>
             <Button
