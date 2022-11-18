@@ -17,8 +17,8 @@ import AudioRecorderPlayer, {
   PlayBackType,
   RecordBackType,
 } from 'react-native-audio-recorder-player';
+import Lottie from 'lottie-react-native';
 
-import { RecordingAnimation } from '.';
 import { styles } from './style';
 
 interface AudioState {
@@ -199,17 +199,22 @@ class Audio extends Component<any, AudioState> {
     const result = await this.audioRecorderPlayer.stopRecorder();
     this.audioRecorderPlayer.removeRecordBackListener();
     if (this.props.isEmergency) {
+      this.setState({
+        isRecording: false,
+        recordSecs: 0,
+        playTime: '00:00:00',
+        duration: this.state.recordTime,
+      });
       this.onReportAudio();
+    } else {
+      this.setState({
+        isRecording: false,
+        recordSecs: 0,
+        playTime: '00:00:00',
+        duration: this.state.recordTime,
+        page: 1,
+      });
     }
-    await this.setState({
-      isRecording: false,
-      recordSecs: 0,
-      playTime: '00:00:00',
-      duration: this.state.recordTime,
-      page: 1,
-    });
-
-    console.log('녹음 종료', this.state);
   };
 
   private onStartPlay = async () => {
@@ -388,8 +393,13 @@ class Audio extends Component<any, AudioState> {
       <View style={styles.container}>
         <VStack bg={this.props.isEmergency ? emergencyBgStyle : nonEmergencyBgStyle} style={styles.innerContainer}>
           {!this.state.page ? (
-            <View style={styles.viewRecorder}>
-              {/* <RecordingAnimation isActive={this.state.isRecording} /> */}
+            <View style={styles.viewContainer}>
+              <Lottie
+                style={styles.lottie}
+                source={require("@/assets/lottie/mic-on")}
+                autoPlay={true}
+                loop={true}
+              />
               <Pressable
                 style={styles.viewBarWrapper}>
                 <View style={styles.viewBar}>
@@ -406,7 +416,13 @@ class Audio extends Component<any, AudioState> {
               </View>
             </View>
           ) : (
-            <View style={styles.viewPlayer}>
+            <View style={styles.viewContainer}>
+              <Lottie
+                style={styles.lottie}
+                source={require("@/assets/lottie/mic-wave")}
+                autoPlay={true}
+                loop={true}
+              />
               <Pressable
                 style={styles.viewBarWrapper}
                 onPress={this.onStatusPress}>
