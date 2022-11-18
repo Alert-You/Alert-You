@@ -1,9 +1,11 @@
-import { FlatList, Text, View } from 'native-base'
+import { Center, FlatList, Image, View } from 'native-base'
 import React, { useCallback } from 'react'
 
 import { proofType } from '@/types'
+import noProof from '@assets/noproof.png'
 
 import ProofItem from './ProofItem'
+import { Dimensions } from 'react-native'
 
 const ProofList: React.FC<{ proofs: proofType[] | undefined }> = ({ proofs }) => {
   const renderItem = useCallback(({ item }: { item: proofType }) => {
@@ -12,7 +14,13 @@ const ProofList: React.FC<{ proofs: proofType[] | undefined }> = ({ proofs }) =>
 
   return (
     <View>
-      {proofs?.length === 0 ? <Text>사진 및 녹취 자료가 없습니다.</Text> :
+      {proofs?.length === 0 ?
+        <Center>
+          <Image
+            source={noProof}
+            alt="noProof"
+            style={{ width: Dimensions.get('window').width - 250, height: Dimensions.get('window').height - 500 }} />
+        </Center> :
         <FlatList
           data={proofs}
           renderItem={renderItem}
