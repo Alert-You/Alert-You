@@ -1,6 +1,6 @@
 import { View } from 'native-base'
 import React, { useCallback } from 'react'
-import { Pressable } from 'react-native'
+import { Pressable, TouchableOpacity } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import { noticeItemType } from '@/types'
@@ -66,7 +66,7 @@ const NoticeItem: React.FC<{ item: noticeItemType; read: boolean }> = ({ item, r
     <MaterialCommunityIcons
       name="account-group"
       size={32}
-      color={RED.red400} />
+      color={PURPLE.purple400} />
   </View>
   if (item.isVictim) {
     icon = <View>
@@ -79,7 +79,7 @@ const NoticeItem: React.FC<{ item: noticeItemType; read: boolean }> = ({ item, r
 
   if (!read) {
     if (item.isVictim) {
-      bgColor = RED.red500
+      bgColor = RED.red400p
     } else if (!item.isVictim) {
       bgColor = PURPLE.purple500
     }
@@ -87,20 +87,21 @@ const NoticeItem: React.FC<{ item: noticeItemType; read: boolean }> = ({ item, r
 
   return (
     <View>
-      <Pressable onPress={onClick}>
+      <TouchableOpacity activeOpacity={0.8} onPress={onClick}>
         <FlatListItem
           title={notice}
           subTitle={subTitle}
           bgColor={bgColor}
-          rightContent=''
+          rightContent=""
           bdColor={RED.red300}
-          bdbColor=''
+          bdbColor=""
           cbgColor={RED.redBg}
           bdWidth={0}
-          icon={icon} />
-      </Pressable>
+          icon={icon}
+        />
+      </TouchableOpacity>
     </View>
-  )
+  );
 }
 
 export default NoticeItem

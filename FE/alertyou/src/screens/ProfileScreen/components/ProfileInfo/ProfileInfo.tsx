@@ -20,7 +20,7 @@ const ProfileInfo = ({ name, schoolName, role, phone }: Props) => {
             color: 'black',
             fontWeight: '500',
           }}>
-          {name}
+          {name ? name : '이름을 등록하세요.'}
         </Text>
       </View>
       <View style={{ flexDirection: 'row' }}>
@@ -33,7 +33,7 @@ const ProfileInfo = ({ name, schoolName, role, phone }: Props) => {
             marginLeft: 10,
             marginBottom: 5,
           }}>
-          {schoolName}
+          {schoolName ? schoolName : "학교 정보가 없습니다."}
         </Text>
       </View>
       <View style={{ flexDirection: 'row' }}>
@@ -50,7 +50,7 @@ const ProfileInfo = ({ name, schoolName, role, phone }: Props) => {
             marginLeft: 10,
             marginBottom: 5,
           }}>
-          {role}
+          {role ? role : "맡은 역할이 없습니다."}
         </Text>
       </View>
       <View style={{ flexDirection: 'row' }}>
@@ -62,7 +62,7 @@ const ProfileInfo = ({ name, schoolName, role, phone }: Props) => {
             fontWeight: '400',
             marginLeft: 10,
           }}>
-          {phone}
+          {phone ? phone : '전화번호 정보가 없습니다.'}
         </Text>
       </View>
     </>
