@@ -2,11 +2,10 @@ import { View } from 'native-base'
 import React, { useCallback } from 'react'
 import { Pressable } from 'react-native'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import moment from 'moment'
 
 import { noticeItemType } from '@/types'
 import { FlatListItem } from '@/components'
-import { WHITE, RED } from '@/theme/colorVariants'
+import { WHITE, RED, PURPLE } from '@/theme/colorVariants'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { NoticeParamList } from '@/navigations/NoticeNavigation/NoticeNavigation'
 import { useMutation } from '@tanstack/react-query'
@@ -25,7 +24,6 @@ const NoticeItem: React.FC<{ item: noticeItemType; read: boolean }> = ({ item, r
   }
   const date = new Date()
   const noticeDateTime = item.noticeDateTime.replace(/-/gi, '/')
-  console.log(noticeDateTime)
   const writeDay = new Date(noticeDateTime)
 
   let dif = date.getTime() - writeDay.getTime()
@@ -81,9 +79,9 @@ const NoticeItem: React.FC<{ item: noticeItemType; read: boolean }> = ({ item, r
 
   if (!read) {
     if (item.isVictim) {
-      bgColor = RED.red700
-    } else if (!item.isVictim) {
       bgColor = RED.red500
+    } else if (!item.isVictim) {
+      bgColor = PURPLE.purple500
     }
   }
 
