@@ -2,6 +2,7 @@ package com.ssafy.alertyou.report.service;
 
 import com.ssafy.alertyou.account.entity.User;
 import com.ssafy.alertyou.account.repository.UserRepository;
+import com.ssafy.alertyou.account.service.VerificationService;
 import com.ssafy.alertyou.alert.entity.Alert;
 import com.ssafy.alertyou.alert.repository.AlertRepository;
 import com.ssafy.alertyou.bodyguard.entity.Coguard;
@@ -31,6 +32,8 @@ public class ReportServiceImpl implements ReportService {
     private final OpGuardRepository opGuardRepository;
     private final CoGuardRepository coGuardRepository;
     private final AlertRepository alertRepository;
+
+    private final VerificationService verificationService;
     private final Util util;
     private final String SUCCESS = "SUCCESS";
     private final String FAIL = "FAIL";
@@ -93,12 +96,13 @@ public class ReportServiceImpl implements ReportService {
             Report report = findReport(alertReportId);
 
             List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
-
+            String content = "[알럿-유] 학교 폭력 신고 접수\n누군가 현재 도움이 필요합니다.\n 신고 위치: " + address;
             String body = "[긴급] 학교 폭력 피해자 도움 요청";
             for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
-                String fcmToken = util.findUser(guardUser.getId()).getFcmToken();
+                String fcmToken = guardUser.getFcmToken();
                 FCMService.sendFCMMessage(fcmToken, body); // fcm메세지를 보냄
+                verificationService.sendSMS(guardUser.getPhone(), content);
             }
 
             return user.getId();
@@ -136,13 +140,14 @@ public class ReportServiceImpl implements ReportService {
             addAlert(alertReportId, user);
 
             Report report = findReport(alertReportId);
-
-            String body = "[긴급] 학교 폭력 목격자 현장 제보";
             List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
+            String body = "[긴급] 학교 폭력 목격자 현장 제보";
+            content = "[알럿-유] 학교 폭력 신고 접수\n누군가 현재 도움이 필요합니다.\n 신고 위치: " + address;
             for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
-                String fcmToken = util.findUser(guardUser.getId()).getFcmToken();
+                String fcmToken = guardUser.getFcmToken();
                 FCMService.sendFCMMessage(fcmToken, body); // fcm메세지를 보냄
+                verificationService.sendSMS(guardUser.getPhone(), content);
             }
 
             return user.getId();
