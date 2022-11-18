@@ -321,7 +321,7 @@ const ProfileEditScreen = ({navigation}: any) => {
               <View style={styles.phoneContainer}>
                 <Input
                   variant="underlined"
-                  placeholder="ex) 12345"
+                  placeholder="ex) 123456"
                   keyboardType="numeric"
                   fontWeight={FONT_WEIGHT.SemiBold}
                   size="md"

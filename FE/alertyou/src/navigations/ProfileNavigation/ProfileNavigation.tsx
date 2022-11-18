@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { EditClassScreen, EditSchoolScreen, ProfileEditScreen, ProfileScreen, SettingScreen, TeacherScreen } from "@/screens"
+import { EditClassScreen, EditSchoolScreen, PrivacyScreen, ProfileEditScreen, ProfileScreen, ServiceAgreeScreen, TeacherScreen } from "@/screens"
 import { StudentDetail } from '@/screens/ProfileScreen';
 import { MAIN, RED, WHITE } from '@/theme/colorVariants';
 import { useQuery } from '@tanstack/react-query';
@@ -14,10 +14,11 @@ export type ProfileParamList = {
   ProfileScreen: undefined;
   TeacherScreen: undefined;
   StudentDetail: { studentId: number | null };
-  SettingScreen: undefined;
   ProfileEditScreen: undefined;
   EditSchoolScreen: undefined;
   EditClassScreen: undefined;
+  PrivacyScreen: undefined;
+  ServiceAgreeScreen: undefined;
 };
 const Stack = createNativeStackNavigator<ProfileParamList>();
 
@@ -59,18 +60,6 @@ const ProfileNavigation = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="SettingScreen"
-        component={SettingScreen}
-        options={{
-          title: '설정',
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontWeight: '700',
-            fontSize: 20,
-          },
-        }}
-      />
-      <Stack.Screen
         name="ProfileEditScreen"
         component={ProfileEditScreen}
         options={{
@@ -99,6 +88,30 @@ const ProfileNavigation = () => {
         component={EditClassScreen}
         options={{
           title: '학급 선택',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: '700',
+            fontSize: 20,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="PrivacyScreen"
+        component={PrivacyScreen}
+        options={{
+          title: '개인정보 처리 방침',
+          headerTitleAlign: 'center',
+          headerTitleStyle: {
+            fontWeight: '700',
+            fontSize: 20,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ServiceAgreeScreen"
+        component={ServiceAgreeScreen}
+        options={{
+          title: '이용약관',
           headerTitleAlign: 'center',
           headerTitleStyle: {
             fontWeight: '700',

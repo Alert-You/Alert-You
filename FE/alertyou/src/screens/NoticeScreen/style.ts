@@ -1,6 +1,7 @@
-import { RED, MAIN, WHITE } from "@/theme/colorVariants";
+import { RED, MAIN, WHITE, BLUE, BLACK, NAVY } from "@/theme/colorVariants";
 import { StyleSheet } from "react-native";
 import { FONT_WEIGHT } from '@/theme/fontWeightVariants';
+import { W } from "@/constants/dimensions";
 
 export const styles = StyleSheet.create({
   container: {
@@ -9,10 +10,11 @@ export const styles = StyleSheet.create({
   },
   readContainer: {
     textAlign: 'right',
-    marginVertical: 12,
-    marginRight: 16,
-    color: MAIN.mainFont,
-    fontSize: 12,
+    marginVertical: 10,
+    fontWeight: FONT_WEIGHT.SemiBold,
+    marginRight: 5,
+    color: BLACK.black,
+    fontSize: 14,
   },
   textContainer: {
     marginLeft: 16,
@@ -26,13 +28,13 @@ export const styles = StyleSheet.create({
     left: 0,
     marginHorizontal: 16,
     marginVertical: 14,
-    color: MAIN.mainFont
+    color: MAIN.mainFont,
   },
   headerBox: {
     position: 'relative',
     // display: 'flex',
     // flexDirection: 'row',
-    backgroundColor: WHITE.white
+    backgroundColor: WHITE.white,
   },
   textBox: {
     fontSize: 20,
@@ -51,25 +53,35 @@ export const styles = StyleSheet.create({
   closeText: {
     color: MAIN.red,
     fontSize: 15,
-    fontWeight: FONT_WEIGHT.Medium
+    fontWeight: FONT_WEIGHT.Medium,
   },
   modalBox: {
     marginTop: 100,
-    marginBottom: "auto"
+    marginBottom: 'auto',
   },
   reportBox: {
     marginBottom: 10,
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   reportTitle: {
     width: '20%',
     marginHorizontal: 5,
     color: MAIN.mainFont,
-    fontWeight: FONT_WEIGHT.Bold
+    fontWeight: FONT_WEIGHT.Bold,
   },
   reportContent: {
     width: '70%',
     color: MAIN.mainFont,
-  }
-})
+  },
+  readAll: {
+    backgroundColor: NAVY.navy400,
+    width: W-10,
+    marginVertical: 5,
+    elevation: 4,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 5,
+  },
+});
