@@ -30,7 +30,7 @@ const ToggleBtn = ({toggleIsEmergency, isEmergency}: propsType) => {
         <AspectRatio
           ratio={5 / 2}
           width="40%"
-          bg={MAIN.lightGrey}
+          bg="white"
           rounded="full">
           <HStack width="100%" height="100%" p="5px" alignItems="center">
             {/* <HStack style={styles.container}> */}
@@ -60,7 +60,7 @@ const ToggleBtn = ({toggleIsEmergency, isEmergency}: propsType) => {
                         : 'moon-waning-crescent'
                     }
                     size={35}
-                    color={MAIN.lightGrey}
+                    color="white"
                   />
                 </Center>
               </AspectRatio>

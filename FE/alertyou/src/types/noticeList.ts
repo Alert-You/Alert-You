@@ -17,8 +17,8 @@ export interface reportType {
   isVictim: boolean | null,
   location: string,
   place: string,
-  latitude: number | null,
-  logitude: number | null,
+  latitude: number,
+  longitude: number,
 }
 
 export interface repType {
