@@ -11,7 +11,7 @@
 // };
 
 // https://uigradients.com/#Peach
-const emergencyColor = {
+export const emergencyColor = {
   light: '#FFEDBC',
   dark: '#ED4264',
 };
@@ -29,7 +29,7 @@ const emergencyColor = {
 // };
 
 // https://uigradients.com/#Mantle
-const nonEmergencyColor = {
+export const nonEmergencyColor = {
   light: '#24C6DC',
   dark: '#514A9D',
 };
@@ -90,6 +90,14 @@ export const nonEmergencyOuterBtnStyle = {
     colors: [nonEmergencyColor.light, nonEmergencyColor.dark],
     start: [0, 0],
     end: [1, 1],
+  },
+};
+
+export const helpTextStyle = {
+  linearGradient: {
+    colors: [emergencyColor.dark, emergencyColor.light],
+    start: [1, -1],
+    end: [2, 2],
   },
 };
 
