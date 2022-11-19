@@ -2,6 +2,7 @@ import { reportAudioFailureToastProps, reportAudioSuccessToastProps } from '@/co
 import { emergencyBgStyle, nonEmergencyBgStyle } from '@/theme/Home/gradient';
 import { AudioBtn } from '@/screens/HomeScreen/components/AudioBtn';
 import { reportFile } from '@/screens/HomeScreen/api';
+import { LoadingView } from '@/components/LoadingView';
 
 import { Platform, PermissionsAndroid, Alert } from 'react-native';
 import { Pressable, Text, View, VStack } from 'native-base';
@@ -49,6 +50,7 @@ interface AudioState {
 
   isReported: boolean;
   isShowCheckMove: boolean;
+  isLoading: boolean,
 }
 
 const screenWidth = W;
@@ -86,6 +88,7 @@ class Audio extends Component<any, AudioState> {
 
       isReported: false,
       isShowCheckMove: false,
+      isLoading: false,
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.11);
@@ -363,7 +366,14 @@ class Audio extends Component<any, AudioState> {
     console.log('돌아간다.', this.state);
   };
 
+  private onChangeIsLoading = async (bool:boolean) => {
+    this.setState({
+      isLoading: bool
+    })
+  }
+
   private onReportAudio = async () => {
+    this.onChangeIsLoading(true);
     if (this.state.uri) {
       const responseStatus = await reportFile(this.state.uri);
       if (responseStatus === 200 || responseStatus === 201) {
@@ -378,6 +388,7 @@ class Audio extends Component<any, AudioState> {
     } else {
       Toast.show(reportAudioFailureToastProps);
     }
+    this.onChangeIsLoading(false);
   };
 
   public render() {
@@ -452,6 +463,7 @@ class Audio extends Component<any, AudioState> {
 
     return (
       <View style={styles.container}>
+        {this.state.isLoading ? <LoadingView /> : <></>}
         <VStack bg={this.props.isEmergency ? emergencyBgStyle : nonEmergencyBgStyle} style={styles.innerContainer}>
           {!this.state.page ? (
             <View style={styles.viewContainer}>

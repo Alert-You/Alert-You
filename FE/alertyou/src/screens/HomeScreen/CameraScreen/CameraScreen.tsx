@@ -1,7 +1,7 @@
 import { HomeParamList } from '@/navigations/HomeNavigation/HomeNavigation';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { CameraRoll } from '@react-native-camera-roll/camera-roll';
-import LoadingView from '@/components/LoadingView';
+import { LoadingView } from '@/components/LoadingView';
 import {
   getNewCameraPermission,
   getNewMicrophonePermission,
@@ -28,7 +28,7 @@ const CameraScreen = () => {
     }
   }
 
-  if (device == null) return <LoadingView />;
+  if (device == null) return <></>;
   getNewCameraPermission();
   getNewMicrophonePermission();
 
