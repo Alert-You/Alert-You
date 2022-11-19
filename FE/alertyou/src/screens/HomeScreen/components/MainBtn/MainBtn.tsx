@@ -8,6 +8,7 @@ import { ReportModal } from '@/screens/HomeScreen/components/ReportModal';
 import { reportVictim } from '@/screens/HomeScreen/api';
 import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 import { useNavigation } from '@react-navigation/native';
+import { LoadingView } from '@/components/LoadingView';
 
 import { AspectRatio, Center, Circle } from 'native-base';
 import React, { useState } from 'react';
@@ -50,6 +51,7 @@ const MainBtn = ({ isEmergency }: props) => {
 
   return (
     <>
+    {location ? <></> : <LoadingView />}
       <ReportModal
         isShowReportModal={isShowReportModal}
         toggleIsShowReportModal={toggleIsShowReportModal}
