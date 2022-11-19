@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-around',
+    elevation: 9,
   },
   centerIcon: {
     bottom: 15,
