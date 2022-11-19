@@ -17,13 +17,13 @@ export const emergencyToastProps = {
 };
 
 export const nonEmergencyToastProps = {
-  type: 'info',
+  type: 'success',
   text1: '현장 목격 신고 완료',
   text2: '교사와 보디가드에게 목격 신고가 접수되었습니다!',
 };
 
 export const reportImageSuccessToastProps = {
-  type: 'info',
+  type: 'success',
   text1: '현장 사진 접수 완료',
   text2: '현장 사진 접수가 완료되었습니다!',
 };
@@ -35,7 +35,7 @@ export const reportImageFailureToastProps = {
 };
 
 export const reportAudioSuccessToastProps = {
-  type: 'info',
+  type: 'success',
   text1: '현장 녹음 접수 완료',
   text2: '현장 녹음 접수가 완료되었습니다!',
 };
