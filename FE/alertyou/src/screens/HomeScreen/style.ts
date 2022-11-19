@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     minHeight: H - 60,
     paddingHorizontal: 16,
-    paddingBottom: 16,
   },
 
   mainTitle: {

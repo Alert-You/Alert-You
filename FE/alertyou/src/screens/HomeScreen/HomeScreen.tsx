@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation }: Props) => {
       <Box
         bg={isEmergency ? emergencyBgStyle : nonEmergencyBgStyle}
         style={styles.innerContainer}>
-        <Text style={styles.mainTitle}>{isEmergency ? '긴급 도움 요청' : '현장 목격 신고'}</Text>
+        <Text style={styles.mainTitle}>{isEmergency ? '긴급 도움 요청' : '현장 목격 신고'}</Text>;
         <MainBtn isEmergency={isEmergency} />
         <ToggleBtn
           toggleIsEmergency={toggleIsEmergency}

@@ -5,38 +5,35 @@ import {
   PresenceTransition,
   Pressable,
 } from 'native-base';
-import { emergencyBgStyle, nonEmergencyBgStyle, emergencyColor, nonEmergencyColor } from '@/theme/Home/gradient';
+import {emergencyBgStyle, nonEmergencyBgStyle} from '@/theme/Home/gradient';
+import {MAIN} from '@/theme/colorVariants';
 import { W } from '@/constants/dimensions';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { styles } from './style';
 
 interface propsType {
   toggleIsEmergency: any;
   isEmergency: boolean;
 }
 
-const ToggleBtn = ({ toggleIsEmergency, isEmergency }: propsType) => {
+const ToggleBtn = ({toggleIsEmergency, isEmergency}: propsType) => {
   const calcToggleMove = () => {
     const W_INNER = W - 32;
-    const TOGGLE_OUTER_W = W_INNER * 0.3;
-    return TOGGLE_OUTER_W * 0.5;
+    const TOGGLE_OUTER_W = W_INNER * 0.4;
+    return TOGGLE_OUTER_W * 0.6;
   };
   const toggleMove = calcToggleMove();
 
   return (
-    <Center
-      style={styles.container}
-      borderColor={isEmergency ? emergencyColor.light : nonEmergencyColor.light}
-      shadow={2}
-    >
+    <Center my={3} mb={9}>
       <Pressable onPress={toggleIsEmergency}>
         <AspectRatio
-          ratio={2 / 1}
-          width="30%"
+          ratio={5 / 2}
+          width="40%"
           bg="white"
           rounded="full">
-          <HStack width="100%" height="100%" p="2px" alignItems="center">
+          <HStack width="100%" height="100%" p="5px" alignItems="center">
+            {/* <HStack style={styles.container}> */}
             <PresenceTransition
               visible={!isEmergency}
               initial={{
