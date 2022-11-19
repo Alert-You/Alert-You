@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import {
   Center,
   Pressable,
@@ -11,6 +11,7 @@ import {
 } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import NaverMapView, { Marker, Path } from 'react-native-nmap';
+import Geolocation from 'react-native-geolocation-service';
 
 import { useRoute, RouteProp } from '@react-navigation/native';
 import { NoticeParamList } from '@/navigations/NoticeNavigation/NoticeNavigation';
@@ -19,7 +20,7 @@ import { useCurrentLocation } from '@/hooks/useCurrentLocation';
 
 import { styles } from './style';
 import { getNoticeItem } from './api';
-import { Dimensions } from 'react-native';
+import { Dimensions, TouchableOpacity, Image } from 'react-native';
 import { RED, PURPLE } from '@/theme/colorVariants';
 import Lottie from 'lottie-react-native';
 
@@ -27,9 +28,17 @@ type Props = {
   navigation: any;
 };
 
+interface ILocation {
+  latitude: number;
+  longitude: number;
+}
+
 const NoticeMap = ({ navigation }: Props) => {
   const reportId = useRoute<RouteProp<NoticeParamList>>().params?.reportId;
   const [showModal, setShowModal] = useState(true);
+  const [curLocation, setCurLocation] = useState<ILocation | undefined>(
+    undefined,
+  );
 
   const { location } = useCurrentLocation();
   const { data } = useQuery(['getNoticeItem'], () => getNoticeItem(reportId), {
@@ -38,9 +47,32 @@ const NoticeMap = ({ navigation }: Props) => {
       // 성공시 호출
     },
     onError: e => {
+      console.log(e);
       return false;
     },
   });
+  const getCurrentLocation = (): void => {
+    Geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords;
+        console.log(curLocation)
+        setCurLocation(prev => {
+          if (prev?.latitude === latitude && prev?.longitude === longitude) {
+            return prev
+          }
+          return {
+            latitude,
+            longitude,
+          };
+        });
+      },
+      error => {
+        console.log(error.code, error.message);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+    )
+  };
+
   const writeDay = new Date(data?.noticeDateTime.replace(/-/gi, '/') + '');
   const convertDay =
     writeDay.getFullYear() +
@@ -58,7 +90,11 @@ const NoticeMap = ({ navigation }: Props) => {
   if (!location || !data) {
     return (
       <Center justifyContent="center" flex={1}>
-        <Spinner size="lg" />
+        <Lottie
+          source={require('@/assets/lottie.json')}
+          autoPlay
+          loop={true}
+        />
       </Center>
     );
   }
@@ -167,20 +203,36 @@ const NoticeMap = ({ navigation }: Props) => {
               height: Dimensions.get('window').height - 110,
             }}
             // 내 위치 찾기 버튼
-            showsMyLocationButton={true}
+            // showsMyLocationButton={true}
             // + - 버튼으로 줌 컨드롤 하는 기능
             zoomControl={true}
-            center={{
-              zoom: 15,
-              tilt: 0,
-              latitude: (location.latitude + data.latitude) / 2,
-              longitude: (location.longitude + data.longitude) / 2,
-            }}>
+            center={
+              curLocation
+                ? {
+                    zoom: 14,
+                    tilt: 0,
+                    latitude: curLocation.latitude,
+                    longitude: curLocation.longitude,
+                  }
+                : {
+                    zoom: 15,
+                    tilt: 0,
+                    latitude: (location.latitude + data.latitude) / 2,
+                    longitude: (location.longitude + data.longitude) / 2,
+                  }
+            }>
             <Marker
-              coordinate={{
-                latitude: location.latitude,
-                longitude: location.longitude,
-              }}
+              coordinate={
+                curLocation
+                  ? {
+                      latitude: curLocation.latitude,
+                      longitude: curLocation.longitude,
+                    }
+                  : {
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                    }
+              }
               pinColor="blue"
               caption={{
                 text: '현위치',
@@ -190,10 +242,15 @@ const NoticeMap = ({ navigation }: Props) => {
             <Path
               color="blue"
               coordinates={[
-                {
-                  latitude: location.latitude,
-                  longitude: location.longitude,
-                },
+                curLocation
+                  ? {
+                      latitude: curLocation.latitude,
+                      longitude: curLocation.longitude,
+                    }
+                  : {
+                      latitude: location.latitude,
+                      longitude: location.longitude,
+                    },
                 { latitude: data.latitude, longitude: data.longitude },
               ]}
             />
@@ -209,6 +266,33 @@ const NoticeMap = ({ navigation }: Props) => {
               }}
             />
           </NaverMapView>
+        </View>
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 40,
+            width: 50,
+            height: 50,
+            elevation: 9,
+            borderRadius: 30,
+            left: 15,
+            backgroundColor: 'white',
+          }}>
+          <TouchableOpacity onPressOut={getCurrentLocation}>
+            <View
+              style={{
+                width: '100%',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <Image
+                source={require('@/assets/location-map.png')}
+                resizeMode="contain"
+                style={{ width: '50%', height: '50%' }}
+              />
+            </View>
+          </TouchableOpacity>
         </View>
       </View>
     </Suspense>

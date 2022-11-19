@@ -1,35 +1,39 @@
-import React, {Suspense, useMemo, useState} from 'react';
-import {View} from 'react-native';
-import {Center, FormControl, Select, Spinner, VStack} from 'native-base';
-import {MAIN} from '@/theme/colorVariants';
-import {styles} from './style';
-import {failedFetchSchoolId, formIsNotFilled} from './functions';
+import React, { Suspense, useMemo, useState } from 'react';
+import { View } from 'react-native';
+import { Center, FormControl, Select, Spinner, VStack } from 'native-base';
+import { MAIN } from '@/theme/colorVariants';
+import { styles } from './style';
+import { failedFetchSchoolId, formIsNotFilled } from './functions';
 import {
   editClassListState,
   editSchoolAddressState,
   editSchoolIdState,
   editSchoolNameState,
 } from '@/store/profileState';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
-import {useQuery} from '@tanstack/react-query';
-import {requestSchoolId} from './apis';
-import {SpinnerButton} from '@/components';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useQuery } from '@tanstack/react-query';
+import { requestSchoolId } from './apis';
+import { SpinnerButton } from '@/components';
 import ErrorBoundary from 'react-native-error-boundary';
 
-const EditClassScreen = ({navigation}: any) => {
+const EditClassScreen = ({ navigation }: any) => {
   const [grade, setGrade] = useState<string>('');
   const [classroom, setClassroom] = useState<string>('');
-  const [schoolNameValue, setSchoolNameValue] = useRecoilState(editSchoolNameState);
+  const [schoolNameValue, setSchoolNameValue] =
+    useRecoilState(editSchoolNameState);
   const schoolAddressValue = useRecoilValue(editSchoolAddressState);
   const classList = useRecoilValue(editClassListState);
   const setSchoolId = useSetRecoilState(editSchoolIdState);
 
   const hasChosenSchool = useMemo(() => classList.length !== 0, [classList]);
-  const hasChosenGrade = useMemo(() => grade && !!classList[parseInt(grade)], [grade]);
+  const hasChosenGrade = useMemo(
+    () => grade && !!classList[parseInt(grade)],
+    [grade],
+  );
   const formIsFilled =
     schoolAddressValue && schoolNameValue && grade && classroom;
 
-  const {refetch} = useQuery(
+  const { refetch } = useQuery(
     ['editSchoolIdKey'],
     () =>
       requestSchoolId(schoolNameValue, grade, classroom, schoolAddressValue),
@@ -64,7 +68,7 @@ const EditClassScreen = ({navigation}: any) => {
   const moveToEditProfile = (): void => {
     if (formIsFilled) {
       refetch();
-      setSchoolNameValue(state => state + ` ${grade}학년 ${classroom}반`)
+      setSchoolNameValue(state => state + ` ${grade}학년 ${classroom}반`);
     } else {
       formIsNotFilled();
     }
@@ -90,11 +94,12 @@ const EditClassScreen = ({navigation}: any) => {
                   }}>
                   {hasChosenSchool
                     ? classList.map((item, idx) => {
+                        if (idx === 0) return;
                         return (
                           <Select.Item
-                            key={`gradeItemKey${idx}`}
-                            label={`${idx + 1}학년`}
-                            value={String(idx + 1)}
+                            key={`gradeItem${idx}`}
+                            label={`${idx}학년`}
+                            value={String(idx)}
                           />
                         );
                       })
@@ -119,7 +124,7 @@ const EditClassScreen = ({navigation}: any) => {
                     ? classList[parseInt(grade)].map((item, idx) => {
                         return (
                           <Select.Item
-                            key={`classItemKey${idx}`}
+                            key={`classItem${idx}`}
                             label={`${item}반`}
                             value={item}
                           />

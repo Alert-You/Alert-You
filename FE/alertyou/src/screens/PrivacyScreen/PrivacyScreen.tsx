@@ -53,8 +53,6 @@ const PrivacyScreen = () => {
       <Text style={styles.smallListContents}>
         {`\u2022`} 보유근거 : 학생들의 학교 최대 재학기간
       </Text>
-      <Text style={styles.smallListContents}>{`\u2022`} 관련법령 :</Text>
-      <Text style={styles.smallListContents}>{`\u2022`} 예외사유 :</Text>
       <Text style={styles.subTitle}>제3조(처리하는 개인정보의 항목)</Text>
       <Text style={styles.subTitle}>
         제4조(개인정보의 파기절차 및 파기방법)
