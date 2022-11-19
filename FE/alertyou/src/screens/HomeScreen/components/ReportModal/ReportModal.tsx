@@ -26,6 +26,7 @@ const ReportModal = ({
       const data = { ...location, ...state };
       const response = await reportWitness(data);
       if (response.msg === 'SUCCESS') {
+        removeReportContent();
         Toast.show(nonEmergencyToastProps);
       } else {
         Toast.show(errorToastProps);
@@ -37,9 +38,13 @@ const ReportModal = ({
   };
 
   const onCancelReport = () => {
+    removeReportContent();
+    toggleIsShowReportModal();
+  }
+
+  const removeReportContent = () => {
     changeReportPlace('');
     changeReportContent('');
-    toggleIsShowReportModal();
   }
 
   const [state, dispatch] = useReducer(
