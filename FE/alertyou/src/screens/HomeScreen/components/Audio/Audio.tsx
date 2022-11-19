@@ -2,8 +2,9 @@ import { reportAudioFailureToastProps, reportAudioSuccessToastProps } from '@/co
 import { emergencyBgStyle, nonEmergencyBgStyle } from '@/theme/Home/gradient';
 import { AudioBtn } from '@/screens/HomeScreen/components/AudioBtn';
 import { reportFile } from '@/screens/HomeScreen/api';
+import { LoadingView } from '@/components/LoadingView';
 
-import { Platform, PermissionsAndroid } from 'react-native';
+import { Platform, PermissionsAndroid, Alert } from 'react-native';
 import { Pressable, Text, View, VStack } from 'native-base';
 import Toast from 'react-native-toast-message';
 import { W } from '@/constants/dimensions';
@@ -46,6 +47,10 @@ interface AudioState {
   isShowStopPlay: boolean;
   isShowRestartRecord: boolean;
   isShowReportAudio: boolean;
+
+  isReported: boolean;
+  isShowCheckMove: boolean;
+  isLoading: boolean,
 }
 
 const screenWidth = W;
@@ -80,12 +85,71 @@ class Audio extends Component<any, AudioState> {
       isShowStopPlay: false,
       isShowRestartRecord: true,
       isShowReportAudio: true,
+
+      isReported: false,
+      isShowCheckMove: false,
+      isLoading: false,
     };
     this.audioRecorderPlayer = new AudioRecorderPlayer();
     this.audioRecorderPlayer.setSubscriptionDuration(0.11);
     if (this.props.isEmergency) {
       this.onStartRecord();
     }
+  }
+
+  componentDidMount() {
+    this.state.navigation.addListener('beforeRemove', (e: any) => {
+      if (this.state.recordTime === '00:00:00') {
+        this.state.navigation.dispatch(e.data.action);
+        return;
+      }
+      if (this.state.isShowCheckMove) return;
+      this.changeIsShowCheckMove(true);
+      e.preventDefault();
+      
+      if (this.state.isReported)  {
+        this.moveAfterRemove(e)
+      } else {
+        Alert.alert(
+          '녹음을 중단하시겠습니까?',
+          '현재까지의 녹음내용을 신고 후 이동하거나 삭제 후 이동할 수 있습니다.',
+          [
+            { text: "이동 취소", style: 'cancel', onPress: () => this.changeIsShowCheckMove(false) },
+            {
+              text: '삭제 후 이동',
+              style: 'destructive',
+              onPress: () => this.moveAfterRemove(e),
+            },
+            {
+              text: '신고 후 이동',
+              style: 'cancel',
+              onPress: () => this.moveAfterReport(e),
+            },
+          ]
+        );
+      }
+    })
+  }
+
+  private changeIsShowCheckMove(bool: boolean): void {
+    this.setState({
+      isShowCheckMove: bool
+    })
+  }
+
+  private moveAfterRemove = (e: any) => {
+    this.onStopRecord();
+    this.onStopPlay();
+    this.state.navigation.dispatch(e.data.action)
+  }
+
+  private moveAfterReport = (e: any) => {
+    console.log('신고 후 이동 진입')
+    console.log(this.state.isReported)
+    this.onStopRecord();
+    this.onStopPlay();
+    this.onReportAudio();
+    this.state.navigation.dispatch(e.data.action)
   }
 
   private onStatusPress = (e: any) => {
@@ -302,21 +366,29 @@ class Audio extends Component<any, AudioState> {
     console.log('돌아간다.', this.state);
   };
 
+  private onChangeIsLoading = async (bool:boolean) => {
+    this.setState({
+      isLoading: bool
+    })
+  }
+
   private onReportAudio = async () => {
-    console.log('eh')
-    console.log('this.state.uri: ', this.state.uri);
+    this.onChangeIsLoading(true);
     if (this.state.uri) {
       const responseStatus = await reportFile(this.state.uri);
-      console.log('responseStatus: ', responseStatus);
       if (responseStatus === 200 || responseStatus === 201) {
-        Toast.show(reportAudioSuccessToastProps);
+        this.setState({
+          isReported: true
+        })
         this.state.navigation.navigate('HomeScreen');
+        Toast.show(reportAudioSuccessToastProps);
       } else {
         Toast.show(reportAudioFailureToastProps);
       }
     } else {
       Toast.show(reportAudioFailureToastProps);
     }
+    this.onChangeIsLoading(false);
   };
 
   public render() {
@@ -391,6 +463,7 @@ class Audio extends Component<any, AudioState> {
 
     return (
       <View style={styles.container}>
+        {this.state.isLoading ? <LoadingView /> : <></>}
         <VStack bg={this.props.isEmergency ? emergencyBgStyle : nonEmergencyBgStyle} style={styles.innerContainer}>
           {!this.state.page ? (
             <View style={styles.viewContainer}>

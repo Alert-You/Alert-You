@@ -1,16 +1,15 @@
 import { StyleSheet } from 'react-native';
-import { W } from '@/constants/dimensions';
-import { emergencyColor } from '@/theme/Home/gradient';
 
 export const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 48,
-    paddingVertical: 24,
-    maxWidth: W - 32,
-    borderRadius: 12,
-    borderColor: emergencyColor.light,
     borderWidth: 1,
-    elevation: 3,
+    borderRadius: 1000,
+    marginVertical: 10,
+    marginBottom: 30,
+  },
+
+  container2: {
+    elevation: 2,
   },
 
   title: {

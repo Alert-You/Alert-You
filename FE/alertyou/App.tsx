@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Toast from 'react-native-toast-message';
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
 import SplashScreen from 'react-native-splash-screen';
 import { AppRegistry } from 'react-native';
 import { RecoilRoot } from 'recoil';
@@ -46,6 +46,39 @@ const App: React.FunctionComponent = () => {
     return unsubscribe;
   }, []);
 
+  const toastConfig = {
+    success: (props:any) => (
+      <BaseToast
+        {...props}
+        style={{ borderLeftColor: 'skyblue', height: '90%', elevation: 9}}
+        contentContainerStyle={{ padding: 20 }}
+        text1Style={{
+          fontSize: 20,
+          fontWeight: '600',
+        }}
+        text2Style={{
+          fontSize: 18,
+          fontWeight: '400',
+        }}
+      />
+    ),
+    error: (props:any) => (
+      <ErrorToast
+        {...props}
+        style={{ borderLeftColor: '#ff7a4a', height: '90%', elevation: 9}}
+        contentContainerStyle={{ padding: 20 }}
+        text1Style={{
+          fontSize: 20,
+          fontWeight: '600',
+        }}
+        text2Style={{
+          fontSize: 18,
+          fontWeight: '400',
+        }}
+      />
+    ),
+  };
+
   return (
     <QueryClientProvider client={queryClinet}>
       <RecoilRoot>
@@ -53,7 +86,7 @@ const App: React.FunctionComponent = () => {
           <NativeBaseProvider config={config}>
             <NavigationContainer>
               <MainNavigation />
-              <Toast />
+              <Toast config={toastConfig} />
             </NavigationContainer>
           </NativeBaseProvider>
         </PaperProvider>
