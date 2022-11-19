@@ -2,7 +2,6 @@
 import React from 'react'
 import { Box, HStack, VStack, Text, Spacer, Circle } from "native-base";
 import { WHITE, MAIN } from '@/theme/colorVariants';
-import LinearGradient from 'react-native-linear-gradient';
 
 const FlatListItem: React.FC<{ title: string; subTitle: string; bgColor: string; rightContent: React.ReactNode, icon: React.ReactNode, bdbColor: string, bdWidth: number, bdColor: string, cbgColor: string }> = ({
   title,

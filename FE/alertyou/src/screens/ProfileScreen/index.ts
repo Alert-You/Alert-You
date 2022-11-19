@@ -5,3 +5,4 @@ export { default as StudentList } from './components/StudentList'
 export { default as ReportList } from './components/ReportList'
 export { default as ProofList } from './components/ProofList'
 export { default as CustomSpinner} from './components/CustomSpinner'
+export { ProfileInfo } from './components/ProfileInfo';
