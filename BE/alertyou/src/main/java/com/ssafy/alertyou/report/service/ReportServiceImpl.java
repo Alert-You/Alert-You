@@ -94,9 +94,9 @@ public class ReportServiceImpl implements ReportService {
             addAlert(alertReportId, user);
 
             Report report = findReport(alertReportId);
-
+            address = (address != null) ? address.replace("광역시", "") : null;
             List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
-            String content = "[알럿-유] 학교 폭력 신고 접수\n누군가 현재 도움이 필요합니다.\n 신고 위치: " + address;
+            String content = "[알럿유] 학교 폭력 신고\n위치: " + address;
             String body = "[긴급] 학교 폭력 피해자 도움 요청";
             for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
@@ -140,9 +140,10 @@ public class ReportServiceImpl implements ReportService {
             addAlert(alertReportId, user);
 
             Report report = findReport(alertReportId);
+            address = (address != null) ? address.replace("광역시", "") : null;
             List<Alert> alertList = findAlertUser(report); // 신고로 id를 찾는다
             String body = "[긴급] 학교 폭력 목격자 현장 제보";
-            content = "[알럿-유] 학교 폭력 신고 접수\n누군가 현재 도움이 필요합니다.\n 신고 위치: " + address;
+            content = "[알럿유] 학교 폭력 신고\n위치: " + address;
             for (Alert alert : alertList) {
                 User guardUser = alert.getUser(); // 해당 신고의 알람을 받을 가드
                 String fcmToken = guardUser.getFcmToken();
