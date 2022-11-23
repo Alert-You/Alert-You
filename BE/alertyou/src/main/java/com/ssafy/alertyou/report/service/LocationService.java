@@ -20,8 +20,8 @@ public class LocationService {
             // orders 옵션: legalcode: 좌표 to 법정동, admcode: 좌표 to 행정동, addr: 좌표 to 지번 주소, roadaddr: 좌표 to 도로명 주소(새주소)
             // sourcecrs 옵션: 좌표 체계(EPSG:4326)
             // coords 옵션: 입력좌표("경도값,위도값")
-            String clientId = "co4w5k4lo3";
-            String clientSecret = "vLrvWalrYx895ya4jmC3XGmWqf3E11ViQJnhppLV";
+            String clientId = "당신의 클라이언트 ID";
+            String clientSecret = "당신의 클라이언트 시크릿 키";
             String basicUrl = String.format("https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc?request=coordsToaddr&coords=%s&sourcecrs=epsg:4326&output=json&orders=roadaddr,addr", coords); // orders=legalcode,admcode,roadaddr
             HttpGet getRequest = new HttpGet(basicUrl);
             getRequest.setHeader("X-NCP-APIGW-API-KEY-ID", clientId);
